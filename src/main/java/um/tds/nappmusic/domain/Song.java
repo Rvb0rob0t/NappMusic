@@ -2,12 +2,17 @@ package um.tds.nappmusic.domain;
 
 import java.util.ArrayList;
 
-public class Song {
+import um.tds.nappmusic.dao.Identifiable;
+
+public class Song implements Identifiable {
+    private int id;
     private String title;
     private String author;
     private ArrayList<String> styles;
     private String filePath;
     private int numPlays;
+
+    public Song() {}
 
     public Song(
         String title,
@@ -21,6 +26,10 @@ public class Song {
         this.styles = styles;
         this.filePath = filePath;
         this.numPlays = numPlays;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -41,6 +50,10 @@ public class Song {
 
     public int getNumPlays() {
         return numPlays;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTitle(String title) {

@@ -1,8 +1,12 @@
 package um.tds.nappmusic.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class User {
+import um.tds.nappmusic.dao.Identifiable;
+
+public class User implements Identifiable {
+    private int id = 0;
     private String name;
     private boolean premium;
     private Discount discount;
@@ -10,6 +14,8 @@ public class User {
     // DIFFERENCE We use Playlist for almost everything (that is a list of songs).
     // The idea is that the user can also replay the list of recently played songs.
     private Playlist recent;
+
+    public User() {}
 
     public User(
         String name,
@@ -35,6 +41,10 @@ public class User {
     //     recent.add(reproduccion);
     // }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -55,6 +65,10 @@ public class User {
         return recent;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -65,6 +79,14 @@ public class User {
 
     public void setDiscount(Discount discount) {
         this.discount = discount;
+    }
+
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = new ArrayList(playlists);
+    }
+
+    public void setRecent(Playlist recent) {
+        this.recent = recent;
     }
 }
 

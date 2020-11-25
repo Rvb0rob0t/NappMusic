@@ -1,6 +1,8 @@
 package um.tds.nappmusic.domain;
 
+import um.tds.nappmusic.dao.Identifiable;
+
 //TODO
-interface Discount {
+interface Discount extends Identifiable {
 }
 
