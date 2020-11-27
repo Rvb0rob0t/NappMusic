@@ -20,16 +20,17 @@
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>es.umu</groupId>
       <artifactId>DriverPersistencia</artifactId>
       <version>1.0</version>
       <scope>compile</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.7.0</version>
+      <scope>test</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
     <dependency>
@@ -69,6 +70,28 @@
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+        <plugin>
+          <groupId>com.cosium.code</groupId>
+          <artifactId>git-code-format-maven-plugin</artifactId>
+          <version>2.7</version>
+          <executions>
+            <!-- On commit, format the modified java files -->
+            <execution>
+              <id>install-formatter-hook</id>
+              <goals>
+                <goal>install-hooks</goal>
+              </goals>
+            </execution>
+            <!-- On Maven verify phase, fail if any file
+            (including unmodified) is badly formatted -->
+            <execution>
+              <id>validate-code-format</id>
+              <goals>
+                <goal>validate-code-format</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
@@ -86,6 +109,14 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
+            <configuration>
+              <properties>
+                <configurationParameters>
+                  junit.platform.output.capture.stdout = true
+                  junit.platform.output.capture.stderr = true
+                </configurationParameters>
+              </properties>
+            </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
