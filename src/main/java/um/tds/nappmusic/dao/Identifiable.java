@@ -1,8 +1,7 @@
 package um.tds.nappmusic.dao;
 
 public interface Identifiable {
-    public int getId();
+  public int getId();
 
-    public void setId(int id);
+  public void setId(int id);
 }
-
