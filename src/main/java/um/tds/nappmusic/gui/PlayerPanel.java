@@ -1,27 +1,24 @@
 package um.tds.nappmusic.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.ImageIcon;
 import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel {
-  private static final String resources = "src/main/resources";
+  private static final String RESOURCES = "src/main/resources";
   private final int thumbWidth = 100;
   private final int thumbHeight = 100;
 
@@ -29,14 +26,12 @@ public class PlayerPanel extends JPanel {
   private JLabel imgLabel;
   private JLabel artistLabel;
   private JLabel songNameLabel;
-  
-  private JPanel centralPanel;
-  
-//  private JPanel volumePanel;
 
-  /**
-   * .
-   */
+  private JPanel centralPanel;
+
+  //  private JPanel volumePanel;
+
+  /** . */
   public PlayerPanel() {
     songDataPanel = new JPanel(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
@@ -71,36 +66,35 @@ public class PlayerPanel extends JPanel {
 
     this.add(songDataPanel, BorderLayout.WEST);
 
-
     centralPanel = new JPanel(new BorderLayout());
 
-//    JSlider playerSlider = new JSlider();
-//    centralPanel.add(playerSlider, BorderLayout.SOUTH);
+    //    JSlider playerSlider = new JSlider();
+    //    centralPanel.add(playerSlider, BorderLayout.SOUTH);
 
     JPanel playerButtonsPanel = new JPanel();
     playerButtonsPanel.setLayout(new BoxLayout(playerButtonsPanel, BoxLayout.X_AXIS));
     playerButtonsPanel.add(Box.createHorizontalGlue());
-    JButton btnPrevious = new JButton(new ImageIcon(resources + "/previous.png"));
+    JButton btnPrevious = new JButton(new ImageIcon(RESOURCES + "/previous.png"));
     playerButtonsPanel.add(btnPrevious);
-    JButton btnPlay = new JButton(new ImageIcon(resources + "/play.png"));
+    JButton btnPlay = new JButton(new ImageIcon(RESOURCES + "/play.png"));
     playerButtonsPanel.add(btnPlay);
-    JButton btnNext = new JButton(new ImageIcon(resources + "/next.png"));
+    JButton btnNext = new JButton(new ImageIcon(RESOURCES + "/next.png"));
     playerButtonsPanel.add(btnNext);
     playerButtonsPanel.add(Box.createHorizontalGlue());
     centralPanel.add(playerButtonsPanel, BorderLayout.CENTER);
 
     this.add(centralPanel, BorderLayout.CENTER);
 
-
-//    volumePanel = new JPanel();
-//    this.add(volumePanel, BorderLayout.EAST);
-//
-//    JSlider volumeSlider = new JSlider();
-//    volumePanel.add(volumeSlider);
+    //    volumePanel = new JPanel();
+    //    this.add(volumePanel, BorderLayout.EAST);
+    //
+    //    JSlider volumeSlider = new JSlider();
+    //    volumePanel.add(volumeSlider);
   }
 
   /**
    * Change the data of the of the currently playing song.
+   *
    * @param thumbnail The relative path of the thumbnail
    * @param artist The artist name
    * @param songName The name of the song

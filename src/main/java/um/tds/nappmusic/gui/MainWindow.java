@@ -1,55 +1,38 @@
 package um.tds.nappmusic.gui;
 
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JList;
-import javax.swing.JPanel;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.JToggleButton;
-import java.awt.CardLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.Box;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.border.EmptyBorder;
 import um.tds.nappmusic.gui.cards.HomePanel;
 import um.tds.nappmusic.gui.cards.PlaylistsPanel;
 import um.tds.nappmusic.gui.cards.RecentlyPlayedPane;
 import um.tds.nappmusic.gui.cards.SearchPanel;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JPopupMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.Component;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener {
+  private static final String RESOURCES = "src/main/resources";
 
   private PlayerPanel playerPanel;
-  
+
   private JPanel topPanel;
   private JMenu menu;
   private JMenuItem upgradeMenuItem;
   private JMenuItem signOutMenuItem;
-  
+
   private JPanel cardsPanel;
   private HomePanel homePanel;
   private static final String HOME_CARD_NAME = "Home";
@@ -59,25 +42,40 @@ public class MainWindow extends JFrame implements ActionListener {
   private static final String PLAYLISTS_CARD_NAME = "Playlists";
   private RecentlyPlayedPane recentlyPlayedPane;
   private static final String RECENTLY_CARD_NAME = "Recently";
-  
+
   private JPanel leftSidePanel;
   private JButton btnHome;
   private JButton btnSearch;
   private JButton btnPlaylists;
   private JButton btnRecently;
   private JMenuBar menuBar;
+  private JLabel logoLabel;
 
-  /**
-   * Create the application.
-   */
+  /** Create the application. */
   public MainWindow() {
     super("NappMusic");
-    initialize();
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.getContentPane().setLayout(new BorderLayout());
+
+    playerPanel = new PlayerPanel();
+    playerPanel.changeSongData(
+        "src/main/resources/torero.jpg", "Emilio Domínguez Sánchez", "Torero");
+    this.getContentPane().add(playerPanel, BorderLayout.SOUTH);
+
+    createLeftSidePanel();
+    this.getContentPane().add(leftSidePanel, BorderLayout.WEST);
+
+    createCardsPanel();
+    this.getContentPane().add(cardsPanel, BorderLayout.CENTER);
+
+    createTopPanel("Username");
+    this.getContentPane().add(topPanel, BorderLayout.NORTH);
+
+    this.pack();
+    this.setMinimumSize(this.getSize());
   }
 
-  /**
-   * Create the menu selector panel.
-   */
+  /** Create the menu selector panel. */
   private void createLeftSidePanel() {
     leftSidePanel = new JPanel(new BorderLayout());
 
@@ -113,9 +111,7 @@ public class MainWindow extends JFrame implements ActionListener {
     leftSidePanel.add(cardSelectorPanel, BorderLayout.NORTH);
   }
 
-  /**
-   * Create the changing panel.
-   */
+  /** Create the changing panel. */
   private void createCardsPanel() {
     cardsPanel = new JPanel(new CardLayout());
 
@@ -132,45 +128,24 @@ public class MainWindow extends JFrame implements ActionListener {
     cardsPanel.add(recentlyPlayedPane, RECENTLY_CARD_NAME);
   }
 
-  /**
-   * Create the panel with the user settings.
-   */
+  /** Create the panel with the user settings. */
   private void createTopPanel(String username) {
     topPanel = new JPanel(new BorderLayout());
-    
+
+    logoLabel = new JLabel("NappMusic", new ImageIcon(RESOURCES + "/Logo.png"), JLabel.CENTER);
+    logoLabel.setBorder(new EmptyBorder(10, 30, 10, 0));
+    logoLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+    topPanel.add(logoLabel, BorderLayout.WEST);
+
     menuBar = new JMenuBar();
     menu = new JMenu("Username");
     upgradeMenuItem = new JMenuItem("Mejora tu cuenta");
     menu.add(upgradeMenuItem);
     signOutMenuItem = new JMenuItem("Cerrar sesión");
     menu.add(signOutMenuItem);
+    //    menuBar.add(Box.createHorizontalGlue());
     menuBar.add(menu);
-    
     topPanel.add(menuBar, BorderLayout.EAST);
-  }
-
-  /**
-   * Initialize the contents of the frame.
-   */
-  private void initialize() {
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.getContentPane().setLayout(new BorderLayout());
-
-    playerPanel = new PlayerPanel();
-    playerPanel.changeSongData("src/main/resources/torero.jpg", "Emilio Domínguez Sánchez", "Torero");
-    this.getContentPane().add(playerPanel, BorderLayout.SOUTH);
-
-    createLeftSidePanel();
-    this.getContentPane().add(leftSidePanel, BorderLayout.WEST);
-
-    createCardsPanel();
-    this.getContentPane().add(cardsPanel, BorderLayout.CENTER);
-
-    createTopPanel("Username");
-    this.getContentPane().add(topPanel, BorderLayout.NORTH);
-
-    this.pack();
-    this.setMinimumSize(this.getSize());
   }
 
   @Override
@@ -187,29 +162,6 @@ public class MainWindow extends JFrame implements ActionListener {
     } else if (e.getSource() == btnRecently) {
       ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, RECENTLY_CARD_NAME);
       cardsPanel.revalidate();
-    } else if (e.getSource() == menu) {
-      System.out.println("a");
     }
-  }
-  
-  /**
-   * Launch the application.
-   */
-  public static void main(String[] args) {
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Throwable e) {
-      e.printStackTrace();
-    }
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          MainWindow window = new MainWindow();
-          window.setVisible(true);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    });
   }
 }
