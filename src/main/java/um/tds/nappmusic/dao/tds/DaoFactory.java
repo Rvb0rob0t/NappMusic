@@ -2,6 +2,7 @@ package um.tds.nappmusic.dao.tds;
 
 import beans.Entidad;
 import beans.Propiedad;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -44,12 +45,56 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return playlistDao;
   }
 
+  // Basic operations on Entidad
+
+  public void registerEntity(Entidad entity) {
+    Entidad retrieved = servPersistencia.registrarEntidad(entity);
+    entity.setId(retrieved.getId());
+  }
+
+  public Entidad retrieveEntity(int id) {
+    return servPersistencia.recuperarEntidad(id);
+  }
+
+  public List<Entidad> retrieveEntities(String entityName) {
+    return servPersistencia.recuperarEntidades(entityName);
+  }
+
+  public void eraseEntity(Entidad entity) {
+    servPersistencia.borrarEntidad(entity);
+  }
+
+  // Encoding typed values in Propiedad
+
+  public Propiedad stringProperty(String field, String value) {
+    return new Propiedad(field, value);
+  }
+
+  public Propiedad booleanProperty(String field, boolean value) {
+    return new Propiedad(field, value ? "true" : "false");
+  }
+
+  public Propiedad objectProperty(String field, Identifiable obj) {
+    return new Propiedad(field, Integer.toString(obj.getId()));
+  }
+
+  public Propiedad objectCollectionProperty(String field, Collection<? extends Identifiable> objs) {
+    return new Propiedad(
+        field,
+        objs.stream()
+            .map(obj -> String.valueOf(obj.getId()))
+            .collect(Collectors.joining(COLLECTIONS_DEL)));
+  }
+
+  // Retrieving typed Propiedad from Entidad
+
   public String retrieveString(Entidad entity, String field) {
     return servPersistencia.recuperarPropiedadEntidad(entity, field);
   }
 
   public boolean retrieveBoolean(Entidad entity, String field) {
-    return servPersistencia.recuperarPropiedadEntidad(entity, field) == "true";
+    System.err.println(servPersistencia.recuperarPropiedadEntidad(entity, field));
+    return servPersistencia.recuperarPropiedadEntidad(entity, field).equals("true");
   }
 
   public int retrieveId(Entidad entity, String field) {
@@ -85,25 +130,5 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return retrieveIdList(entity, field).stream()
         .map(id -> playlistDao.get(id))
         .collect(Collectors.toList());
-  }
-
-  public Propiedad stringProperty(String field, String value) {
-    return new Propiedad(field, value);
-  }
-
-  public Propiedad booleanProperty(String field, boolean value) {
-    return new Propiedad(field, value ? "true" : "false");
-  }
-
-  public Propiedad objectProperty(String field, Identifiable obj) {
-    return new Propiedad(field, Integer.toString(obj.getId()));
-  }
-
-  public Propiedad objectCollectionProperty(String field, Collection<? extends Identifiable> objs) {
-    return new Propiedad(
-        field,
-        objs.stream()
-            .map(obj -> String.valueOf(obj.getId()))
-            .collect(Collectors.joining(COLLECTIONS_DEL)));
   }
 }
