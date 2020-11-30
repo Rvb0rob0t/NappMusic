@@ -20,14 +20,17 @@ public final class UserEncoder implements BiEncoder<User> {
     this.factory = factory;
   }
 
+  @Override
   public String getEntityName() {
     return ENTITY_FIELD;
   }
 
+  @Override
   public User newEmptyObj() {
     return new User();
   }
 
+  @Override
   public void initObjFromEntity(User user, Entidad entity) {
     user.setName(factory.retrieveString(entity, NAME_FIELD));
     user.setPremium(factory.retrieveBoolean(entity, PREMIUM_FIELD));
@@ -36,6 +39,7 @@ public final class UserEncoder implements BiEncoder<User> {
     user.setRecent(factory.retrievePlaylist(entity, RECENT_FIELD));
   }
 
+  @Override
   public Entidad encodeEntity(User user) {
     Entidad entity = new Entidad();
     entity.setNombre(ENTITY_FIELD);
@@ -50,5 +54,6 @@ public final class UserEncoder implements BiEncoder<User> {
     return entity;
   }
 
+  @Override
   public void updateEntity(Entidad entity, User user) {}
 }

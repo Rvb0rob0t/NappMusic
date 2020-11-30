@@ -4,59 +4,58 @@ import beans.Entidad;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import tds.driver.FactoriaServicioPersistencia;
-import tds.driver.ServicioPersistencia;
 import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.Identifiable;
 
 public class Pool<T extends Identifiable> implements Dao<T> {
   private BiEncoder<T> encoder;
   private HashMap<Integer, T> pool;
-  private ServicioPersistencia servPersistencia;
+  private DaoFactory factory;
 
   public Pool(DaoFactory factory, BiEncoder encoder) {
     this.encoder = encoder;
     this.pool = new HashMap<Integer, T>();
-    this.servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
+    this.factory = factory;
   }
 
+  @Override
   public T get(int id) {
     T t = pool.get(id);
     if (t != null) return t;
     T obj = encoder.newEmptyObj();
     obj.setId(id);
     pool.put(id, obj);
-    encoder.initObjFromEntity(obj, servPersistencia.recuperarEntidad(id));
+    encoder.initObjFromEntity(obj, factory.retrieveEntity(id));
     return obj;
   }
 
+  @Override
   public List<T> getAll() {
-    return servPersistencia.recuperarEntidades(encoder.getEntityName()).stream()
+    return factory.retrieveEntities(encoder.getEntityName()).stream()
         .map(entity -> get(entity.getId()))
         .collect(Collectors.toList());
   }
 
+  @Override
   public void register(T obj) {
     Entidad entity = encoder.encodeEntity(obj);
     // Registering the entity in the server gives it a unique id
-    entity = servPersistencia.registrarEntidad(entity);
-    obj.setId(entity.getId());
+    factory.registerEntity(entity);
     pool.put(obj.getId(), obj);
   }
 
+  @Override
   public void update(T obj) {
-    Entidad entity = servPersistencia.recuperarEntidad(obj.getId());
+    Entidad entity = factory.retrieveEntity(obj.getId());
     encoder.updateEntity(entity, obj);
     // We update the pool in case the object is not the same as the stored
     pool.put(obj.getId(), obj);
   }
 
-  public boolean delete(T obj) {
-    Entidad entity = servPersistencia.recuperarEntidad(obj.getId());
-    if (servPersistencia.borrarEntidad(entity)) {
-      pool.remove(obj.getId());
-      return true;
-    }
-    return false;
+  @Override
+  public void delete(T obj) {
+    Entidad entity = factory.retrieveEntity(obj.getId());
+    factory.eraseEntity(entity);
+    pool.remove(obj.getId());
   }
 }

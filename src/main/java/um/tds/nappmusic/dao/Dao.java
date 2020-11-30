@@ -11,5 +11,5 @@ public interface Dao<T extends Identifiable> {
 
   void update(T obj);
 
-  boolean delete(T obj);
+  void delete(T obj);
 }
