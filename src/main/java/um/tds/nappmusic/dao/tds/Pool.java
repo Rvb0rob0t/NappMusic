@@ -18,6 +18,10 @@ public class Pool<T extends Identifiable> implements Dao<T> {
     this.factory = factory;
   }
 
+  public void clear() {
+    pool.clear();
+  }
+
   @Override
   public T get(int id) {
     T t = pool.get(id);
@@ -41,6 +45,7 @@ public class Pool<T extends Identifiable> implements Dao<T> {
     Entidad entity = encoder.encodeEntity(obj);
     // Registering the entity in the server gives it a unique id
     factory.registerEntity(entity);
+    obj.setId(entity.getId());
     pool.put(obj.getId(), obj);
   }
 

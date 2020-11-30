@@ -35,8 +35,8 @@ public final class UserEncoder implements BiEncoder<User> {
     user.setName(factory.retrieveString(entity, NAME_FIELD));
     user.setPremium(factory.retrieveBoolean(entity, PREMIUM_FIELD));
     // int discountId = factory.retrieveDiscount(entity, DISCOUNT_FIELD);
-    user.setPlaylists(factory.retrievePlaylistList(entity, PLAYLISTS_FIELD));
-    user.setRecent(factory.retrievePlaylist(entity, RECENT_FIELD));
+    // user.setPlaylists(factory.retrievePlaylistList(entity, PLAYLISTS_FIELD));
+    // user.setRecent(factory.retrievePlaylist(entity, RECENT_FIELD));
   }
 
   @Override
@@ -47,10 +47,11 @@ public final class UserEncoder implements BiEncoder<User> {
         new ArrayList<Propiedad>(
             Arrays.asList(
                 factory.stringProperty(NAME_FIELD, user.getName()),
-                factory.booleanProperty(PREMIUM_FIELD, user.isPremium()),
-                factory.objectProperty(DISCOUNT_FIELD, user.getDiscount()),
-                factory.objectCollectionProperty(PLAYLISTS_FIELD, user.getPlaylists()),
-                factory.objectProperty(RECENT_FIELD, user.getRecent()))));
+                factory.booleanProperty(PREMIUM_FIELD, user.isPremium()) // ,
+                // factory.objectProperty(DISCOUNT_FIELD, user.getDiscount()),
+                // factory.objectCollectionProperty(PLAYLISTS_FIELD, user.getPlaylists()),
+                // factory.objectProperty(RECENT_FIELD, user.getRecent()))));
+                )));
     return entity;
   }
 
