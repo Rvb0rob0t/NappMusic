@@ -42,6 +42,10 @@ public class Pool<T extends Identifiable> implements Dao<T> {
 
   @Override
   public void register(T obj) {
+    // This step is very important to avoid cycles when registering
+    // an entity that triggers more registers
+    if (pool.get(obj.getId()) != null) return;
+
     Entidad entity = encoder.encodeEntity(obj);
     // Registering the entity in the server gives it a unique id
     factory.registerEntity(entity);

@@ -55,7 +55,7 @@ public class Song implements Identifiable {
   }
 
   public void setAuthor(String author) {
-    this.title = author;
+    this.author = author;
   }
 
   public void setFilePath(String filePath) {

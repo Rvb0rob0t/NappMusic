@@ -16,7 +16,7 @@ import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.domain.User;
 
 public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
-  private static final String COLLECTIONS_DEL = " ";
+  private static final String COLLECTIONS_DEL = "\t";
 
   private ServicioPersistencia servPersistencia;
   private Dao<User> userDao;
@@ -26,8 +26,8 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
   public DaoFactory() {
     servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
     userDao = new Pool<User>(this, new UserEncoder(this));
-    // songDao = new Pool<Song>(this, new SongEncoder(this));
-    // playlistDao = new Pool<Playlist>(this, new PlaylistEncoder(this));
+    songDao = new Pool<Song>(this, new SongEncoder(this));
+    playlistDao = new Pool<Playlist>(this, new PlaylistEncoder(this));
   }
 
   @Override
@@ -70,19 +70,49 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return new Propiedad(field, value);
   }
 
+  public Propiedad intProperty(String field, int value) {
+    return new Propiedad(field, Integer.toString(value));
+  }
+
   public Propiedad booleanProperty(String field, boolean value) {
     return new Propiedad(field, value ? "true" : "false");
   }
 
+  // FIXME This is to support an old test and is no longer needed
   public Propiedad objectProperty(String field, Identifiable obj) {
     return new Propiedad(field, Integer.toString(obj.getId()));
   }
 
+  // FIXME This is to support an old test and is no longer needed
   public Propiedad objectCollectionProperty(String field, Collection<? extends Identifiable> objs) {
     return new Propiedad(
         field,
         objs.stream()
             .map(obj -> String.valueOf(obj.getId()))
+            .collect(Collectors.joining(COLLECTIONS_DEL)));
+  }
+
+  public Propiedad userProperty(String field, User user) {
+    userDao.register(user);
+    return new Propiedad(field, Integer.toString(user.getId()));
+  }
+
+  public Propiedad songProperty(String field, Song song) {
+    songDao.register(song);
+    return new Propiedad(field, Integer.toString(song.getId()));
+  }
+
+  public Propiedad playlistProperty(String field, Playlist playlist) {
+    playlistDao.register(playlist);
+    return new Propiedad(field, Integer.toString(playlist.getId()));
+  }
+
+  public Propiedad songCollectionProperty(String field, Collection<Song> songs) {
+    return new Propiedad(
+        field,
+        songs.stream()
+            .peek(song -> songDao.register(song))
+            .map(song -> String.valueOf(song.getId()))
             .collect(Collectors.joining(COLLECTIONS_DEL)));
   }
 
@@ -92,8 +122,11 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return servPersistencia.recuperarPropiedadEntidad(entity, field);
   }
 
+  public int retrieveInt(Entidad entity, String field) {
+    return Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(entity, field));
+  }
+
   public boolean retrieveBoolean(Entidad entity, String field) {
-    System.err.println(servPersistencia.recuperarPropiedadEntidad(entity, field));
     return servPersistencia.recuperarPropiedadEntidad(entity, field).equals("true");
   }
 
@@ -102,6 +135,7 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
   }
 
   public List<Integer> retrieveIdList(Entidad entity, String field) {
+    String p = servPersistencia.recuperarPropiedadEntidad(entity, field);
     return Arrays.stream(
             servPersistencia.recuperarPropiedadEntidad(entity, field).split(COLLECTIONS_DEL))
         .map(Integer::valueOf)
