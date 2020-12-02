@@ -1,6 +1,5 @@
 package um.tds.nappmusic.domain;
 
-
 public interface Discount {
   public boolean isApplicable(User user);
 

@@ -1,6 +1,5 @@
 package um.tds.nappmusic.domain;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -30,8 +29,8 @@ public class UserCatalog {
     }
   }
 
-  public Collection<User> getUsuarios() throws DaoException {
-    return usersByName.values();
+  public List<User> getUsers() throws DaoException {
+    return factory.getUserDao().getAll();
   }
 
   public User getUser(String name) {
@@ -42,7 +41,7 @@ public class UserCatalog {
     usersByName.put(user.getName(), user);
   }
 
-  public User removeUser(String userName) {
-    return usersByName.remove(userName);
+  public User removeUser(String name) {
+    return usersByName.remove(name);
   }
 }
