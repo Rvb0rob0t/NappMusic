@@ -33,8 +33,6 @@ class PoolTests {
     User user = new User();
     user.setName("Alberto");
     user.setPremium(false);
-    // TODO
-    // user.setDiscount(new );
     user.setPlaylists(new ArrayList<Playlist>());
     user.setRecent(new Playlist());
     // TODO should we actually set the user in a decent state in User()?
@@ -47,8 +45,8 @@ class PoolTests {
     userDao.clear();
     User retrieved = userDao.get(user.getId());
     assertEquals(user.getName(), retrieved.getName());
-    // assertEquals(user.isPremium(), retrieved.isPremium());
     assertEquals(user.isPremium(), retrieved.isPremium());
+    // TODO
     // assertListsIdsMatch(user.getPlaylists(), retrieved.getPlaylists());
     assertEquals(user.getRecent().getId(), retrieved.getRecent().getId());
   }
