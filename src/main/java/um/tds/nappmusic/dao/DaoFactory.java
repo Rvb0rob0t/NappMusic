@@ -5,7 +5,7 @@ import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.domain.User;
 
 public abstract class DaoFactory {
-  public static final String TDS_DAO = "es.umu.tds.dao.TDSFactoriaDAO";
+  public static final String TDS_DAO = "um.tds.nappmusic.dao.tds.DaoFactory";
 
   private static DaoFactory singleton = null;
 
