@@ -1,6 +1,13 @@
 package um.tds.nappmusic.domain;
 
-import um.tds.nappmusic.dao.Identifiable;
 
-// TODO
-interface Discount extends Identifiable {}
+public interface Discount {
+  public boolean isApplicable(User user);
+
+  public int calculatePrice();
+
+  // TODO :(
+  public static int getBasePrice() {
+    return 1899; // 18.99
+  }
+}
