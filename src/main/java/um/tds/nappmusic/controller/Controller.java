@@ -76,22 +76,6 @@ public final class Controller {
     return currentUser;
   }
 
-  public ArrayList<Playlist> getUserPlaylists() {
-    if (currentUser == null) {
-      // TODO Throw exception
-    }
-
-    return currentUser.getPlaylists();
-  }
-
-  public Playlist getUserRecentlyPlayedSongs() {
-    if (currentUser == null) {
-      // TODO Throw exception
-    }
-
-    return currentUser.getRecent();
-  }
-
   public boolean isUserRegistered(String name) {
     return userCatalog.getUser(name) != null;
   }
@@ -148,5 +132,36 @@ public final class Controller {
   // Functionality
   public Playlist searchSongsBy(String titleSubstring, String authorSubstring, String style) {
     return songCatalog.searchSongsBy(titleSubstring, authorSubstring, style);
+  }
+
+  public Playlist createPlaylist() {
+    // TODO Should create the playlist elsewhere?
+    Playlist playlist = new Playlist();
+    currentUser.addPlaylist(playlist);
+    return playlist;
+  }
+
+  public boolean addToPlaylist(Playlist playlist, Song song) { // TODO Does it make sense?
+    return playlist.add(song);
+  }
+
+  public boolean removeFromPlaylist(Playlist playlist, Song song) { // TODO Does it make sense?
+    return playlist.remove(song);
+  }
+
+  public ArrayList<Playlist> getUserPlaylists() {
+    if (currentUser == null) {
+      // TODO Throw exception
+    }
+
+    return currentUser.getPlaylists();
+  }
+
+  public Playlist getUserRecentlyPlayedSongs() {
+    if (currentUser == null) {
+      // TODO Throw exception
+    }
+
+    return currentUser.getRecent();
   }
 }
