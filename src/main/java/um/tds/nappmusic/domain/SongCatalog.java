@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.DaoFactory;
@@ -14,7 +15,9 @@ public class SongCatalog {
   private HashMap<String, ArrayList<Song>> songsByAuthor;
 
   public static SongCatalog getSingleton() {
-    if (singleton == null) singleton = new SongCatalog();
+    if (singleton == null) {
+      singleton = new SongCatalog();
+    }
     return singleton;
   }
 
@@ -22,9 +25,9 @@ public class SongCatalog {
     try {
       factory = DaoFactory.getSingleton();
       List<Song> songs = factory.getSongDao().getAll();
-      songsByAuthor = new HashMap();
+      songsByAuthor = new HashMap<String, ArrayList<Song>>();
       for (Song song : songs) {
-        songsByAuthor.computeIfAbsent(song.getAuthor(), k -> new ArrayList()).add(song);
+        songsByAuthor.computeIfAbsent(song.getAuthor(), k -> new ArrayList<Song>()).add(song);
       }
     } catch (DaoException e) {
       // TODO what do we do?
@@ -33,7 +36,7 @@ public class SongCatalog {
   }
 
   public List<Song> getAllSongs() {
-    List<Song> all = new LinkedList();
+    List<Song> all = new LinkedList<Song>();
     for (ArrayList<Song> authorSongs : songsByAuthor.values()) {
       all.addAll(authorSongs);
     }
@@ -42,6 +45,12 @@ public class SongCatalog {
 
   public Playlist getSongsByAuthor(String author) {
     return new Playlist("Songs of " + author, new ArrayList<Song>(songsByAuthor.get(author)));
+  }
+
+  public Song getSong(String title, String author) {
+    Optional<Song> result =
+        songsByAuthor.get(author).stream().filter(s -> s.getTitle().equals(title)).findAny();
+    return result.orElse(null);
   }
 
   public Playlist searchSongsByTitle(String pattern) {
@@ -53,7 +62,7 @@ public class SongCatalog {
   }
 
   public List<Playlist> searchSongsByAuthor(String pattern) {
-    ArrayList<Playlist> result = new ArrayList();
+    ArrayList<Playlist> result = new ArrayList<Playlist>();
     for (HashMap.Entry<String, ArrayList<Song>> entry : songsByAuthor.entrySet()) {
       String author = entry.getKey();
       if (author.contains(pattern)) {
@@ -63,7 +72,19 @@ public class SongCatalog {
     return result;
   }
 
-  // TODO songs to dao?
+  public Playlist searchSongsBy(String titleSubstring, String authorSubstring, String style) {
+    ArrayList<Song> result =
+        getAllSongs().stream()
+            .filter(
+                song ->
+                    song.getStyles().stream().anyMatch(s -> s.equals(style))
+                        && song.getAuthor().contains(authorSubstring)
+                        && song.getTitle().contains(titleSubstring))
+            .collect(Collectors.toCollection(ArrayList::new));
+
+    return new Playlist("Search Results", result);
+  }
+
   public void addSong(Song song) {
     songsByAuthor.computeIfAbsent(song.getAuthor(), k -> new ArrayList<Song>()).add(song);
   }

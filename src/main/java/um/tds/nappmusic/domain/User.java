@@ -80,7 +80,7 @@ public class User implements Identifiable {
   }
 
   public void setPlaylists(List<Playlist> playlists) {
-    this.playlists = new ArrayList(playlists);
+    this.playlists = new ArrayList<Playlist>(playlists);
   }
 
   public void setRecent(Playlist recent) {
