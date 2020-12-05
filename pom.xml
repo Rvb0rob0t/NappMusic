@@ -20,7 +20,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>es.umu</groupId>
+      <groupId>um.tds</groupId>
       <artifactId>DriverPersistencia</artifactId>
       <version>1.0</version>
       <scope>compile</scope>
