@@ -30,9 +30,9 @@ public class User implements Identifiable {
   }
 
   // TODO consider if this is necessary
-  // public void addPlaylist(Playlist playlist) {
-  //     playlists.add(playlist);
-  // }
+  public void addPlaylist(Playlist playlist) {
+    playlists.add(playlist);
+  }
 
   // TODO consider if this is necessary
   // public void updateRecent(Song reproduccion) {
@@ -80,7 +80,7 @@ public class User implements Identifiable {
   }
 
   public void setPlaylists(List<Playlist> playlists) {
-    this.playlists = new ArrayList(playlists);
+    this.playlists = new ArrayList<Playlist>(playlists);
   }
 
   public void setRecent(Playlist recent) {

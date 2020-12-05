@@ -16,8 +16,12 @@ public class Playlist implements Identifiable {
     this.songs = songs;
   }
 
-  public boolean add(Song cancion) {
-    return songs.add(cancion);
+  public boolean add(Song song) {
+    return songs.add(song);
+  }
+
+  public boolean remove(Song song) {
+    return songs.remove(song);
   }
 
   public int getId() {
