@@ -4,11 +4,17 @@ import beans.Entidad;
 import beans.Propiedad;
 import java.util.ArrayList;
 import java.util.Arrays;
+import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.User;
 
 public final class UserEncoder implements BiEncoder<User> {
   private static final String ENTITY_FIELD = "User";
   private static final String NAME_FIELD = "name";
+  private static final String SURNAME_FIELD = "surname";
+  private static final String BIRTHDATE_FIELD = "date of birth";
+  private static final String EMAIL_FIELD = "e-mail";
+  private static final String USERNAME_FIELD = "username";
+  private static final String PASSWORD_FIELD = "password";
   private static final String PREMIUM_FIELD = "premium";
   private static final String PLAYLISTS_FIELD = "lists";
   private static final String RECENT_FIELD = "recent";
@@ -32,8 +38,14 @@ public final class UserEncoder implements BiEncoder<User> {
   @Override
   public void initObjFromEntity(User user, Entidad entity) {
     user.setName(factory.retrieveString(entity, NAME_FIELD));
+    user.setSurname(factory.retrieveString(entity, SURNAME_FIELD));
+    user.setBirthDate(factory.retrieveString(entity, BIRTHDATE_FIELD));
+    user.setEmail(factory.retrieveString(entity, EMAIL_FIELD));
+    user.setUsername(factory.retrieveString(entity, USERNAME_FIELD));
+    user.setPassword(factory.retrieveString(entity, PASSWORD_FIELD));
     user.setPremium(factory.retrieveBoolean(entity, PREMIUM_FIELD));
     // user.setPlaylists(factory.retrievePlaylistList(entity, PLAYLISTS_FIELD));
+    user.setPlaylists(new ArrayList<Playlist>()); // TODO remove playlist import after fix this
     user.setRecent(factory.retrievePlaylist(entity, RECENT_FIELD));
   }
 
@@ -45,8 +57,13 @@ public final class UserEncoder implements BiEncoder<User> {
         new ArrayList<Propiedad>(
             Arrays.asList(
                 factory.stringProperty(NAME_FIELD, user.getName()),
+                factory.stringProperty(SURNAME_FIELD, user.getSurname()),
+                factory.stringProperty(BIRTHDATE_FIELD, user.getBirthDate()),
+                factory.stringProperty(EMAIL_FIELD, user.getEmail()),
+                factory.stringProperty(USERNAME_FIELD, user.getUsername()),
+                factory.stringProperty(PASSWORD_FIELD, user.getPassword()),
                 factory.booleanProperty(PREMIUM_FIELD, user.isPremium()),
-                // factory.objectCollectionProperty(PLAYLISTS_FIELD, user.getPlaylists()),
+                // factory.playlistCollectionProperty(PLAYLISTS_FIELD, user.getPlaylists()),
                 factory.playlistProperty(RECENT_FIELD, user.getRecent()))));
     return entity;
   }

@@ -16,8 +16,12 @@ public class Playlist implements Identifiable {
     this.songs = songs;
   }
 
-  public boolean add(Song cancion) {
-    return songs.add(cancion);
+  public boolean add(Song song) {
+    return songs.add(song);
+  }
+
+  public boolean remove(Song song) {
+    return songs.remove(song);
   }
 
   public int getId() {
@@ -28,8 +32,16 @@ public class Playlist implements Identifiable {
     return name;
   }
 
+  public int getSize() {
+    return songs.size();
+  }
+
   public ArrayList<Song> getSongs() {
     return songs;
+  }
+
+  public Song getSong(int index) {
+    return songs.get(index);
   }
 
   public void setId(int id) {
@@ -41,6 +53,6 @@ public class Playlist implements Identifiable {
   }
 
   public void setSongs(List<Song> songs) {
-    this.songs = new ArrayList(songs);
+    this.songs = new ArrayList<Song>(songs);
   }
 }

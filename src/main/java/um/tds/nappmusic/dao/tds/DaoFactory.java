@@ -116,6 +116,15 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
             .collect(Collectors.joining(COLLECTIONS_DEL)));
   }
 
+  public Propiedad playlistCollectionProperty(String field, Collection<Playlist> playlists) {
+    return new Propiedad(
+        field,
+        playlists.stream()
+            .peek(playlist -> playlistDao.register(playlist))
+            .map(playlist -> String.valueOf(playlist.getId()))
+            .collect(Collectors.joining(COLLECTIONS_DEL)));
+  }
+
   // Retrieving typed Propiedad from Entidad
 
   public String retrieveString(Entidad entity, String field) {
@@ -135,7 +144,6 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
   }
 
   public List<Integer> retrieveIdList(Entidad entity, String field) {
-    String p = servPersistencia.recuperarPropiedadEntidad(entity, field);
     return Arrays.stream(
             servPersistencia.recuperarPropiedadEntidad(entity, field).split(COLLECTIONS_DEL))
         .map(Integer::valueOf)

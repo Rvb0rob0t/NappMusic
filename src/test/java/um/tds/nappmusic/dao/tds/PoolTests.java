@@ -32,6 +32,11 @@ class PoolTests {
   void checkUserPool() {
     User user = new User();
     user.setName("Alberto");
+    user.setSurname("Robles");
+    user.setBirthDate("18/08/1999");
+    user.setEmail("albertor@um.es");
+    user.setUsername("Albertoc");
+    user.setPassword("1234");
     user.setPremium(false);
     user.setPlaylists(new ArrayList<Playlist>());
     user.setRecent(new Playlist());
@@ -45,6 +50,11 @@ class PoolTests {
     userDao.clear();
     User retrieved = userDao.get(user.getId());
     assertEquals(user.getName(), retrieved.getName());
+    assertEquals(user.getSurname(), retrieved.getSurname());
+    assertEquals(user.getBirthDate(), retrieved.getBirthDate());
+    assertEquals(user.getEmail(), retrieved.getEmail());
+    assertEquals(user.getUsername(), retrieved.getUsername());
+    assertEquals(user.getPassword(), retrieved.getPassword());
     assertEquals(user.isPremium(), retrieved.isPremium());
     // TODO
     // assertListsIdsMatch(user.getPlaylists(), retrieved.getPlaylists());
@@ -93,6 +103,10 @@ class PoolTests {
     Playlist retrieved = playlistDao.get(playlist.getId());
 
     assertEquals(playlist.getName(), retrieved.getName());
+    assertEquals(playlist.getSize(), retrieved.getSize());
+    for (int i = 0; i < playlist.getSize(); i++) {
+      assertEquals(playlist.getSong(i), retrieved.getSong(i));
+    }
     assertListsIdsMatch(playlist.getSongs(), retrieved.getSongs());
   }
 }
