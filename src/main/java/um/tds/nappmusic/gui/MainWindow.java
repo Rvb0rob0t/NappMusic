@@ -26,21 +26,17 @@ import um.tds.nappmusic.gui.cards.SearchPanel;
 public class MainWindow extends JFrame implements ActionListener {
   private static final String RESOURCES = "src/main/resources";
 
-  private PlayerPanel playerPanel;
+  private MusicPlayer musicPlayer;
 
   private JPanel topPanel;
-  private JMenu menu;
+  private JLabel logoLabel;
   private JMenuItem upgradeMenuItem;
   private JMenuItem signOutMenuItem;
 
   private JPanel cardsPanel;
-  private HomePanel homePanel;
   private static final String HOME_CARD_NAME = "Home";
-  private SearchPanel searchPanel;
   private static final String SEARCH_CARD_NAME = "Search";
-  private PlaylistsPanel playlistsPanel;
   private static final String PLAYLISTS_CARD_NAME = "Playlists";
-  private RecentlyPlayedPane recentlyPlayedPane;
   private static final String RECENTLY_CARD_NAME = "Recently";
 
   private JPanel leftSidePanel;
@@ -48,8 +44,6 @@ public class MainWindow extends JFrame implements ActionListener {
   private JButton btnSearch;
   private JButton btnPlaylists;
   private JButton btnRecently;
-  private JMenuBar menuBar;
-  private JLabel logoLabel;
 
   /** Create the application. */
   public MainWindow() {
@@ -57,10 +51,8 @@ public class MainWindow extends JFrame implements ActionListener {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.getContentPane().setLayout(new BorderLayout());
 
-    playerPanel = new PlayerPanel();
-    playerPanel.changeSongData(
-        "src/main/resources/torero.jpg", "Emilio Domínguez Sánchez", "Torero");
-    this.getContentPane().add(playerPanel, BorderLayout.SOUTH);
+    musicPlayer = new MusicPlayer();
+    this.getContentPane().add(musicPlayer.getPanel(), BorderLayout.SOUTH);
 
     createLeftSidePanel();
     this.getContentPane().add(leftSidePanel, BorderLayout.WEST);
@@ -114,18 +106,10 @@ public class MainWindow extends JFrame implements ActionListener {
   /** Create the changing panel. */
   private void createCardsPanel() {
     cardsPanel = new JPanel(new CardLayout());
-
-    homePanel = new HomePanel();
-    cardsPanel.add(homePanel, HOME_CARD_NAME);
-
-    searchPanel = new SearchPanel();
-    cardsPanel.add(searchPanel, SEARCH_CARD_NAME);
-
-    playlistsPanel = new PlaylistsPanel();
-    cardsPanel.add(playlistsPanel, PLAYLISTS_CARD_NAME);
-
-    recentlyPlayedPane = new RecentlyPlayedPane();
-    cardsPanel.add(recentlyPlayedPane, RECENTLY_CARD_NAME);
+    cardsPanel.add(new HomePanel(), HOME_CARD_NAME);
+    cardsPanel.add(new SearchPanel(musicPlayer), SEARCH_CARD_NAME);
+    cardsPanel.add(new PlaylistsPanel(musicPlayer), PLAYLISTS_CARD_NAME);
+    cardsPanel.add(new RecentlyPlayedPane(musicPlayer), RECENTLY_CARD_NAME);
   }
 
   /** Create the panel with the user settings. */
@@ -137,8 +121,8 @@ public class MainWindow extends JFrame implements ActionListener {
     logoLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
     topPanel.add(logoLabel, BorderLayout.WEST);
 
-    menuBar = new JMenuBar();
-    menu = new JMenu("Username");
+    JMenuBar menuBar = new JMenuBar();
+    JMenu menu = new JMenu("Username");
     upgradeMenuItem = new JMenuItem("Mejora tu cuenta");
     menu.add(upgradeMenuItem);
     signOutMenuItem = new JMenuItem("Cerrar sesión");

@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import um.tds.nappmusic.controller.Controller;
 
 @SuppressWarnings("serial")
 public class LoginWindow extends JFrame {
@@ -113,10 +114,10 @@ public class LoginWindow extends JFrame {
     btnLogin.setVerticalAlignment(SwingConstants.BOTTOM);
     btnLogin.addActionListener(
         event -> {
-          // boolean login = Controlador.getUnicaInstancia().loginUsuario(nickField.getText(),
-          // new String(passwordField.getPassword()));
-
-          if (true) {
+          boolean login =
+              Controller.getSingleton()
+                  .logIn(nickField.getText(), new String(passwordField.getPassword()));
+          if (login) {
             MainWindow window = new MainWindow();
             window.setVisible(true);
             this.dispose();
