@@ -10,7 +10,7 @@ import um.tds.nappmusic.dao.DaoFactory;
 public class UserCatalog {
   private static UserCatalog singleton = null;
   private DaoFactory factory;
-  private HashMap<String, User> usersByName;
+  private HashMap<String, User> usersByUsername;
 
   public static UserCatalog getSingleton() {
     if (singleton == null) {
@@ -23,9 +23,9 @@ public class UserCatalog {
     try {
       factory = DaoFactory.getSingleton();
       List<User> usuarios = factory.getUserDao().getAll();
-      usersByName =
+      usersByUsername =
           new HashMap<String, User>(
-              usuarios.stream().collect(Collectors.toMap(User::getName, Function.identity())));
+              usuarios.stream().collect(Collectors.toMap(User::getUsername, Function.identity())));
     } catch (DaoException e) {
       e.printStackTrace();
     }
@@ -35,15 +35,15 @@ public class UserCatalog {
     return factory.getUserDao().getAll();
   }
 
-  public User getUser(String name) {
-    return usersByName.get(name);
+  public User getUser(String username) {
+    return usersByUsername.get(username);
   }
 
   public void addUser(User user) {
-    usersByName.put(user.getName(), user);
+    usersByUsername.put(user.getUsername(), user);
   }
 
-  public User removeUser(String name) {
-    return usersByName.remove(name);
+  public User removeUser(String username) {
+    return usersByUsername.remove(username);
   }
 }
