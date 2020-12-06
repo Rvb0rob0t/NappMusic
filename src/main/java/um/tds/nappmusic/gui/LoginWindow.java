@@ -66,9 +66,9 @@ public class LoginWindow extends JFrame {
   }
 
   private JPanel createFieldsPanel() {
+    JPanel centeringWrapperPanel = new JPanel(new FlowLayout());
     JPanel fieldsPanel = new JPanel();
-    fieldsPanel.setBorder(
-        new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+    fieldsPanel.setBorder(new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP));
     fieldsPanel.setLayout(new BoxLayout(fieldsPanel, BoxLayout.Y_AXIS));
 
     // Nick field
@@ -76,6 +76,7 @@ public class LoginWindow extends JFrame {
     nickFieldPanel.setLayout(new BorderLayout());
 
     JLabel userLabel = new JLabel("Usuario: ");
+    // Put the text next to the label
     userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     userLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
     nickFieldPanel.add(userLabel);
@@ -99,7 +100,8 @@ public class LoginWindow extends JFrame {
 
     fieldsPanel.add(passwordFieldPanel);
 
-    return fieldsPanel;
+    centeringWrapperPanel.add(fieldsPanel);
+    return centeringWrapperPanel;
   }
 
   private JPanel createButtonsPanel() {
