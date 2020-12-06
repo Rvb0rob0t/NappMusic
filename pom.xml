@@ -51,6 +51,12 @@
       <version>5.7.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-media</artifactId>
+      <version>16-ea+5</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
     <dependency>
         <groupId>com.h2database</groupId>
