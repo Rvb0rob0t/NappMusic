@@ -3,15 +3,14 @@ package um.tds.nappmusic.gui.cards;
 import java.awt.BorderLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
-import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
@@ -22,6 +21,9 @@ public class SearchPanel extends JPanel {
   private static final int FIELD_WIDTH = 10;
   private JTextField titleField;
   private JTextField authorField;
+  private JComboBox<String> styleComboBox;
+
+  private JScrollPane scrollPane;
 
   /** . */
   public SearchPanel(MusicPlayer musicPlayer) {
@@ -55,35 +57,33 @@ public class SearchPanel extends JPanel {
         });
     fieldsPanel.add(authorField);
 
-    JComboBox<String> genreComboBox = new JComboBox<String>();
-    genreComboBox.setModel(
+    styleComboBox = new JComboBox<String>();
+    styleComboBox.setModel(
         new DefaultComboBoxModel<String>(
-            new String[] {
-              "Rock", "Indie", "Pop", "Dance / Electronic"
-            })); // TODO Get from controller
-    fieldsPanel.add(genreComboBox);
+            new String[] {"Nana", "Rock", "Indie", "Pop"})); // TODO Get from controller
+    fieldsPanel.add(styleComboBox);
 
     JButton searchButton = new JButton("Buscar");
     searchButton.addActionListener(
         e -> {
-          // TODO Get search playlist from controller
-          Song prueba =
-              new Song(
-                  "Torero",
-                  "Emilio Domínguez Sánchez",
-                  null,
-                  "src/main/resources/CALLA PEQUEÑO - Baby Song Sleep Music Sleeping.mp3",
-                  0);
-          ArrayList<Song> pruebaa = new ArrayList<Song>();
-          pruebaa.add(prueba);
-          Playlist playlist = new Playlist("webo", pruebaa);
-          PlaylistTable searchTable = new PlaylistTable(musicPlayer, playlist);
-          JScrollPane scrollPane = new JScrollPane(searchTable.getTable());
-          this.add(scrollPane, BorderLayout.CENTER);
-          this.revalidate();
+          changeTable(
+              musicPlayer,
+              Controller.getSingleton()
+                  .searchSongsBy(
+                      titleField.getText(),
+                      authorField.getText(),
+                      (String) styleComboBox.getSelectedItem()));
         });
     fieldsPanel.add(searchButton);
-
     this.add(fieldsPanel, BorderLayout.NORTH);
+
+    scrollPane = new JScrollPane();
+    this.add(scrollPane, BorderLayout.CENTER);
+  }
+
+  private void changeTable(MusicPlayer musicPlayer, Playlist playlist) {
+    PlaylistTable searchTable = new PlaylistTable(musicPlayer, playlist);
+    scrollPane.setViewportView(searchTable.getTable());
+    this.revalidate();
   }
 }
