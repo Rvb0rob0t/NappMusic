@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,12 +22,13 @@ import javax.swing.border.EmptyBorder;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
 
-@SuppressWarnings("restriction")
+@SuppressWarnings("restriction") // TODO Check
 public class MusicPlayer {
   private static final String RESOURCES = "src/main/resources";
   private static final String DEFAULT_THUMBNAIL = RESOURCES + "/default_thumbnail.png";
   private static final int THUMB_WIDTH = 100;
   private static final int THUMB_HEIGHT = 100;
+  private static final double SECS_TO_BE_LISTENED = 10;
 
   private static final ImageIcon PREV_ICON = new ImageIcon(RESOURCES + "/previous.png");
   private static final ImageIcon PLAY_ICON = new ImageIcon(RESOURCES + "/play.png");
@@ -172,7 +174,13 @@ public class MusicPlayer {
 
     File f = new File(song.getFilePath());
     Media media = new Media(f.toURI().toString());
+    media.getMarkers().put("listened", new Duration(SECS_TO_BE_LISTENED * 1000));
+
     mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.setOnMarker(
+        mediaMarkerEvent -> {
+          // Controller.getSingleton().updatePlaysCounter(song);
+        });
   }
 
   /**
