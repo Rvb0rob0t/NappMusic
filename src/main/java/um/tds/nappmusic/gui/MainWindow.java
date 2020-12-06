@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +16,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import um.tds.nappmusic.app.App;
+import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.gui.cards.HomePanel;
 import um.tds.nappmusic.gui.cards.PlaylistsPanel;
 import um.tds.nappmusic.gui.cards.RecentlyPlayedPane;
@@ -24,8 +25,6 @@ import um.tds.nappmusic.gui.cards.SearchPanel;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame implements ActionListener {
-  private static final String RESOURCES = "src/main/resources";
-
   private MusicPlayer musicPlayer;
 
   private JPanel topPanel;
@@ -47,7 +46,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
   /** Create the application. */
   public MainWindow() {
-    super("NappMusic");
+    super(App.NAME);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.getContentPane().setLayout(new BorderLayout());
 
@@ -116,7 +115,7 @@ public class MainWindow extends JFrame implements ActionListener {
   private void createTopPanel(String username) {
     topPanel = new JPanel(new BorderLayout());
 
-    logoLabel = new JLabel("NappMusic", new ImageIcon(RESOURCES + "/Logo.png"), JLabel.CENTER);
+    logoLabel = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
     logoLabel.setBorder(new EmptyBorder(10, 30, 10, 0));
     logoLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
     topPanel.add(logoLabel, BorderLayout.WEST);

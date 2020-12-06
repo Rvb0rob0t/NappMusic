@@ -6,7 +6,6 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -19,18 +18,20 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import um.tds.nappmusic.app.App;
+import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
 
 @SuppressWarnings("serial")
 public class LoginWindow extends JFrame {
   private static final int FIELDS_WIDTH = 15;
-  private static final String RESOURCES = "src/main/resources";
+
   private JTextField nickField;
   private JPasswordField passwordField;
 
   /** Create the window. */
   public LoginWindow() {
-    super("Login AppMusic");
+    super(App.NAME + " - Login");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.getContentPane().setLayout(new BorderLayout());
 
@@ -43,10 +44,9 @@ public class LoginWindow extends JFrame {
 
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel();
-    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 15));
+    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-    JLabel lblTitulo =
-        new JLabel("NappMusic", new ImageIcon(RESOURCES + "/Logo.png"), JLabel.CENTER);
+    JLabel lblTitulo = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
     lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 20));
     lblTitulo.setForeground(Color.DARK_GRAY);
     topPanel.add(lblTitulo);
@@ -136,11 +136,9 @@ public class LoginWindow extends JFrame {
     btnRegistro.addActionListener(
         event -> {
           // RegisterDialog registerDialog = new RegisterDialog();
-          JDialog registerDialog = new JDialog(this, "Registro NappMusic", true);
+          JDialog registerDialog = new JDialog(this, App.NAME + " - Register", true);
           registerDialog.getContentPane().setLayout(new BorderLayout());
-          registerDialog
-              .getContentPane()
-              .add(new JLabel("NappMusic", new ImageIcon(RESOURCES + "/Logo.png"), JLabel.CENTER));
+          registerDialog.getContentPane().add(new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER));
           registerDialog.setLocationRelativeTo(null);
           registerDialog.pack();
           registerDialog.setVisible(true);
