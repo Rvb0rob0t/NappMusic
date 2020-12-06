@@ -11,6 +11,11 @@ public class Playlist implements Identifiable {
 
   public Playlist() {}
 
+  public Playlist(String name) {
+    this.name = name;
+    this.songs = new ArrayList<Song>();
+  }
+
   public Playlist(String name, ArrayList<Song> songs) {
     this.name = name;
     this.songs = songs;

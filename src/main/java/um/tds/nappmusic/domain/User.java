@@ -58,6 +58,39 @@ public class User implements Identifiable {
     this.recent = recent;
   }
 
+  /**
+   * Create a user.
+   *
+   * @param name The name of the user
+   * @param surname The surname of the user
+   * @param birthDate The date of birth of the user
+   * @param email The email of the user
+   * @param username The nickname of the user
+   * @param password The password of the user
+   * @param premium true if the user is premium, false otherwise
+   */
+  public User(
+      String name,
+      String surname,
+      String birthDate,
+      String email,
+      String username,
+      String password,
+      boolean premium) {
+    // TODO null
+    this(
+        name,
+        surname,
+        birthDate,
+        email,
+        username,
+        password,
+        premium,
+        null,
+        new ArrayList<Playlist>(),
+        new Playlist("Recent"));
+  }
+
   // TODO consider if this is necessary
   public void addPlaylist(Playlist playlist) {
     playlists.add(playlist);

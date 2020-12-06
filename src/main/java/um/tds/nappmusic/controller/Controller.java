@@ -74,8 +74,7 @@ public final class Controller {
       return false;
     }
 
-    User user =
-        new User(name, surname, birthDate, email, username, password, false, null, null, null);
+    User user = new User(name, surname, birthDate, email, username, password, false);
     userCatalog.addUser(user);
     userDao.register(user);
     return true;

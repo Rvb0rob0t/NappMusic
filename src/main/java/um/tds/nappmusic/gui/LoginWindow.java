@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -75,7 +74,7 @@ public class LoginWindow extends JFrame {
     JPanel nickFieldPanel = new JPanel();
     nickFieldPanel.setLayout(new BorderLayout());
 
-    JLabel userLabel = new JLabel("Usuario: ");
+    JLabel userLabel = new JLabel("User: ");
     // Put the text next to the label
     userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     userLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -90,7 +89,7 @@ public class LoginWindow extends JFrame {
     JPanel passwordFieldPanel = new JPanel();
     passwordFieldPanel.setLayout(new BorderLayout());
 
-    JLabel passwordLabel = new JLabel("Contraseña: ");
+    JLabel passwordLabel = new JLabel("Password: ");
     passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     passwordLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
     passwordFieldPanel.add(passwordLabel);
@@ -132,25 +131,19 @@ public class LoginWindow extends JFrame {
           }
         });
 
-    JButton btnRegistro = new JButton("Registro");
+    JButton btnRegistro = new JButton("Register");
     loginRegisterButtonsPanel.add(btnRegistro);
     btnRegistro.setVerticalAlignment(SwingConstants.BOTTOM);
     btnRegistro.addActionListener(
         event -> {
-          // RegisterDialog registerDialog = new RegisterDialog();
-          JDialog registerDialog = new JDialog(this, App.NAME + " - Register", true);
-          registerDialog.getContentPane().setLayout(new BorderLayout());
-          registerDialog.getContentPane().add(new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER));
-          registerDialog.setLocationRelativeTo(null);
-          registerDialog.pack();
-          registerDialog.setVisible(true);
-          this.dispose();
+          RegisterWindow registerPopup = new RegisterWindow(this);
+          registerPopup.showWindow();
         });
 
     JPanel panelBotonSalir = new JPanel();
     buttonsPanel.add(panelBotonSalir, BorderLayout.EAST);
 
-    JButton btnSalir = new JButton("Salir");
+    JButton btnSalir = new JButton("Exit");
     btnSalir.setVerticalAlignment(SwingConstants.BOTTOM);
     btnSalir.addActionListener(
         event -> {
