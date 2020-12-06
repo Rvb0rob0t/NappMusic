@@ -134,19 +134,29 @@ public final class Controller {
     return songCatalog.searchSongsBy(titleSubstring, authorSubstring, style);
   }
 
-  public Playlist createPlaylist() {
+  public Playlist createPlaylist(String name) {
     // TODO Should create the playlist elsewhere?
-    Playlist playlist = new Playlist();
+    Playlist playlist = new Playlist(name, new ArrayList<Song>());
+    playlistDao.register(playlist);
     currentUser.addPlaylist(playlist);
+    userDao.update(currentUser);
     return playlist;
   }
 
-  public boolean addToPlaylist(Playlist playlist, Song song) { // TODO Does it make sense?
-    return playlist.add(song);
+  public boolean addToPlaylist(Playlist playlist, Song song) {
+    if (!playlist.add(song)) {
+      return false;
+    }
+    playlistDao.update(playlist);
+    return true;
   }
 
-  public boolean removeFromPlaylist(Playlist playlist, Song song) { // TODO Does it make sense?
-    return playlist.remove(song);
+  public boolean removeFromPlaylist(Playlist playlist, Song song) {
+    if (!playlist.remove(song)) {
+      return false;
+    }
+    playlistDao.update(playlist);
+    return true;
   }
 
   public ArrayList<Playlist> getUserPlaylists() {
