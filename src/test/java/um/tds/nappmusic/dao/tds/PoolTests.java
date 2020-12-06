@@ -93,6 +93,10 @@ class PoolTests {
     Playlist retrieved = playlistDao.get(playlist.getId());
 
     assertEquals(playlist.getName(), retrieved.getName());
+    assertEquals(playlist.getSize(), retrieved.getSize());
+    for (int i = 0; i < playlist.getSize(); i++) {
+      assertEquals(playlist.getSong(i), retrieved.getSong(i));
+    }
     assertListsIdsMatch(playlist.getSongs(), retrieved.getSongs());
   }
 }

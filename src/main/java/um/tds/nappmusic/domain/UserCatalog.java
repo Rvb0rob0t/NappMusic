@@ -13,7 +13,9 @@ public class UserCatalog {
   private HashMap<String, User> usersByName;
 
   public static UserCatalog getSingleton() {
-    if (singleton == null) singleton = new UserCatalog();
+    if (singleton == null) {
+      singleton = new UserCatalog();
+    }
     return singleton;
   }
 
@@ -22,7 +24,7 @@ public class UserCatalog {
       factory = DaoFactory.getSingleton();
       List<User> usuarios = factory.getUserDao().getAll();
       usersByName =
-          new HashMap(
+          new HashMap<String, User>(
               usuarios.stream().collect(Collectors.toMap(User::getName, Function.identity())));
     } catch (DaoException e) {
       e.printStackTrace();
