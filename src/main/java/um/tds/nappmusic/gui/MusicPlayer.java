@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
 
@@ -179,7 +180,7 @@ public class MusicPlayer {
     mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setOnMarker(
         mediaMarkerEvent -> {
-          // Controller.getSingleton().updatePlaysCounter(song);
+          Controller.getSingleton().updatePlaysCounter(song);
         });
   }
 

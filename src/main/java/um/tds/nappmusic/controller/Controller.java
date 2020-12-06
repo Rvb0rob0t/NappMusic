@@ -186,4 +186,9 @@ public final class Controller {
 
     return currentUser.getRecent();
   }
+
+  public void updatePlaysCounter(Song song) {
+    song.incrementNumPlays();
+    songDao.update(song);
+  }
 }

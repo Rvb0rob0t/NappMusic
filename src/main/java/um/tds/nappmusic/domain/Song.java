@@ -65,4 +65,8 @@ public class Song implements Identifiable {
   public void setNumPlays(int numPlays) {
     this.numPlays = numPlays;
   }
+
+  public void incrementNumPlays() {
+    numPlays++;
+  }
 }
