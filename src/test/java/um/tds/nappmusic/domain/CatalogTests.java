@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class CatalogTests {
@@ -78,6 +79,41 @@ class CatalogTests {
             new ArrayList<String>(Arrays.asList("Style5", "Style0", "Style1")),
             "/home/useredsa/Music/song5.mp4",
             50));
+    fakeSongs.add(
+        new Song(
+            "Title6",
+            "Author6",
+            new ArrayList<String>(Arrays.asList("Style6", "Style0", "Style1")),
+            "/home/useredsa/Music/song6.mp4",
+            60));
+    fakeSongs.add(
+        new Song(
+            "Title7",
+            "Author7",
+            new ArrayList<String>(Arrays.asList("Style7", "Style0", "Style1")),
+            "/home/useredsa/Music/song7.mp4",
+            70));
+    fakeSongs.add(
+        new Song(
+            "Title8",
+            "Author8",
+            new ArrayList<String>(Arrays.asList("Style8", "Style0", "Style1")),
+            "/home/useredsa/Music/song8.mp4",
+            80));
+    fakeSongs.add(
+        new Song(
+            "Title9",
+            "Author9",
+            new ArrayList<String>(Arrays.asList("Style9", "Style0", "Style1")),
+            "/home/useredsa/Music/song9.mp4",
+            90));
+    fakeSongs.add(
+        new Song(
+            "Title10",
+            "Author10",
+            new ArrayList<String>(Arrays.asList("Style10", "Style0", "Style1")),
+            "/home/useredsa/Music/song10.mp4",
+            100));
 
     fakeSongs.forEach(s -> songCatalog.addSong(s));
   }
@@ -114,6 +150,29 @@ class CatalogTests {
             .filter(song -> song.getTitle().contains(pattern))
             .collect(Collectors.toList());
     List<Song> returned = songCatalog.searchSongsByTitle(pattern).getSongs();
+    assertCollectionIsContained(expected, returned);
+  }
+
+  @ParameterizedTest
+  @CsvSource(value = {"Title, Author0, Style0", "Title, Author, Style1", "itle5, Auth, Style1"})
+  void checkSearchSongsBy(String titleSubstring, String authorSubstring, String style) {
+    List<Song> expected =
+        fakeSongs.stream()
+            .filter(
+                song ->
+                    song.getStyles().stream().anyMatch(s -> s.equals(style))
+                        && song.getAuthor().contains(authorSubstring)
+                        && song.getTitle().contains(titleSubstring))
+            .collect(Collectors.toList());
+    List<Song> returned =
+        songCatalog.searchSongsBy(titleSubstring, authorSubstring, style).getSongs();
+    assertCollectionIsContained(expected, returned);
+  }
+
+  @Test
+  void checkGetMostPlayedSongs() {
+    List<Song> expected = fakeSongs.subList(fakeSongs.size() - 10, fakeSongs.size());
+    List<Song> returned = songCatalog.getMostPlayedSongs().getSongs();
     assertCollectionIsContained(expected, returned);
   }
 }

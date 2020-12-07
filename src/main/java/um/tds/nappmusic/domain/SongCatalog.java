@@ -10,6 +10,7 @@ import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.DaoFactory;
 
 public class SongCatalog {
+  public static final int MOST_PLAYED_SIZE = 10;
   private static SongCatalog singleton = null;
   private DaoFactory factory;
   private HashMap<String, ArrayList<Song>> songsByAuthor;
@@ -95,5 +96,20 @@ public class SongCatalog {
     if (sameAuthor.isEmpty()) {
       songsByAuthor.remove(song.getAuthor());
     }
+  }
+
+  /**
+   * Get the {@value #MOST_PLAYED_SIZE} most played songs.
+   *
+   * @return A playlist with the {@value #MOST_PLAYED_SIZE} most played songs
+   */
+  public Playlist getMostPlayedSongs() {
+    ArrayList<Song> result =
+        getAllSongs().stream()
+            .sorted((song1, song2) -> (song2.getNumPlays() - song1.getNumPlays()))
+            .limit(MOST_PLAYED_SIZE)
+            .collect(Collectors.toCollection(ArrayList::new));
+
+    return new Playlist("Most played songs", result);
   }
 }
