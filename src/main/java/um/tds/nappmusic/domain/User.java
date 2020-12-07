@@ -1,5 +1,6 @@
 package um.tds.nappmusic.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import um.tds.nappmusic.dao.Identifiable;
@@ -8,7 +9,7 @@ public class User implements Identifiable {
   private int id = 0;
   private String name;
   private String surname;
-  private String birthDate;
+  private LocalDate birthDate;
   private String email;
   private String username;
   private String password;
@@ -38,7 +39,7 @@ public class User implements Identifiable {
   public User(
       String name,
       String surname,
-      String birthDate,
+      LocalDate birthDate,
       String email,
       String username,
       String password,
@@ -72,7 +73,7 @@ public class User implements Identifiable {
   public User(
       String name,
       String surname,
-      String birthDate,
+      LocalDate birthDate,
       String email,
       String username,
       String password,
@@ -113,7 +114,7 @@ public class User implements Identifiable {
     return surname;
   }
 
-  public String getBirthDate() {
+  public LocalDate getBirthDate() {
     return birthDate;
   }
 
@@ -157,7 +158,7 @@ public class User implements Identifiable {
     this.surname = surname;
   }
 
-  public void setBirthDate(String birthDate) {
+  public void setBirthDate(LocalDate birthDate) {
     this.birthDate = birthDate;
   }
 

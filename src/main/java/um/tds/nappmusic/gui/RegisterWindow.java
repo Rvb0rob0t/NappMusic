@@ -1,5 +1,6 @@
 package um.tds.nappmusic.gui;
 
+import com.toedter.calendar.JCalendar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -8,6 +9,10 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -39,7 +44,7 @@ public class RegisterWindow {
   private JLabel passwordChkLbl;
   private JTextField nameTxt;
   private JTextField surnameTxt;
-  private JTextField birthDateTxt;
+  private JCalendar birthDateCal;
   private JTextField emailTxt;
   private JTextField usernameTxt;
   private JPasswordField passwordTxt;
@@ -77,6 +82,7 @@ public class RegisterWindow {
 
     dialogWin.revalidate();
     dialogWin.pack();
+    dialogWin.setResizable(false);
   }
 
   public void showWindow() {
@@ -148,28 +154,38 @@ public class RegisterWindow {
     fixedSize(passwordChkLbl, 60, 20);
     fixedSize(passwordChkTxt, 100, 20);
 
-    JPanel panel = new JPanel();
-    panel.add(passwordLbl);
-    panel.add(passwordTxt);
-    panel.add(passwordChkLbl);
-    panel.add(passwordChkTxt);
+    JPanel onlyEntry = new JPanel();
+    onlyEntry.add(passwordLbl);
+    onlyEntry.add(passwordTxt);
+    onlyEntry.add(passwordChkLbl);
+    onlyEntry.add(passwordChkTxt);
 
-    JPanel lineaPassword = new JPanel(new BorderLayout(0, 0));
-    lineaPassword.setAlignmentX(JLabel.LEFT_ALIGNMENT);
-    lineaPassword.add(panel, BorderLayout.CENTER);
-    lineaPassword.add(passwordErrLbl, BorderLayout.SOUTH);
+    JPanel entryAndErr = new JPanel(new BorderLayout(0, 0));
+    entryAndErr.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+    entryAndErr.add(onlyEntry, BorderLayout.CENTER);
+    entryAndErr.add(passwordErrLbl, BorderLayout.SOUTH);
     passwordErrLbl.setForeground(Color.RED);
-    return lineaPassword;
+    return entryAndErr;
   }
 
   private JPanel initBirthDateEntry() {
     birthDateLbl = new JLabel("Birth date: ", JLabel.RIGHT);
-    birthDateTxt = new JTextField();
+    birthDateCal = new JCalendar();
     birthDateErrLbl = new JLabel("", SwingConstants.CENTER);
     fixedSize(birthDateLbl, 75, 20);
-    fixedSize(birthDateTxt, 270, 20);
+    fixedSize(birthDateCal, 270, 170);
     fixedSize(birthDateErrLbl, 150, 15);
-    return createEntry(birthDateLbl, birthDateTxt, birthDateErrLbl);
+
+    JPanel onlyEntry = new JPanel();
+    onlyEntry.add(birthDateLbl);
+    onlyEntry.add(birthDateCal);
+
+    JPanel entryAndErr = new JPanel(new BorderLayout(0, 0));
+    entryAndErr.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+    entryAndErr.add(onlyEntry, BorderLayout.CENTER);
+    entryAndErr.add(birthDateErrLbl, BorderLayout.SOUTH);
+    birthDateErrLbl.setForeground(Color.RED);
+    return entryAndErr;
   }
 
   private void initButtonPanel() {
@@ -195,7 +211,7 @@ public class RegisterWindow {
                       .registerUser(
                           nameTxt.getText(),
                           surnameTxt.getText(),
-                          birthDateTxt.getText(),
+                          dateToLocalDate(birthDateCal.getDate()),
                           emailTxt.getText(),
                           usernameTxt.getText(),
                           new String(passwordTxt.getPassword()));
@@ -298,12 +314,13 @@ public class RegisterWindow {
       usernameTxt.setBorder(BorderFactory.createLineBorder(Color.RED));
       ok = false;
     }
-    if (birthDateTxt.getText().isEmpty()) {
-      birthDateErrLbl.setVisible(true);
-      birthDateLbl.setForeground(Color.RED);
-      birthDateTxt.setBorder(BorderFactory.createLineBorder(Color.RED));
-      ok = false;
-    }
+    // TODO
+    // if (Period.between(birthDateCal.getDate(), LocalDate.now()).getYears() < App.MINIMUM_AGE) {
+    //   birthDateErrLbl.setVisible(true);
+    //   birthDateLbl.setForeground(Color.RED);
+    //   birthDateCal.setBorder(BorderFactory.createLineBorder(Color.RED));
+    //   ok = false;
+    // }
 
     dialogWin.revalidate();
     dialogWin.pack();
@@ -329,7 +346,7 @@ public class RegisterWindow {
     passwordTxt.setBorder(border);
     passwordChkTxt.setBorder(border);
     usernameTxt.setBorder(border);
-    birthDateTxt.setBorder(border);
+    birthDateCal.setBorder(border);
 
     nameLbl.setForeground(Color.BLACK);
     surnameLbl.setForeground(Color.BLACK);
@@ -346,5 +363,10 @@ public class RegisterWindow {
     o.setMinimumSize(d);
     o.setMaximumSize(d);
     o.setPreferredSize(d);
+  }
+
+  private LocalDate dateToLocalDate(Date date) {
+    // TODO system default? I can only sense danger
+    return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
   }
 }

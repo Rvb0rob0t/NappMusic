@@ -3,6 +3,9 @@ package um.tds.nappmusic.dao.tds;
 import beans.Entidad;
 import beans.Propiedad;
 import java.io.*;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -78,6 +81,10 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return new Propiedad(field, value ? "true" : "false");
   }
 
+  public Propiedad localDateProperty(String field, LocalDate value) {
+    return new Propiedad(field, value.format(DateTimeFormatter.ISO_LOCAL_DATE));
+  }
+
   // FIXME This is to support an old test and is no longer needed
   public Propiedad objectProperty(String field, Identifiable obj) {
     return new Propiedad(field, Integer.toString(obj.getId()));
@@ -137,6 +144,12 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
 
   public boolean retrieveBoolean(Entidad entity, String field) {
     return servPersistencia.recuperarPropiedadEntidad(entity, field).equals("true");
+  }
+
+  public LocalDate retrieveLocalDate(Entidad entity, String field) throws ParseException {
+    return LocalDate.parse(
+        servPersistencia.recuperarPropiedadEntidad(entity, field),
+        DateTimeFormatter.ISO_LOCAL_DATE);
   }
 
   public int retrieveId(Entidad entity, String field) {

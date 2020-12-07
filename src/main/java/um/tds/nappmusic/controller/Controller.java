@@ -1,5 +1,6 @@
 package um.tds.nappmusic.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
@@ -66,7 +67,7 @@ public final class Controller {
   public boolean registerUser(
       String name,
       String surname,
-      String birthDate,
+      LocalDate birthDate,
       String email,
       String username,
       String password) {

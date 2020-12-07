@@ -3,6 +3,7 @@ package um.tds.nappmusic.dao.tds;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +34,7 @@ class PoolTests {
     User user = new User();
     user.setName("Alberto");
     user.setSurname("Robles");
-    user.setBirthDate("18/08/1999");
+    user.setBirthDate(LocalDate.parse("1999-08-18"));
     user.setEmail("albertor@um.es");
     user.setUsername("Albertoc");
     user.setPassword("1234");
