@@ -59,7 +59,7 @@ public class MainWindow {
   public MainWindow() {
     mainFrame = new JFrame(App.NAME);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    mainFrame.getContentPane().setLayout(new BorderLayout());
+    mainFrame.getContentPane().setLayout(new BorderLayout(10, 0));
 
     musicPlayer = new MusicPlayer();
     mainFrame.getContentPane().add(musicPlayer.getPanel(), BorderLayout.SOUTH);
@@ -120,7 +120,7 @@ public class MainWindow {
     cardsPanel = new JPanel(new CardLayout());
     cardsPanel.add(new HomePanel(), HOME_CARD_NAME);
     cardsPanel.add(new SearchPanel(musicPlayer), SEARCH_CARD_NAME);
-    cardsPanel.add(new PlaylistsPanel(musicPlayer), PLAYLISTS_CARD_NAME);
+    cardsPanel.add(new PlaylistsPanel(musicPlayer).getPanel(), PLAYLISTS_CARD_NAME);
     cardsPanel.add(new RecentlyPlayedPane(musicPlayer), RECENTLY_CARD_NAME);
   }
 
