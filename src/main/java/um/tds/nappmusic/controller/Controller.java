@@ -102,6 +102,9 @@ public final class Controller {
       // TODO Throw exception
     }
 
+    // The best discount among possible is calculated in each session
+    currentUser.setBestDiscount();
+
     return currentUser;
   }
 

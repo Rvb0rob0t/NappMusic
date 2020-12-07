@@ -2,7 +2,11 @@ package um.tds.nappmusic.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import org.reflections.Reflections;
 import um.tds.nappmusic.dao.Identifiable;
+import um.tds.nappmusic.domain.discounts.NoDiscount;
 
 public class User implements Identifiable {
   private int id = 0;
@@ -65,7 +69,7 @@ public class User implements Identifiable {
 
   // TODO consider if this is necessary
   // public void updateRecent(Song reproduccion) {
-  //     recent.add(reproduccion);
+  //    recent.add(reproduccion);
   // }
 
   public int getId() {
@@ -154,5 +158,31 @@ public class User implements Identifiable {
 
   public void setRecent(Playlist recent) {
     this.recent = recent;
+  }
+
+  /** Sets the best discount among all possible. */
+  public void setBestDiscount() {
+    Reflections reflections = new Reflections(Discount.DISCOUNTS_PACKAGE);
+    Set<Class<? extends Discount>> discountClasses = reflections.getSubTypesOf(Discount.class);
+    Optional<Discount> bestDiscount =
+        discountClasses.stream()
+            .map(
+                discountClass -> {
+                  try {
+                    return discountClass.newInstance();
+                  } catch (InstantiationException | IllegalAccessException e) {
+                    return new NoDiscount();
+                  }
+                })
+            .filter(discount -> discount.isApplicable(this))
+            .min(
+                (discount1, discount2) ->
+                    (discount1.calculatePrice() - discount2.calculatePrice()));
+
+    if (bestDiscount.isPresent()) {
+      this.discount = bestDiscount.get();
+    } else {
+      this.discount = new NoDiscount();
+    }
   }
 }
