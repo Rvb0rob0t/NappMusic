@@ -72,6 +72,12 @@
         <artifactId>jcalendar</artifactId>
         <version>1.4</version>
     </dependency>
+    <!-- https://github.com/ronmamo/reflections -->
+    <dependency>
+        <groupId>org.reflections</groupId>
+        <artifactId>reflections</artifactId>
+        <version>0.9.12</version>
+    </dependency>
   </dependencies>
 
   <build>
