@@ -3,13 +3,13 @@ package um.tds.nappmusic.gui;
 import com.toedter.calendar.JCalendar;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -61,7 +60,6 @@ public class RegisterWindow {
     dialogWin.setLocationRelativeTo(null);
     dialogWin.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialogWin.getContentPane().setLayout(new BorderLayout());
-    dialogWin.setResizable(false);
 
     Container contentPane = dialogWin.getContentPane();
 
@@ -96,7 +94,7 @@ public class RegisterWindow {
     onlyEntry.add(textField);
 
     JPanel entryAndErr = new JPanel(new BorderLayout(0, 0));
-    entryAndErr.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+    entryAndErr.setAlignmentX(Component.LEFT_ALIGNMENT);
     entryAndErr.add(onlyEntry, BorderLayout.CENTER);
     entryAndErr.add(errLabel, BorderLayout.SOUTH);
     errLabel.setForeground(Color.RED);
@@ -106,7 +104,7 @@ public class RegisterWindow {
   private JPanel initNameEntry() {
     nameLbl = new JLabel("Name: ", JLabel.RIGHT);
     nameTxt = new JTextField();
-    nameErrLbl = new JLabel("", SwingConstants.CENTER);
+    nameErrLbl = new JLabel("", JLabel.CENTER);
     fixedSize(nameLbl, 75, 20);
     fixedSize(nameTxt, 270, 20);
     fixedSize(nameErrLbl, 224, 15);
@@ -116,7 +114,7 @@ public class RegisterWindow {
   private JPanel initSurnameEntry() {
     surnameLbl = new JLabel("Surname: ", JLabel.RIGHT);
     surnameTxt = new JTextField();
-    surnameErrLbl = new JLabel("", SwingConstants.CENTER);
+    surnameErrLbl = new JLabel("", JLabel.CENTER);
     fixedSize(surnameLbl, 75, 20);
     fixedSize(surnameTxt, 270, 20);
     fixedSize(surnameErrLbl, 255, 15);
@@ -126,7 +124,7 @@ public class RegisterWindow {
   private JPanel initEmailEntry() {
     emailLbl = new JLabel("Email: ", JLabel.RIGHT);
     emailTxt = new JTextField();
-    emailErrLbl = new JLabel("El Email es obligatorio", SwingConstants.CENTER);
+    emailErrLbl = new JLabel("", JLabel.CENTER);
     fixedSize(emailLbl, 75, 20);
     fixedSize(emailTxt, 270, 20);
     fixedSize(emailErrLbl, 150, 15);
@@ -136,7 +134,7 @@ public class RegisterWindow {
   private JPanel initUserEntry() {
     usernameLbl = new JLabel("Usuario: ", JLabel.RIGHT);
     usernameTxt = new JTextField();
-    usernameErrLbl = new JLabel("El usuario ya existe", SwingConstants.CENTER);
+    usernameErrLbl = new JLabel("", JLabel.CENTER);
     fixedSize(usernameLbl, 75, 20);
     fixedSize(usernameTxt, 270, 20);
     fixedSize(usernameErrLbl, 150, 15);
@@ -161,7 +159,7 @@ public class RegisterWindow {
     onlyEntry.add(passwordChkTxt);
 
     JPanel entryAndErr = new JPanel(new BorderLayout(0, 0));
-    entryAndErr.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+    entryAndErr.setAlignmentX(Component.LEFT_ALIGNMENT);
     entryAndErr.add(onlyEntry, BorderLayout.CENTER);
     entryAndErr.add(passwordErrLbl, BorderLayout.SOUTH);
     passwordErrLbl.setForeground(Color.RED);
@@ -171,7 +169,7 @@ public class RegisterWindow {
   private JPanel initBirthDateEntry() {
     birthDateLbl = new JLabel("Birth date: ", JLabel.RIGHT);
     birthDateCal = new JCalendar();
-    birthDateErrLbl = new JLabel("", SwingConstants.CENTER);
+    birthDateErrLbl = new JLabel("", JLabel.CENTER);
     fixedSize(birthDateLbl, 75, 20);
     fixedSize(birthDateCal, 270, 170);
     fixedSize(birthDateErrLbl, 150, 15);
@@ -181,7 +179,7 @@ public class RegisterWindow {
     onlyEntry.add(birthDateCal);
 
     JPanel entryAndErr = new JPanel(new BorderLayout(0, 0));
-    entryAndErr.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+    entryAndErr.setAlignmentX(Component.LEFT_ALIGNMENT);
     entryAndErr.add(onlyEntry, BorderLayout.CENTER);
     entryAndErr.add(birthDateErrLbl, BorderLayout.SOUTH);
     birthDateErrLbl.setForeground(Color.RED);
@@ -367,6 +365,6 @@ public class RegisterWindow {
 
   private LocalDate dateToLocalDate(Date date) {
     // TODO system default? I can only sense danger
-    return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
   }
 }
