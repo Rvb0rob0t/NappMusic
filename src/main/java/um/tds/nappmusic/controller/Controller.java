@@ -21,6 +21,7 @@ public final class Controller {
 
   private UserCatalog userCatalog;
   private SongCatalog songCatalog;
+  private XmlLoader xmlLoader;
 
   private User currentUser;
 
@@ -37,6 +38,7 @@ public final class Controller {
 
     userCatalog = UserCatalog.getSingleton();
     songCatalog = SongCatalog.getSingleton();
+    xmlLoader = new XmlLoader();
 
     currentUser = null;
   }
@@ -185,5 +187,9 @@ public final class Controller {
     }
 
     return currentUser.getRecent();
+  }
+
+  public void loadXml(String xmlPath) {
+    xmlLoader.loadSongs(xmlPath);
   }
 }
