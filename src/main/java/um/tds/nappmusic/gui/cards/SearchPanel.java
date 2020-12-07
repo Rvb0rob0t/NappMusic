@@ -60,7 +60,7 @@ public class SearchPanel extends JPanel {
     styleComboBox = new JComboBox<String>();
     styleComboBox.setModel(
         new DefaultComboBoxModel<String>(
-            new String[] {"Nana", "Rock", "Indie", "Pop"})); // TODO Get from controller
+            new String[] {"Nana", "Rock", "Indie", "Pop", "Jazz"})); // TODO Get from controller
     fieldsPanel.add(styleComboBox);
 
     JButton searchButton = new JButton("Buscar");

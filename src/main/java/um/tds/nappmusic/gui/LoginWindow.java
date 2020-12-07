@@ -6,9 +6,7 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,18 +17,20 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import um.tds.nappmusic.app.App;
+import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
 
 @SuppressWarnings("serial")
 public class LoginWindow extends JFrame {
   private static final int FIELDS_WIDTH = 15;
-  private static final String RESOURCES = "src/main/resources";
+
   private JTextField nickField;
   private JPasswordField passwordField;
 
   /** Create the window. */
   public LoginWindow() {
-    super("Login AppMusic");
+    super(App.NAME + " - Login");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.getContentPane().setLayout(new BorderLayout());
 
@@ -43,10 +43,9 @@ public class LoginWindow extends JFrame {
 
   private JPanel createTopPanel() {
     JPanel topPanel = new JPanel();
-    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 15));
+    topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-    JLabel lblTitulo =
-        new JLabel("NappMusic", new ImageIcon(RESOURCES + "/Logo.png"), JLabel.CENTER);
+    JLabel lblTitulo = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
     lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 20));
     lblTitulo.setForeground(Color.DARK_GRAY);
     topPanel.add(lblTitulo);
@@ -66,16 +65,17 @@ public class LoginWindow extends JFrame {
   }
 
   private JPanel createFieldsPanel() {
+    JPanel centeringWrapperPanel = new JPanel(new FlowLayout());
     JPanel fieldsPanel = new JPanel();
-    fieldsPanel.setBorder(
-        new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+    fieldsPanel.setBorder(new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP));
     fieldsPanel.setLayout(new BoxLayout(fieldsPanel, BoxLayout.Y_AXIS));
 
     // Nick field
     JPanel nickFieldPanel = new JPanel();
     nickFieldPanel.setLayout(new BorderLayout());
 
-    JLabel userLabel = new JLabel("Usuario: ");
+    JLabel userLabel = new JLabel("User: ");
+    // Put the text next to the label
     userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     userLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
     nickFieldPanel.add(userLabel);
@@ -89,7 +89,7 @@ public class LoginWindow extends JFrame {
     JPanel passwordFieldPanel = new JPanel();
     passwordFieldPanel.setLayout(new BorderLayout());
 
-    JLabel passwordLabel = new JLabel("Contraseña: ");
+    JLabel passwordLabel = new JLabel("Password: ");
     passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     passwordLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
     passwordFieldPanel.add(passwordLabel);
@@ -99,7 +99,8 @@ public class LoginWindow extends JFrame {
 
     fieldsPanel.add(passwordFieldPanel);
 
-    return fieldsPanel;
+    centeringWrapperPanel.add(fieldsPanel);
+    return centeringWrapperPanel;
   }
 
   private JPanel createButtonsPanel() {
@@ -130,27 +131,19 @@ public class LoginWindow extends JFrame {
           }
         });
 
-    JButton btnRegistro = new JButton("Registro");
+    JButton btnRegistro = new JButton("Register");
     loginRegisterButtonsPanel.add(btnRegistro);
     btnRegistro.setVerticalAlignment(SwingConstants.BOTTOM);
     btnRegistro.addActionListener(
         event -> {
-          // RegisterDialog registerDialog = new RegisterDialog();
-          JDialog registerDialog = new JDialog(this, "Registro NappMusic", true);
-          registerDialog.getContentPane().setLayout(new BorderLayout());
-          registerDialog
-              .getContentPane()
-              .add(new JLabel("NappMusic", new ImageIcon(RESOURCES + "/Logo.png"), JLabel.CENTER));
-          registerDialog.setLocationRelativeTo(null);
-          registerDialog.pack();
-          registerDialog.setVisible(true);
-          this.dispose();
+          RegisterWindow registerPopup = new RegisterWindow(this);
+          registerPopup.showWindow();
         });
 
     JPanel panelBotonSalir = new JPanel();
     buttonsPanel.add(panelBotonSalir, BorderLayout.EAST);
 
-    JButton btnSalir = new JButton("Salir");
+    JButton btnSalir = new JButton("Exit");
     btnSalir.setVerticalAlignment(SwingConstants.BOTTOM);
     btnSalir.addActionListener(
         event -> {

@@ -19,22 +19,22 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
 
 @SuppressWarnings("restriction") // TODO Check
 public class MusicPlayer {
-  private static final String RESOURCES = "src/main/resources";
-  private static final String DEFAULT_THUMBNAIL = RESOURCES + "/default_thumbnail.png";
+  private static final String DEFAULT_THUMBNAIL = App.RESOURCES_PATH + "/default_thumbnail.png";
   private static final int THUMB_WIDTH = 100;
   private static final int THUMB_HEIGHT = 100;
   private static final double SECS_TO_BE_LISTENED = 10;
 
-  private static final ImageIcon PREV_ICON = new ImageIcon(RESOURCES + "/previous.png");
-  private static final ImageIcon PLAY_ICON = new ImageIcon(RESOURCES + "/play.png");
-  private static final ImageIcon PAUSE_ICON = new ImageIcon(RESOURCES + "/pause.png");
-  private static final ImageIcon NEXT_ICON = new ImageIcon(RESOURCES + "/next.png");
+  private static final ImageIcon PREV_ICON = new ImageIcon(App.RESOURCES_PATH + "/previous.png");
+  private static final ImageIcon PLAY_ICON = new ImageIcon(App.RESOURCES_PATH + "/play.png");
+  private static final ImageIcon PAUSE_ICON = new ImageIcon(App.RESOURCES_PATH + "/pause.png");
+  private static final ImageIcon NEXT_ICON = new ImageIcon(App.RESOURCES_PATH + "/next.png");
 
   private MediaPlayer mediaPlayer;
   private Playlist playlistPlaying;

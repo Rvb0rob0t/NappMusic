@@ -1,5 +1,6 @@
 package um.tds.nappmusic.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public class User implements Identifiable {
   private int id = 0;
   private String name;
   private String surname;
-  private String birthDate;
+  private LocalDate birthDate;
   private String email;
   private String username;
   private String password;
@@ -42,7 +43,7 @@ public class User implements Identifiable {
   public User(
       String name,
       String surname,
-      String birthDate,
+      LocalDate birthDate,
       String email,
       String username,
       String password,
@@ -60,6 +61,39 @@ public class User implements Identifiable {
     this.discount = discount;
     this.playlists = playlists;
     this.recent = recent;
+  }
+
+  /**
+   * Create a user.
+   *
+   * @param name The name of the user
+   * @param surname The surname of the user
+   * @param birthDate The date of birth of the user
+   * @param email The email of the user
+   * @param username The nickname of the user
+   * @param password The password of the user
+   * @param premium true if the user is premium, false otherwise
+   */
+  public User(
+      String name,
+      String surname,
+      LocalDate birthDate,
+      String email,
+      String username,
+      String password,
+      boolean premium) {
+    // TODO null
+    this(
+        name,
+        surname,
+        birthDate,
+        email,
+        username,
+        password,
+        premium,
+        null,
+        new ArrayList<Playlist>(),
+        new Playlist("Recent"));
   }
 
   // TODO consider if this is necessary
@@ -84,7 +118,7 @@ public class User implements Identifiable {
     return surname;
   }
 
-  public String getBirthDate() {
+  public LocalDate getBirthDate() {
     return birthDate;
   }
 
@@ -128,7 +162,7 @@ public class User implements Identifiable {
     this.surname = surname;
   }
 
-  public void setBirthDate(String birthDate) {
+  public void setBirthDate(LocalDate birthDate) {
     this.birthDate = birthDate;
   }
 

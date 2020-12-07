@@ -15,7 +15,7 @@ public class DiscountsTests {
   void checkSetBestDiscount() {
 
     User user = new User();
-    user.setBirthDate("18/08/1999");
+    user.setBirthDate(LocalDate.parse("1999-08-18"));
     user.setBestDiscount();
 
     Below25Discount below25Discount = new Below25Discount();

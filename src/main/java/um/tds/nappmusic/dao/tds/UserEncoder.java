@@ -2,6 +2,8 @@ package um.tds.nappmusic.dao.tds;
 
 import beans.Entidad;
 import beans.Propiedad;
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import um.tds.nappmusic.domain.Playlist;
@@ -39,7 +41,13 @@ public final class UserEncoder implements BiEncoder<User> {
   public void initObjFromEntity(User user, Entidad entity) {
     user.setName(factory.retrieveString(entity, NAME_FIELD));
     user.setSurname(factory.retrieveString(entity, SURNAME_FIELD));
-    user.setBirthDate(factory.retrieveString(entity, BIRTHDATE_FIELD));
+    try {
+      user.setBirthDate(factory.retrieveLocalDate(entity, BIRTHDATE_FIELD));
+    } catch (ParseException e) {
+      System.err.println("Date format inconsistency in persistent server");
+      e.printStackTrace();
+      user.setBirthDate(LocalDate.now()); // TODO is this the best or exit?
+    }
     user.setEmail(factory.retrieveString(entity, EMAIL_FIELD));
     user.setUsername(factory.retrieveString(entity, USERNAME_FIELD));
     user.setPassword(factory.retrieveString(entity, PASSWORD_FIELD));
@@ -58,7 +66,7 @@ public final class UserEncoder implements BiEncoder<User> {
             Arrays.asList(
                 factory.stringProperty(NAME_FIELD, user.getName()),
                 factory.stringProperty(SURNAME_FIELD, user.getSurname()),
-                factory.stringProperty(BIRTHDATE_FIELD, user.getBirthDate()),
+                factory.localDateProperty(BIRTHDATE_FIELD, user.getBirthDate()),
                 factory.stringProperty(EMAIL_FIELD, user.getEmail()),
                 factory.stringProperty(USERNAME_FIELD, user.getUsername()),
                 factory.stringProperty(PASSWORD_FIELD, user.getPassword()),

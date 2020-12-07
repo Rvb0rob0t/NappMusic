@@ -1,5 +1,6 @@
 package um.tds.nappmusic.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
@@ -20,6 +21,7 @@ public final class Controller {
 
   private UserCatalog userCatalog;
   private SongCatalog songCatalog;
+  private XmlLoader xmlLoader;
 
   private User currentUser;
 
@@ -36,6 +38,7 @@ public final class Controller {
 
     userCatalog = UserCatalog.getSingleton();
     songCatalog = SongCatalog.getSingleton();
+    xmlLoader = new XmlLoader();
 
     currentUser = null;
   }
@@ -66,7 +69,7 @@ public final class Controller {
   public boolean registerUser(
       String name,
       String surname,
-      String birthDate,
+      LocalDate birthDate,
       String email,
       String username,
       String password) {
@@ -74,8 +77,7 @@ public final class Controller {
       return false;
     }
 
-    User user =
-        new User(name, surname, birthDate, email, username, password, false, null, null, null);
+    User user = new User(name, surname, birthDate, email, username, password, false);
     userCatalog.addUser(user);
     userDao.register(user);
     return true;
@@ -193,5 +195,9 @@ public final class Controller {
   public void updatePlaysCounter(Song song) {
     song.incrementNumPlays();
     songDao.update(song);
+  }
+
+  public void loadXml(String xmlPath) {
+    xmlLoader.loadSongs(xmlPath);
   }
 }
