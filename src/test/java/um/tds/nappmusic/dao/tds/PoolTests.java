@@ -81,6 +81,8 @@ class PoolTests {
     // assertEquals(song.getStyles(), retrieved.getStyles());
     assertEquals(song.getFilePath(), retrieved.getFilePath());
     assertEquals(song.getNumPlays(), retrieved.getNumPlays());
+
+    songDao.delete(song);
   }
 
   @Test
@@ -108,5 +110,9 @@ class PoolTests {
       assertEquals(playlist.getSong(i), retrieved.getSong(i));
     }
     assertListsIdsMatch(playlist.getSongs(), retrieved.getSongs());
+
+    playlistDao.delete(playlist);
+    Pool<Song> songDao = (Pool) factory.getSongDao();
+    songDao.delete(song);
   }
 }
