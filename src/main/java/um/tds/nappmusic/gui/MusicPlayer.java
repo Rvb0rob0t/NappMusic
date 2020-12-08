@@ -8,6 +8,11 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -17,6 +22,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import um.tds.nappmusic.app.App;
@@ -173,7 +179,17 @@ public class MusicPlayer {
 
     }
 
-    File f = new File(song.getFilePath());
+    File f;
+    try {
+      f = pathToFile(song.getFilePath());
+    } catch (IOException e) {
+      JOptionPane.showMessageDialog(
+          this.getPanel(),
+          "You don't want to listen to this song",
+          "Song not available",
+          JOptionPane.ERROR_MESSAGE);
+      return;
+    }
     Media media = new Media(f.toURI().toString());
     media.getMarkers().put("listened", new Duration(SECS_TO_BE_LISTENED * 1000));
 
@@ -182,6 +198,19 @@ public class MusicPlayer {
         mediaMarkerEvent -> {
           Controller.getSingleton().updatePlaysCounter(song);
         });
+  }
+
+  private File pathToFile(String pathName) throws IOException {
+    if (pathName.startsWith("http")) {
+      URL url = new URL(pathName);
+      Path mp3 = Files.createTempFile("now-playing", ".mp3");
+      try (InputStream stream = url.openStream()) {
+        Files.copy(stream, mp3, StandardCopyOption.REPLACE_EXISTING);
+      }
+      return mp3.toFile();
+    } else {
+      return new File(pathName);
+    }
   }
 
   /**
