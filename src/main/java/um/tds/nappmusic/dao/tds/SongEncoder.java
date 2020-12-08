@@ -14,10 +14,10 @@ public final class SongEncoder implements BiEncoder<Song> {
   private static final String FILEPATH_FIELD = "filePath";
   private static final String NUMPLAYS_FIELD = "numPlays";
 
-  private DaoFactory factory;
+  private PersistencyWrapper wrapper;
 
-  public SongEncoder(DaoFactory factory) {
-    this.factory = factory;
+  public SongEncoder(PersistencyWrapper wrapper) {
+    this.wrapper = wrapper;
   }
 
   @Override
@@ -32,11 +32,11 @@ public final class SongEncoder implements BiEncoder<Song> {
 
   @Override
   public void initObjFromEntity(Song song, Entidad entity) {
-    song.setTitle(factory.retrieveString(entity, TITLE_FIELD));
-    song.setAuthor(factory.retrieveString(entity, AUTHOR_FIELD));
-    song.setStyles(new ArrayList(factory.retrieveStringList(entity, STYLES_FIELD)));
-    song.setFilePath(factory.retrieveString(entity, FILEPATH_FIELD));
-    song.setNumPlays(factory.retrieveInt(entity, NUMPLAYS_FIELD));
+    song.setTitle(wrapper.retrieveString(entity, TITLE_FIELD));
+    song.setAuthor(wrapper.retrieveString(entity, AUTHOR_FIELD));
+    song.setStyles(new ArrayList(wrapper.retrieveStringList(entity, STYLES_FIELD)));
+    song.setFilePath(wrapper.retrieveString(entity, FILEPATH_FIELD));
+    song.setNumPlays(wrapper.retrieveInt(entity, NUMPLAYS_FIELD));
   }
 
   @Override
@@ -46,11 +46,11 @@ public final class SongEncoder implements BiEncoder<Song> {
     entity.setPropiedades(
         new ArrayList<Propiedad>(
             Arrays.asList(
-                factory.stringProperty(TITLE_FIELD, song.getTitle()),
-                factory.stringProperty(AUTHOR_FIELD, song.getAuthor()),
-                factory.stringCollectionProperty(STYLES_FIELD, song.getStyles()),
-                factory.stringProperty(FILEPATH_FIELD, song.getFilePath()),
-                factory.intProperty(NUMPLAYS_FIELD, song.getNumPlays()))));
+                new Propiedad(TITLE_FIELD, song.getTitle()),
+                new Propiedad(AUTHOR_FIELD, song.getAuthor()),
+                new Propiedad(STYLES_FIELD, wrapper.encodeStringList(song.getStyles())),
+                new Propiedad(FILEPATH_FIELD, song.getFilePath()),
+                new Propiedad(NUMPLAYS_FIELD, wrapper.encodeInt(song.getNumPlays())))));
     return entity;
   }
 

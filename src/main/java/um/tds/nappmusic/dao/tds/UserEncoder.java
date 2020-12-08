@@ -20,10 +20,10 @@ public final class UserEncoder implements BiEncoder<User> {
   private static final String PLAYLISTS_FIELD = "lists";
   private static final String RECENT_FIELD = "recent";
 
-  private DaoFactory factory;
+  private PersistencyWrapper wrapper;
 
-  public UserEncoder(DaoFactory factory) {
-    this.factory = factory;
+  public UserEncoder(PersistencyWrapper wrapper) {
+    this.wrapper = wrapper;
   }
 
   @Override
@@ -38,20 +38,20 @@ public final class UserEncoder implements BiEncoder<User> {
 
   @Override
   public void initObjFromEntity(User user, Entidad entity) throws DaoException {
-    user.setName(factory.retrieveString(entity, NAME_FIELD));
-    user.setSurname(factory.retrieveString(entity, SURNAME_FIELD));
+    user.setName(wrapper.retrieveString(entity, NAME_FIELD));
+    user.setSurname(wrapper.retrieveString(entity, SURNAME_FIELD));
     try {
-      user.setBirthDate(factory.retrieveLocalDate(entity, BIRTHDATE_FIELD));
+      user.setBirthDate(wrapper.retrieveLocalDate(entity, BIRTHDATE_FIELD));
     } catch (ParseException e) {
       e.printStackTrace();
       throw new DaoException("Date format inconsistency in persistent server");
     }
-    user.setEmail(factory.retrieveString(entity, EMAIL_FIELD));
-    user.setUsername(factory.retrieveString(entity, USERNAME_FIELD));
-    user.setPassword(factory.retrieveString(entity, PASSWORD_FIELD));
-    user.setPremium(factory.retrieveBoolean(entity, PREMIUM_FIELD));
-    user.setPlaylists(factory.retrievePlaylistList(entity, PLAYLISTS_FIELD));
-    user.setRecent(factory.retrievePlaylist(entity, RECENT_FIELD));
+    user.setEmail(wrapper.retrieveString(entity, EMAIL_FIELD));
+    user.setUsername(wrapper.retrieveString(entity, USERNAME_FIELD));
+    user.setPassword(wrapper.retrieveString(entity, PASSWORD_FIELD));
+    user.setPremium(wrapper.retrieveBoolean(entity, PREMIUM_FIELD));
+    user.setPlaylists(wrapper.retrievePlaylistList(entity, PLAYLISTS_FIELD));
+    user.setRecent(wrapper.retrievePlaylist(entity, RECENT_FIELD));
   }
 
   @Override
@@ -61,20 +61,18 @@ public final class UserEncoder implements BiEncoder<User> {
     entity.setPropiedades(
         new ArrayList<Propiedad>(
             Arrays.asList(
-                factory.stringProperty(NAME_FIELD, user.getName()),
-                factory.stringProperty(SURNAME_FIELD, user.getSurname()),
-                factory.localDateProperty(BIRTHDATE_FIELD, user.getBirthDate()),
-                factory.stringProperty(EMAIL_FIELD, user.getEmail()),
-                factory.stringProperty(USERNAME_FIELD, user.getUsername()),
-                factory.stringProperty(PASSWORD_FIELD, user.getPassword()),
-                factory.booleanProperty(PREMIUM_FIELD, user.isPremium()),
-                factory.playlistCollectionProperty(PLAYLISTS_FIELD, user.getPlaylists()),
-                factory.playlistProperty(RECENT_FIELD, user.getRecent()))));
+                new Propiedad(NAME_FIELD, user.getName()),
+                new Propiedad(SURNAME_FIELD, user.getSurname()),
+                new Propiedad(BIRTHDATE_FIELD, wrapper.encodeLocalDate(user.getBirthDate())),
+                new Propiedad(EMAIL_FIELD, user.getEmail()),
+                new Propiedad(USERNAME_FIELD, user.getUsername()),
+                new Propiedad(PASSWORD_FIELD, user.getPassword()),
+                new Propiedad(PREMIUM_FIELD, wrapper.encodeBoolean(user.isPremium())),
+                new Propiedad(PLAYLISTS_FIELD, wrapper.encodePlaylistList(user.getPlaylists())),
+                new Propiedad(RECENT_FIELD, wrapper.encodePlaylist(user.getRecent())))));
     return entity;
   }
 
   @Override
-  public void updateEntity(Entidad entity, User user) {
-    // TODO
-  }
+  public void updateEntity(Entidad entity, User user) {}
 }

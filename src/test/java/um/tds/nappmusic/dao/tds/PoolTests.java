@@ -44,8 +44,7 @@ class PoolTests {
     user.setPremium(false);
     user.setDiscount(new NoDiscount());
     user.setPlaylists(new ArrayList<Playlist>());
-    user.setRecent(new Playlist());
-    user.getRecent().setSongs(new ArrayList());
+    user.setRecent(new Playlist("Recent"));
 
     Pool<User> userDao = (Pool) factory.getUserDao();
     userDao.register(user);

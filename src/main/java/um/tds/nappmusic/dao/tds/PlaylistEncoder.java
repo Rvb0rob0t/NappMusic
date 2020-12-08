@@ -12,9 +12,9 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
   private static final String NAME_FIELD = "name";
   private static final String SONGS_FIELD = "songs";
 
-  private DaoFactory factory;
+  private PersistencyWrapper factory;
 
-  public PlaylistEncoder(DaoFactory factory) {
+  public PlaylistEncoder(PersistencyWrapper factory) {
     this.factory = factory;
   }
 
@@ -41,8 +41,8 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
     entity.setPropiedades(
         new ArrayList<Propiedad>(
             Arrays.asList(
-                factory.stringProperty(NAME_FIELD, playlist.getName()),
-                factory.songCollectionProperty(SONGS_FIELD, playlist.getSongs()))));
+                new Propiedad(NAME_FIELD, playlist.getName()),
+                new Propiedad(SONGS_FIELD, factory.encodeSongList(playlist.getSongs())))));
     return entity;
   }
 

@@ -16,7 +16,7 @@ class RetrieveStoreTests {
   private static final String ENTITY_NAME = "Entity";
   private static final String FIELD_NAME = "field";
 
-  private DaoFactory factory;
+  private PersistencyWrapper wrapper;
 
   Entidad createEntity() {
     Entidad entity = new Entidad();
@@ -33,8 +33,8 @@ class RetrieveStoreTests {
   Entidad registerAndRetrieve(Entidad entity) {
     assertNotNull(entity);
     assertEquals(entity.getNombre(), ENTITY_NAME);
-    factory.registerEntity(entity);
-    Entidad retrieved = factory.retrieveEntity(entity.getId());
+    wrapper.registerEntity(entity);
+    Entidad retrieved = wrapper.retrieveEntity(entity.getId());
     assertNotNull(retrieved);
     assertEquals(entity.getId(), retrieved.getId(), "Stored and retrieved entity Ids do not match");
     return retrieved;
@@ -42,7 +42,7 @@ class RetrieveStoreTests {
 
   @BeforeEach
   void initAll() {
-    factory = new DaoFactory();
+    wrapper = new PersistencyWrapper();
   }
 
   @Test
@@ -54,20 +54,20 @@ class RetrieveStoreTests {
   @Test
   void checkStringField() {
     String FIELD_VALUE = "value";
-    Entidad entity = createEntity(factory.stringProperty(FIELD_NAME, FIELD_VALUE));
+    Entidad entity = createEntity(new Propiedad(FIELD_NAME, FIELD_VALUE));
 
     Entidad rentity = registerAndRetrieve(entity);
-    String rvalue = factory.retrieveString(rentity, FIELD_NAME);
+    String rvalue = wrapper.retrieveString(rentity, FIELD_NAME);
     assertEquals(FIELD_VALUE, rvalue, "Incorrect stringProperty");
   }
 
   @Test
   void checkBooleanField() {
     boolean FIELD_VALUE = true;
-    Entidad entity = createEntity(factory.booleanProperty(FIELD_NAME, FIELD_VALUE));
+    Entidad entity = createEntity(new Propiedad(FIELD_NAME, wrapper.encodeBoolean(FIELD_VALUE)));
 
     Entidad rentity = registerAndRetrieve(entity);
-    boolean rvalue = factory.retrieveBoolean(rentity, FIELD_NAME);
+    boolean rvalue = wrapper.retrieveBoolean(rentity, FIELD_NAME);
     assertEquals(FIELD_VALUE, rvalue, "Incorrect booleanProperty");
   }
 
@@ -75,19 +75,20 @@ class RetrieveStoreTests {
   void checkIdField() {
     Entidad referenced = registerAndRetrieve(createEntity());
     Propiedad p =
-        factory.objectProperty(
+        new Propiedad(
             FIELD_NAME,
-            new Identifiable() {
-              public int getId() {
-                return referenced.getId();
-              }
+            wrapper.encodeObject(
+                new Identifiable() {
+                  public int getId() {
+                    return referenced.getId();
+                  }
 
-              public void setId(int id) {}
-            });
+                  public void setId(int id) {}
+                }));
     Entidad entity = createEntity(p);
 
     Entidad rentity = registerAndRetrieve(entity);
-    int rvalue = factory.retrieveId(rentity, FIELD_NAME);
+    int rvalue = wrapper.retrieveId(rentity, FIELD_NAME);
     assertEquals(referenced.getId(), rvalue, "Incorrect objectIdProperty");
   }
 
@@ -103,11 +104,11 @@ class RetrieveStoreTests {
           public void setId(int id) {}
         };
     List<Identifiable> FIELD_VALUE = Arrays.asList(referencedObj, referencedObj, referencedObj);
-    Propiedad p = factory.objectCollectionProperty(FIELD_NAME, FIELD_VALUE);
+    Propiedad p = new Propiedad(FIELD_NAME, wrapper.encodeObjectList(FIELD_VALUE));
     Entidad entity = createEntity(p);
 
     Entidad rentity = registerAndRetrieve(entity);
-    List<Integer> rvalue = factory.retrieveIdList(rentity, FIELD_NAME);
+    List<Integer> rvalue = wrapper.retrieveIdList(rentity, FIELD_NAME);
     assertEquals(FIELD_VALUE.size(), rvalue.size());
     for (int i = 0; i < FIELD_VALUE.size(); i++) {
       assertEquals(FIELD_VALUE.get(i).getId(), rvalue.get(i), "Incorrect objectIdCollection");
