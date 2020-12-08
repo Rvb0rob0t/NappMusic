@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -17,6 +18,7 @@ public class PlaylistTable extends MouseAdapter {
   private MusicPlayer musicPlayer;
   private JPopupMenu rightClickMenu;
   private JMenu addToPlaylistMenu;
+  private JMenuItem newPlaylistItem;
 
   public PlaylistTable(MusicPlayer musicPlayer, Playlist playlist, JPopupMenu rightClickMenu) {
     this.table = new JTable(new PlaylistTableModel(playlist));
@@ -25,6 +27,15 @@ public class PlaylistTable extends MouseAdapter {
 
     this.rightClickMenu = rightClickMenu;
     this.addToPlaylistMenu = new JMenu("Añadir a playlist");
+    this.newPlaylistItem = new JMenuItem("Nueva playlist");
+    this.newPlaylistItem.addActionListener(
+        e -> {
+          String newPlaylistName = JOptionPane.showInputDialog("Name of the new playlist");
+          if (newPlaylistName != null && newPlaylistName.length() > 0) {
+            Controller.getSingleton().createPlaylist(newPlaylistName);
+          }
+        });
+    this.addToPlaylistMenu.add(newPlaylistItem);
     this.rightClickMenu.add(addToPlaylistMenu);
   }
 
@@ -65,14 +76,10 @@ public class PlaylistTable extends MouseAdapter {
               JMenuItem playlistItem = new JMenuItem(playlist.getName());
               playlistItem.addActionListener(
                   e -> {
-                    // TODO Controller.getSingleton().addToPlaylist(playlist, song);
+                    Controller.getSingleton().addToPlaylist(playlist, song);
                   });
               addToPlaylistMenu.add(playlistItem);
             });
-    JMenuItem newPlaylistItem = new JMenuItem("Nueva playlist");
-    newPlaylistItem.addActionListener(
-        e -> {
-          // TODO Controller.getSingleton().createPlaylist();
-        });
+    addToPlaylistMenu.add(newPlaylistItem);
   }
 }
