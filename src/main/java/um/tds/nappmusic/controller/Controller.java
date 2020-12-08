@@ -1,5 +1,7 @@
 package um.tds.nappmusic.controller;
 
+import com.itextpdf.text.DocumentException;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import um.tds.nappmusic.dao.Dao;
@@ -22,6 +24,7 @@ public final class Controller {
   private UserCatalog userCatalog;
   private SongCatalog songCatalog;
   private XmlLoader xmlLoader;
+  private PdfGenerator pdfGenerator;
 
   private User currentUser;
 
@@ -39,6 +42,7 @@ public final class Controller {
     userCatalog = UserCatalog.getSingleton();
     songCatalog = SongCatalog.getSingleton();
     xmlLoader = new XmlLoader();
+    pdfGenerator = new PdfGenerator();
 
     currentUser = null;
   }
@@ -199,5 +203,10 @@ public final class Controller {
 
   public void loadXml(String xmlPath) {
     xmlLoader.loadSongs(xmlPath);
+  }
+
+  public void generatePlaylistsPdf(String directoryPath)
+      throws FileNotFoundException, DocumentException {
+    pdfGenerator.userPlaylistsToPdf(currentUser, directoryPath);
   }
 }
