@@ -199,4 +199,13 @@ public class MusicPlayer {
     buttonPlay.setIcon(PAUSE_ICON);
     mediaPlayer.play();
   }
+
+  /**
+   * Change the currently playing playlist and sets the Panel if it's not already visible.
+   *
+   * @param playlist The playlist to be played
+   */
+  public void play(Playlist playlist) {
+    play(playlist, 0);
+  }
 }

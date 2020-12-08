@@ -3,9 +3,9 @@ package um.tds.nappmusic.dao.tds;
 import beans.Entidad;
 import beans.Propiedad;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.domain.User;
 
 public final class UserEncoder implements BiEncoder<User> {
@@ -37,15 +37,14 @@ public final class UserEncoder implements BiEncoder<User> {
   }
 
   @Override
-  public void initObjFromEntity(User user, Entidad entity) {
+  public void initObjFromEntity(User user, Entidad entity) throws DaoException {
     user.setName(factory.retrieveString(entity, NAME_FIELD));
     user.setSurname(factory.retrieveString(entity, SURNAME_FIELD));
     try {
       user.setBirthDate(factory.retrieveLocalDate(entity, BIRTHDATE_FIELD));
     } catch (ParseException e) {
-      System.err.println("Date format inconsistency in persistent server");
       e.printStackTrace();
-      user.setBirthDate(LocalDate.now()); // TODO is this the best or exit?
+      throw new DaoException("Date format inconsistency in persistent server");
     }
     user.setEmail(factory.retrieveString(entity, EMAIL_FIELD));
     user.setUsername(factory.retrieveString(entity, USERNAME_FIELD));

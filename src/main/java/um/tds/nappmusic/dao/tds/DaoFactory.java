@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import um.tds.nappmusic.dao.Dao;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.Identifiable;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
@@ -167,15 +168,15 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
         .collect(Collectors.toList());
   }
 
-  public User retrieveUser(Entidad entity, String field) {
+  public User retrieveUser(Entidad entity, String field) throws DaoException {
     return getUserDao().get(retrieveId(entity, field));
   }
 
-  public Song retrieveSong(Entidad entity, String field) {
+  public Song retrieveSong(Entidad entity, String field) throws DaoException {
     return getSongDao().get(retrieveId(entity, field));
   }
 
-  public Playlist retrievePlaylist(Entidad entity, String field) {
+  public Playlist retrievePlaylist(Entidad entity, String field) throws DaoException {
     return getPlaylistDao().get(retrieveId(entity, field));
   }
 
@@ -185,17 +186,21 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
         .collect(Collectors.toList());
   }
 
-  public List<Song> retrieveSongList(Entidad entity, String field) {
-    return retrieveIdList(entity, field).stream()
-        .map(id -> songDao.get(id))
-        .collect(Collectors.toList());
+  public List<Song> retrieveSongList(Entidad entity, String field) throws DaoException {
+    // Streams are a hassle to use when the map method throws
+    List<Song> list = new ArrayList();
+    for (int id : retrieveIdList(entity, field)) {
+      list.add(songDao.get(id));
+    }
+    return list;
   }
 
-  public List<Playlist> retrievePlaylistList(Entidad entity, String field) {
-    retrieveIdList(entity, field).forEach(id -> System.err.println("id: " + id));
-    return retrieveIdList(entity, field).stream()
-        .map(id -> playlistDao.get(id))
-        .collect(Collectors.toList());
+  public List<Playlist> retrievePlaylistList(Entidad entity, String field) throws DaoException {
+    List<Playlist> list = new ArrayList();
+    for (int id : retrieveIdList(entity, field)) {
+      list.add(playlistDao.get(id));
+    }
+    return list;
   }
 
   private List<String> splitValueList(String string) {
