@@ -118,8 +118,8 @@ public class MainWindow {
   /** Create the changing panel. */
   private void createCardsPanel() {
     cardsPanel = new JPanel(new CardLayout());
-    cardsPanel.add(new HomePanel(), HOME_CARD_NAME);
-    cardsPanel.add(new SearchPanel(musicPlayer), SEARCH_CARD_NAME);
+    cardsPanel.add(new HomePanel().getPanel(), HOME_CARD_NAME);
+    cardsPanel.add(new SearchPanel(musicPlayer).getPanel(), SEARCH_CARD_NAME);
     cardsPanel.add(new PlaylistsPanel(musicPlayer).getPanel(), PLAYLISTS_CARD_NAME);
     cardsPanel.add(new RecentlyPlayedPane(musicPlayer).getPanel(), RECENTLY_CARD_NAME);
   }

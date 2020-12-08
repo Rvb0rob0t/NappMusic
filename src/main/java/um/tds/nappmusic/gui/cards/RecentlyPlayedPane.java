@@ -8,7 +8,6 @@ import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
-@SuppressWarnings("serial")
 public class RecentlyPlayedPane {
   private JPanel mainPanel;
   private JScrollPane scrollPane;

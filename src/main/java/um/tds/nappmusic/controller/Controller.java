@@ -200,6 +200,7 @@ public final class Controller {
     song.incrementNumPlays();
     currentUser.updateRecent(song);
     songDao.update(song);
+    playlistDao.update(currentUser.getRecent());
   }
 
   public void loadXml(String xmlPath) {
