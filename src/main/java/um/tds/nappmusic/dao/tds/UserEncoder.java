@@ -3,10 +3,9 @@ package um.tds.nappmusic.dao.tds;
 import beans.Entidad;
 import beans.Propiedad;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import um.tds.nappmusic.domain.Playlist;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.domain.User;
 
 public final class UserEncoder implements BiEncoder<User> {
@@ -38,22 +37,20 @@ public final class UserEncoder implements BiEncoder<User> {
   }
 
   @Override
-  public void initObjFromEntity(User user, Entidad entity) {
+  public void initObjFromEntity(User user, Entidad entity) throws DaoException {
     user.setName(factory.retrieveString(entity, NAME_FIELD));
     user.setSurname(factory.retrieveString(entity, SURNAME_FIELD));
     try {
       user.setBirthDate(factory.retrieveLocalDate(entity, BIRTHDATE_FIELD));
     } catch (ParseException e) {
-      System.err.println("Date format inconsistency in persistent server");
       e.printStackTrace();
-      user.setBirthDate(LocalDate.now()); // TODO is this the best or exit?
+      throw new DaoException("Date format inconsistency in persistent server");
     }
     user.setEmail(factory.retrieveString(entity, EMAIL_FIELD));
     user.setUsername(factory.retrieveString(entity, USERNAME_FIELD));
     user.setPassword(factory.retrieveString(entity, PASSWORD_FIELD));
     user.setPremium(factory.retrieveBoolean(entity, PREMIUM_FIELD));
-    // user.setPlaylists(factory.retrievePlaylistList(entity, PLAYLISTS_FIELD));
-    user.setPlaylists(new ArrayList<Playlist>()); // TODO remove playlist import after fix this
+    user.setPlaylists(factory.retrievePlaylistList(entity, PLAYLISTS_FIELD));
     user.setRecent(factory.retrievePlaylist(entity, RECENT_FIELD));
   }
 
@@ -71,7 +68,7 @@ public final class UserEncoder implements BiEncoder<User> {
                 factory.stringProperty(USERNAME_FIELD, user.getUsername()),
                 factory.stringProperty(PASSWORD_FIELD, user.getPassword()),
                 factory.booleanProperty(PREMIUM_FIELD, user.isPremium()),
-                // factory.playlistCollectionProperty(PLAYLISTS_FIELD, user.getPlaylists()),
+                factory.playlistCollectionProperty(PLAYLISTS_FIELD, user.getPlaylists()),
                 factory.playlistProperty(RECENT_FIELD, user.getRecent()))));
     return entity;
   }

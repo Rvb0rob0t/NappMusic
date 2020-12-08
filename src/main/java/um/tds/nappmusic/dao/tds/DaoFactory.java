@@ -6,6 +6,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import um.tds.nappmusic.dao.Dao;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.Identifiable;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
@@ -114,6 +116,10 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return new Propiedad(field, Integer.toString(playlist.getId()));
   }
 
+  public Propiedad stringCollectionProperty(String field, Collection<String> strings) {
+    return new Propiedad(field, strings.stream().collect(Collectors.joining(COLLECTIONS_DEL)));
+  }
+
   public Propiedad songCollectionProperty(String field, Collection<Song> songs) {
     return new Propiedad(
         field,
@@ -157,33 +163,48 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
   }
 
   public List<Integer> retrieveIdList(Entidad entity, String field) {
-    return Arrays.stream(
-            servPersistencia.recuperarPropiedadEntidad(entity, field).split(COLLECTIONS_DEL))
+    return splitValueList(servPersistencia.recuperarPropiedadEntidad(entity, field)).stream()
         .map(Integer::valueOf)
         .collect(Collectors.toList());
   }
 
-  public User retrieveUser(Entidad entity, String field) {
+  public User retrieveUser(Entidad entity, String field) throws DaoException {
     return getUserDao().get(retrieveId(entity, field));
   }
 
-  public Song retrieveSong(Entidad entity, String field) {
+  public Song retrieveSong(Entidad entity, String field) throws DaoException {
     return getSongDao().get(retrieveId(entity, field));
   }
 
-  public Playlist retrievePlaylist(Entidad entity, String field) {
+  public Playlist retrievePlaylist(Entidad entity, String field) throws DaoException {
     return getPlaylistDao().get(retrieveId(entity, field));
   }
 
-  public List<Song> retrieveSongList(Entidad entity, String field) {
-    return retrieveIdList(entity, field).stream()
-        .map(id -> songDao.get(id))
+  public List<String> retrieveStringList(Entidad entity, String field) {
+    return Arrays.stream(
+            servPersistencia.recuperarPropiedadEntidad(entity, field).split(COLLECTIONS_DEL))
         .collect(Collectors.toList());
   }
 
-  public List<Playlist> retrievePlaylistList(Entidad entity, String field) {
-    return retrieveIdList(entity, field).stream()
-        .map(id -> playlistDao.get(id))
-        .collect(Collectors.toList());
+  public List<Song> retrieveSongList(Entidad entity, String field) throws DaoException {
+    // Streams are a hassle to use when the map method throws
+    List<Song> list = new ArrayList();
+    for (int id : retrieveIdList(entity, field)) {
+      list.add(songDao.get(id));
+    }
+    return list;
+  }
+
+  public List<Playlist> retrievePlaylistList(Entidad entity, String field) throws DaoException {
+    List<Playlist> list = new ArrayList();
+    for (int id : retrieveIdList(entity, field)) {
+      list.add(playlistDao.get(id));
+    }
+    return list;
+  }
+
+  private List<String> splitValueList(String string) {
+    if (string.equals("")) return new ArrayList<String>();
+    return Arrays.asList(string.split(COLLECTIONS_DEL));
   }
 }

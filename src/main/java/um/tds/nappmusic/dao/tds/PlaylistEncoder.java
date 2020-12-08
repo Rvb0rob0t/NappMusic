@@ -4,6 +4,7 @@ import beans.Entidad;
 import beans.Propiedad;
 import java.util.ArrayList;
 import java.util.Arrays;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.domain.Playlist;
 
 public final class PlaylistEncoder implements BiEncoder<Playlist> {
@@ -28,7 +29,7 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
   }
 
   @Override
-  public void initObjFromEntity(Playlist playlist, Entidad entity) {
+  public void initObjFromEntity(Playlist playlist, Entidad entity) throws DaoException {
     playlist.setName(factory.retrieveString(entity, NAME_FIELD));
     playlist.setSongs(factory.retrieveSongList(entity, SONGS_FIELD));
   }

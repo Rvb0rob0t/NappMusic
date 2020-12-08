@@ -1,10 +1,11 @@
 package um.tds.nappmusic.dao.tds;
 
 import beans.Entidad;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import um.tds.nappmusic.dao.Dao;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.Identifiable;
 
 public class Pool<T extends Identifiable> implements Dao<T> {
@@ -23,7 +24,7 @@ public class Pool<T extends Identifiable> implements Dao<T> {
   }
 
   @Override
-  public T get(int id) {
+  public T get(int id) throws DaoException {
     T t = pool.get(id);
     if (t != null) return t;
     T obj = encoder.newEmptyObj();
@@ -34,10 +35,13 @@ public class Pool<T extends Identifiable> implements Dao<T> {
   }
 
   @Override
-  public List<T> getAll() {
-    return factory.retrieveEntities(encoder.getEntityName()).stream()
-        .map(entity -> get(entity.getId()))
-        .collect(Collectors.toList());
+  public List<T> getAll() throws DaoException {
+    // Streams are a hassle to use when the map method throws
+    List<T> all = new ArrayList();
+    for (Entidad entity : factory.retrieveEntities(encoder.getEntityName())) {
+      all.add(get(entity.getId()));
+    }
+    return all;
   }
 
   @Override

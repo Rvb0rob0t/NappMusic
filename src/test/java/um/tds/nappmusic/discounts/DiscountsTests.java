@@ -10,10 +10,8 @@ import um.tds.nappmusic.domain.discounts.Below25Discount;
 import um.tds.nappmusic.domain.discounts.OctoberDiscount;
 
 public class DiscountsTests {
-
   @Test
   void checkSetBestDiscount() {
-
     User user = new User();
     user.setBirthDate(LocalDate.parse("1999-08-18"));
     user.setBestDiscount();

@@ -34,7 +34,7 @@ public final class SongEncoder implements BiEncoder<Song> {
   public void initObjFromEntity(Song song, Entidad entity) {
     song.setTitle(factory.retrieveString(entity, TITLE_FIELD));
     song.setAuthor(factory.retrieveString(entity, AUTHOR_FIELD));
-    // song.setStyles(factory.retrieveStringList(entity, STYLES_FIELD));
+    song.setStyles(new ArrayList(factory.retrieveStringList(entity, STYLES_FIELD)));
     song.setFilePath(factory.retrieveString(entity, FILEPATH_FIELD));
     song.setNumPlays(factory.retrieveInt(entity, NUMPLAYS_FIELD));
   }
@@ -48,7 +48,7 @@ public final class SongEncoder implements BiEncoder<Song> {
             Arrays.asList(
                 factory.stringProperty(TITLE_FIELD, song.getTitle()),
                 factory.stringProperty(AUTHOR_FIELD, song.getAuthor()),
-                // factory.stringCollectionProperty(STYLES_FIELD, song.getStyles()),
+                factory.stringCollectionProperty(STYLES_FIELD, song.getStyles()),
                 factory.stringProperty(FILEPATH_FIELD, song.getFilePath()),
                 factory.intProperty(NUMPLAYS_FIELD, song.getNumPlays()))));
     return entity;
