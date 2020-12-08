@@ -1,6 +1,7 @@
 package um.tds.nappmusic.dao.tds;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -9,10 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.Identifiable;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.domain.User;
+import um.tds.nappmusic.domain.discounts.NoDiscount;
 
 class PoolTests {
   private DaoFactory factory;
@@ -39,9 +42,9 @@ class PoolTests {
     user.setUsername("Albertoc");
     user.setPassword("1234");
     user.setPremium(false);
+    user.setDiscount(new NoDiscount());
     user.setPlaylists(new ArrayList<Playlist>());
     user.setRecent(new Playlist());
-    // TODO should we actually set the user in a decent state in User()?
     user.getRecent().setSongs(new ArrayList());
 
     Pool<User> userDao = (Pool) factory.getUserDao();
@@ -49,17 +52,23 @@ class PoolTests {
     // The object is now in the pool, clear it
     // to try retrieving it from the database
     userDao.clear();
-    User retrieved = userDao.get(user.getId());
-    assertEquals(user.getName(), retrieved.getName());
-    assertEquals(user.getSurname(), retrieved.getSurname());
-    assertEquals(user.getBirthDate(), retrieved.getBirthDate());
-    assertEquals(user.getEmail(), retrieved.getEmail());
-    assertEquals(user.getUsername(), retrieved.getUsername());
-    assertEquals(user.getPassword(), retrieved.getPassword());
-    assertEquals(user.isPremium(), retrieved.isPremium());
-    // TODO
-    // assertListsIdsMatch(user.getPlaylists(), retrieved.getPlaylists());
-    assertEquals(user.getRecent().getId(), retrieved.getRecent().getId());
+    try {
+      User retrieved = userDao.get(user.getId());
+
+      assertEquals(user.getName(), retrieved.getName());
+      assertEquals(user.getSurname(), retrieved.getSurname());
+      assertEquals(user.getBirthDate(), retrieved.getBirthDate());
+      assertEquals(user.getEmail(), retrieved.getEmail());
+      assertEquals(user.getUsername(), retrieved.getUsername());
+      assertEquals(user.getPassword(), retrieved.getPassword());
+      assertEquals(user.isPremium(), retrieved.isPremium());
+      assertListsIdsMatch(user.getPlaylists(), retrieved.getPlaylists());
+      assertEquals(user.getRecent().getId(), retrieved.getRecent().getId());
+      userDao.delete(user);
+    } catch (DaoException e) {
+      e.printStackTrace();
+      fail("Failed retrieving user");
+    }
   }
 
   @Test
@@ -74,15 +83,19 @@ class PoolTests {
     Pool<Song> songDao = (Pool) factory.getSongDao();
     songDao.register(song);
     songDao.clear();
-    Song retrieved = songDao.get(song.getId());
+    try {
+      Song retrieved = songDao.get(song.getId());
 
-    assertEquals(song.getTitle(), retrieved.getTitle());
-    assertEquals(song.getAuthor(), retrieved.getAuthor());
-    assertEquals(song.getStyles(), retrieved.getStyles());
-    assertEquals(song.getFilePath(), retrieved.getFilePath());
-    assertEquals(song.getNumPlays(), retrieved.getNumPlays());
-
-    songDao.delete(song);
+      assertEquals(song.getTitle(), retrieved.getTitle());
+      assertEquals(song.getAuthor(), retrieved.getAuthor());
+      assertEquals(song.getStyles(), retrieved.getStyles());
+      assertEquals(song.getFilePath(), retrieved.getFilePath());
+      assertEquals(song.getNumPlays(), retrieved.getNumPlays());
+      songDao.delete(song);
+    } catch (DaoException e) {
+      e.printStackTrace();
+      fail("Failed retrieving song");
+    }
   }
 
   @Test
@@ -101,17 +114,22 @@ class PoolTests {
     Pool<Playlist> playlistDao = (Pool) factory.getPlaylistDao();
     playlistDao.register(playlist);
     playlistDao.clear();
-    Playlist retrieved = playlistDao.get(playlist.getId());
+    try {
+      Playlist retrieved = playlistDao.get(playlist.getId());
 
-    assertEquals(playlist.getName(), retrieved.getName());
-    assertEquals(playlist.getSize(), retrieved.getSize());
-    for (int i = 0; i < playlist.getSize(); i++) {
-      assertEquals(playlist.getSong(i), retrieved.getSong(i));
+      assertEquals(playlist.getName(), retrieved.getName());
+      assertEquals(playlist.getSize(), retrieved.getSize());
+      for (int i = 0; i < playlist.getSize(); i++) {
+        assertEquals(playlist.getSong(i), retrieved.getSong(i));
+      }
+      assertListsIdsMatch(playlist.getSongs(), retrieved.getSongs());
+
+      playlistDao.delete(playlist);
+      Pool<Song> songDao = (Pool) factory.getSongDao();
+      songDao.delete(song);
+    } catch (DaoException e) {
+      e.printStackTrace();
+      fail("Failed retrieving playlist");
     }
-    assertListsIdsMatch(playlist.getSongs(), retrieved.getSongs());
-
-    playlistDao.delete(playlist);
-    Pool<Song> songDao = (Pool) factory.getSongDao();
-    songDao.delete(song);
   }
 }
