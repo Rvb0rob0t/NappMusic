@@ -121,7 +121,7 @@ public class MainWindow {
     cardsPanel.add(new HomePanel(), HOME_CARD_NAME);
     cardsPanel.add(new SearchPanel(musicPlayer), SEARCH_CARD_NAME);
     cardsPanel.add(new PlaylistsPanel(musicPlayer).getPanel(), PLAYLISTS_CARD_NAME);
-    cardsPanel.add(new RecentlyPlayedPane(musicPlayer), RECENTLY_CARD_NAME);
+    cardsPanel.add(new RecentlyPlayedPane(musicPlayer).getPanel(), RECENTLY_CARD_NAME);
   }
 
   /** Create the panel with the user settings. */

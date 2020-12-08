@@ -33,6 +33,7 @@ public class AddRootUserToDb {
             "root",
             true);
     user.getPlaylists().add(fakePlaylist());
+    user.updateRecent(fakeSong());
     Dao<User> userDao = factory.getUserDao();
     userDao.register(user);
   }

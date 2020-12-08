@@ -1,11 +1,18 @@
 package um.tds.nappmusic.gui.cards;
 
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import um.tds.nappmusic.controller.Controller;
+import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.gui.MusicPlayer;
+import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 @SuppressWarnings("serial")
-public class RecentlyPlayedPane extends JScrollPane {
+public class RecentlyPlayedPane {
+  private JPanel mainPanel;
+  private JScrollPane scrollPane;
+  private PlaylistTable songTable;
 
   /**
    * .
@@ -13,7 +20,16 @@ public class RecentlyPlayedPane extends JScrollPane {
    * @param musicPlayer
    */
   public RecentlyPlayedPane(MusicPlayer musicPlayer) {
-    JTable table = new JTable();
-    this.setViewportView(table);
+    Playlist userPlaylists = Controller.getSingleton().getUserRecentlyPlayedSongs();
+    mainPanel = new JPanel(new BorderLayout());
+    JScrollPane scrollPane = new JScrollPane();
+    songTable = new PlaylistTable(musicPlayer, userPlaylists);
+
+    mainPanel.add(scrollPane, BorderLayout.CENTER);
+    scrollPane.setViewportView(songTable.getTable());
+  }
+
+  public JPanel getPanel() {
+    return mainPanel;
   }
 }

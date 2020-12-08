@@ -96,15 +96,16 @@ public class User implements Identifiable {
         new Playlist("Recent"));
   }
 
-  // TODO consider if this is necessary
   public void addPlaylist(Playlist playlist) {
     playlists.add(playlist);
   }
 
-  // TODO consider if this is necessary
-  // public void updateRecent(Song reproduccion) {
-  //    recent.add(reproduccion);
-  // }
+  public void updateRecent(Song reproduccion) {
+    recent.add(0, reproduccion);
+    if (recent.size() > Playlist.RECENTLY_PLAYED_LIST_SIZE) {
+      recent.remove(Playlist.RECENTLY_PLAYED_LIST_SIZE);
+    }
+  }
 
   public int getId() {
     return id;
