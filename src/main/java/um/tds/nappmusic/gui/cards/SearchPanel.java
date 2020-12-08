@@ -14,7 +14,6 @@ import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
-@SuppressWarnings("serial")
 public class SearchPanel {
   private static final String TITLE_FIELD_NAME = "Título";
   private static final String AUTHOR_FIELD_NAME = "Intérprete";
@@ -90,8 +89,12 @@ public class SearchPanel {
   }
 
   private void changeTable(MusicPlayer musicPlayer, Playlist playlist) {
-    PlaylistTable searchTable = new PlaylistTable(musicPlayer, playlist);
-    scrollPane.setViewportView(searchTable.getTable());
+    if (playlistTable == null) {
+      playlistTable = new PlaylistTable(musicPlayer, playlist);
+    } else {
+      playlistTable.setPlaylist(playlist);
+    }
+    scrollPane.setViewportView(playlistTable.getTable());
     mainPanel.revalidate();
   }
 }

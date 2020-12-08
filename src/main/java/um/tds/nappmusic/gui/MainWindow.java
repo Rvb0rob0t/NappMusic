@@ -54,6 +54,10 @@ public class MainWindow {
   private JButton btnPlaylists;
   private JButton btnRecently;
   private UiButton btnXmlLoader;
+  private HomePanel homePanel;
+  private SearchPanel searchPanel;
+  private PlaylistsPanel playlistsPanel;
+  private RecentlyPlayedPane recentlyPlayedPane;
 
   /** Create the application. */
   public MainWindow() {
@@ -118,10 +122,14 @@ public class MainWindow {
   /** Create the changing panel. */
   private void createCardsPanel() {
     cardsPanel = new JPanel(new CardLayout());
-    cardsPanel.add(new HomePanel(), HOME_CARD_NAME);
-    cardsPanel.add(new SearchPanel(musicPlayer), SEARCH_CARD_NAME);
-    cardsPanel.add(new PlaylistsPanel(musicPlayer).getPanel(), PLAYLISTS_CARD_NAME);
-    cardsPanel.add(new RecentlyPlayedPane(musicPlayer), RECENTLY_CARD_NAME);
+    homePanel = new HomePanel();
+    cardsPanel.add(homePanel.getPanel(), HOME_CARD_NAME);
+    searchPanel = new SearchPanel(musicPlayer);
+    cardsPanel.add(searchPanel.getPanel(), SEARCH_CARD_NAME);
+    playlistsPanel = new PlaylistsPanel(musicPlayer);
+    cardsPanel.add(playlistsPanel.getPanel(), PLAYLISTS_CARD_NAME);
+    recentlyPlayedPane = new RecentlyPlayedPane(musicPlayer);
+    cardsPanel.add(recentlyPlayedPane.getScrollPane(), RECENTLY_CARD_NAME);
   }
 
   /** Create the panel with the user settings. */
@@ -171,6 +179,7 @@ public class MainWindow {
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, PLAYLISTS_CARD_NAME);
+            playlistsPanel.revalidate();
           }
         });
 

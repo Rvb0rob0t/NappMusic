@@ -15,15 +15,18 @@ import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.lists.PlaylistJList;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
-@SuppressWarnings("serial")
 public class PlaylistsPanel extends MouseAdapter {
   private MusicPlayer musicPlayer;
+
   private JPanel mainPanel;
   private JPanel leftPanel;
   private JPanel rightPanel;
   private JScrollPane leftPanelScroll;
   private JScrollPane rightPanelScroll;
+
   private PlaylistJList playlistsList;
+  private PlaylistTable playlistTable;
+
   private JLabel leftPaneLbl;
 
   /**
@@ -56,8 +59,13 @@ public class PlaylistsPanel extends MouseAdapter {
   public void updateDisplayedList(Optional<Playlist> selected) {
     Playlist playlist =
         selected.isPresent() ? selected.get() : new Playlist("No Playlist Selected");
-    PlaylistTable searchTable = new PlaylistTable(musicPlayer, playlist);
-    rightPanelScroll.setViewportView(searchTable.getTable());
+    if (playlistTable == null) {
+      playlistTable = new PlaylistTable(musicPlayer, playlist);
+    } else {
+      playlistTable.setPlaylist(playlist);
+    }
+    rightPanelScroll.setViewportView(playlistTable.getTable());
+    mainPanel.revalidate();
   }
 
   @Override
@@ -71,5 +79,10 @@ public class PlaylistsPanel extends MouseAdapter {
 
   public JPanel getPanel() {
     return mainPanel;
+  }
+
+  public void revalidate() {
+    playlistsList.setPlaylist(Controller.getSingleton().getUserPlaylists());
+    updateDisplayedList(playlistsList.getSelectedPlaylist());
   }
 }

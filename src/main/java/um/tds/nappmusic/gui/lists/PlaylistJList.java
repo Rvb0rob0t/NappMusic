@@ -46,5 +46,6 @@ public class PlaylistJList {
 
   public void setPlaylist(List<Playlist> playlists) {
     listModel.setPlaylistList(playlists);
+    list.updateUI();
   }
 }
