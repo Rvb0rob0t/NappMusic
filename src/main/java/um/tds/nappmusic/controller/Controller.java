@@ -207,9 +207,9 @@ public final class Controller {
     xmlLoader.loadSongs(xmlPath);
   }
 
-  public void generatePlaylistsPdf(String directoryPath)
+  public void generatePlaylistsPdf(String filePath)
       throws FileNotFoundException, DocumentException {
-    pdfGenerator.userPlaylistsToPdf(currentUser, directoryPath);
+    pdfGenerator.userPlaylistsToPdf(currentUser, filePath);
   }
 
   public UserCatalog getUserCatalog() {

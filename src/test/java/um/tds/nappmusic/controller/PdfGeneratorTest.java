@@ -32,11 +32,10 @@ public class PdfGeneratorTest {
     controller.addToPlaylist(controller.createPlaylist("Test playlist 2"), song);
 
     JFileChooser chooser = new JFileChooser();
-    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
       System.out.println(
-          "You chose to save the pdf in this directory: "
-              + chooser.getSelectedFile().getAbsolutePath());
+          "You chose to save the pdf in this file: " + chooser.getSelectedFile().getAbsolutePath());
       try {
         controller.generatePlaylistsPdf(chooser.getSelectedFile().getAbsolutePath());
       } catch (FileNotFoundException | DocumentException e) {
