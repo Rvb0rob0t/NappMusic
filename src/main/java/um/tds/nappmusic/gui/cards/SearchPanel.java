@@ -15,19 +15,23 @@ import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 @SuppressWarnings("serial")
-public class SearchPanel extends JPanel {
+public class SearchPanel {
   private static final String TITLE_FIELD_NAME = "Título";
   private static final String AUTHOR_FIELD_NAME = "Intérprete";
   private static final int FIELD_WIDTH = 10;
+
+  JPanel mainPanel;
+
   private JTextField titleField;
   private JTextField authorField;
   private JComboBox<String> styleComboBox;
 
+  private PlaylistTable playlistTable;
   private JScrollPane scrollPane;
 
   /** . */
   public SearchPanel(MusicPlayer musicPlayer) {
-    super(new BorderLayout());
+    mainPanel = new JPanel(new BorderLayout());
 
     JPanel fieldsPanel = new JPanel();
 
@@ -75,15 +79,19 @@ public class SearchPanel extends JPanel {
                       (String) styleComboBox.getSelectedItem()));
         });
     fieldsPanel.add(searchButton);
-    this.add(fieldsPanel, BorderLayout.NORTH);
+    mainPanel.add(fieldsPanel, BorderLayout.NORTH);
 
     scrollPane = new JScrollPane();
-    this.add(scrollPane, BorderLayout.CENTER);
+    mainPanel.add(scrollPane, BorderLayout.CENTER);
+  }
+
+  public JPanel getPanel() {
+    return mainPanel;
   }
 
   private void changeTable(MusicPlayer musicPlayer, Playlist playlist) {
     PlaylistTable searchTable = new PlaylistTable(musicPlayer, playlist);
     scrollPane.setViewportView(searchTable.getTable());
-    this.revalidate();
+    mainPanel.revalidate();
   }
 }

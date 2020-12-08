@@ -4,8 +4,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import um.tds.nappmusic.gui.MusicPlayer;
 
-@SuppressWarnings("serial")
-public class RecentlyPlayedPane extends JScrollPane {
+public class RecentlyPlayedPane {
+  JScrollPane scrollPane;
 
   /**
    * .
@@ -14,6 +14,10 @@ public class RecentlyPlayedPane extends JScrollPane {
    */
   public RecentlyPlayedPane(MusicPlayer musicPlayer) {
     JTable table = new JTable();
-    this.setViewportView(table);
+    scrollPane = new JScrollPane(table);
+  }
+
+  public JScrollPane getScrollPane() {
+    return scrollPane;
   }
 }
