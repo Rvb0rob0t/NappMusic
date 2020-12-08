@@ -6,6 +6,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -114,6 +115,10 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return new Propiedad(field, Integer.toString(playlist.getId()));
   }
 
+  public Propiedad stringCollectionProperty(String field, Collection<String> strings) {
+    return new Propiedad(field, strings.stream().collect(Collectors.joining(COLLECTIONS_DEL)));
+  }
+
   public Propiedad songCollectionProperty(String field, Collection<Song> songs) {
     return new Propiedad(
         field,
@@ -157,8 +162,7 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
   }
 
   public List<Integer> retrieveIdList(Entidad entity, String field) {
-    return Arrays.stream(
-            servPersistencia.recuperarPropiedadEntidad(entity, field).split(COLLECTIONS_DEL))
+    return splitValueList(servPersistencia.recuperarPropiedadEntidad(entity, field)).stream()
         .map(Integer::valueOf)
         .collect(Collectors.toList());
   }
@@ -175,6 +179,12 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
     return getPlaylistDao().get(retrieveId(entity, field));
   }
 
+  public List<String> retrieveStringList(Entidad entity, String field) {
+    return Arrays.stream(
+            servPersistencia.recuperarPropiedadEntidad(entity, field).split(COLLECTIONS_DEL))
+        .collect(Collectors.toList());
+  }
+
   public List<Song> retrieveSongList(Entidad entity, String field) {
     return retrieveIdList(entity, field).stream()
         .map(id -> songDao.get(id))
@@ -182,8 +192,14 @@ public final class DaoFactory extends um.tds.nappmusic.dao.DaoFactory {
   }
 
   public List<Playlist> retrievePlaylistList(Entidad entity, String field) {
+    retrieveIdList(entity, field).forEach(id -> System.err.println("id: " + id));
     return retrieveIdList(entity, field).stream()
         .map(id -> playlistDao.get(id))
         .collect(Collectors.toList());
+  }
+
+  private List<String> splitValueList(String string) {
+    if (string.equals("")) return new ArrayList<String>();
+    return Arrays.asList(string.split(COLLECTIONS_DEL));
   }
 }

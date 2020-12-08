@@ -58,6 +58,10 @@ public class Song implements Identifiable {
     this.author = author;
   }
 
+  public void setStyles(ArrayList<String> styles) {
+    this.styles = styles;
+  }
+
   public void setFilePath(String filePath) {
     this.filePath = filePath;
   }

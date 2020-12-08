@@ -67,8 +67,7 @@ class PoolTests {
     Song song = new Song();
     song.setTitle("SSNII");
     song.setAuthor("Ca Papanate");
-    // TODO
-    // song.setStyles(
+    song.setStyles(new ArrayList<String>(Arrays.asList("Absolutely", "Original")));
     song.setFilePath("/home/useredsa/dotfiles/.config/kak/kakrc");
     song.setNumPlays(10);
 
@@ -79,7 +78,7 @@ class PoolTests {
 
     assertEquals(song.getTitle(), retrieved.getTitle());
     assertEquals(song.getAuthor(), retrieved.getAuthor());
-    // assertEquals(song.getStyles(), retrieved.getStyles());
+    assertEquals(song.getStyles(), retrieved.getStyles());
     assertEquals(song.getFilePath(), retrieved.getFilePath());
     assertEquals(song.getNumPlays(), retrieved.getNumPlays());
 
@@ -91,8 +90,7 @@ class PoolTests {
     Song song = new Song();
     song.setTitle("SSNII");
     song.setAuthor("Ca Papanate");
-    // TODO
-    // song.setStyles(
+    song.setStyles(new ArrayList<String>(Arrays.asList("Absolutely", "Original")));
     song.setFilePath("/home/useredsa/dotfiles/.config/kak/kakrc");
     song.setNumPlays(10);
 
