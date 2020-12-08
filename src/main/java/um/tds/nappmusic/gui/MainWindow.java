@@ -172,6 +172,7 @@ public class MainWindow {
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, SEARCH_CARD_NAME);
+            searchPanel.revalidate();
           }
         });
 

@@ -211,4 +211,12 @@ public final class Controller {
       throws FileNotFoundException, DocumentException {
     pdfGenerator.userPlaylistsToPdf(currentUser, directoryPath);
   }
+
+  public UserCatalog getUserCatalog() {
+    return userCatalog;
+  }
+
+  public SongCatalog getSongCatalog() {
+    return songCatalog;
+  }
 }
