@@ -131,4 +131,40 @@ class PoolTests {
       fail("Failed retrieving playlist");
     }
   }
+
+  @Test
+  void checkUpdateUserPool() {
+    User user = new User();
+    user.setName("Alberto");
+    user.setSurname("Robles");
+    user.setBirthDate(LocalDate.parse("1999-08-18"));
+    user.setEmail("albertor@um.es");
+    user.setUsername("Albertoc");
+    user.setPassword("1234");
+    user.setPremium(false);
+    user.setDiscount(new NoDiscount());
+    user.setPlaylists(new ArrayList<Playlist>());
+    user.setRecent(new Playlist("Recent"));
+
+    Pool<User> userDao = (Pool) factory.getUserDao();
+    userDao.register(user);
+    user.addPlaylist(new Playlist("Roberto"));
+    // The object is now in the pool, clear it
+    // to try retrieving it from the database
+    Pool<Song> songDao = (Pool) factory.getSongDao();
+    Pool<Playlist> playlistDao = (Pool) factory.getPlaylistDao();
+    userDao.clear();
+    songDao.clear();
+    playlistDao.clear();
+    userDao.update(user);
+    try {
+      User retrieved = userDao.get(user.getId());
+
+      System.err.println("Poh favoh" + user.getPlaylists() + retrieved.getPlaylists());
+      assertEquals(user.getName(), retrieved.getName());
+    } catch (DaoException e) {
+      e.printStackTrace();
+      fail("Failed retrieving user");
+    }
+  }
 }

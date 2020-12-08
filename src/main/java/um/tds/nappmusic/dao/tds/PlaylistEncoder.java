@@ -12,10 +12,10 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
   private static final String NAME_FIELD = "name";
   private static final String SONGS_FIELD = "songs";
 
-  private PersistencyWrapper factory;
+  private PersistencyWrapper wrapper;
 
-  public PlaylistEncoder(PersistencyWrapper factory) {
-    this.factory = factory;
+  public PlaylistEncoder(PersistencyWrapper wrapper) {
+    this.wrapper = wrapper;
   }
 
   @Override
@@ -30,8 +30,8 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
 
   @Override
   public void initObjFromEntity(Playlist playlist, Entidad entity) throws DaoException {
-    playlist.setName(factory.retrieveString(entity, NAME_FIELD));
-    playlist.setSongs(factory.retrieveSongList(entity, SONGS_FIELD));
+    playlist.setName(wrapper.retrieveString(entity, NAME_FIELD));
+    playlist.setSongs(wrapper.retrieveSongList(entity, SONGS_FIELD));
   }
 
   @Override
@@ -42,12 +42,13 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
         new ArrayList<Propiedad>(
             Arrays.asList(
                 new Propiedad(NAME_FIELD, playlist.getName()),
-                new Propiedad(SONGS_FIELD, factory.encodeSongList(playlist.getSongs())))));
+                new Propiedad(SONGS_FIELD, wrapper.encodeSongList(playlist.getSongs())))));
     return entity;
   }
 
   @Override
   public void updateEntity(Entidad entity, Playlist playlist) {
-    // TODO
+    wrapper.updateProperty(entity, NAME_FIELD, playlist.getName());
+    wrapper.updateProperty(entity, SONGS_FIELD, wrapper.encodeSongList(playlist.getSongs()));
   }
 }

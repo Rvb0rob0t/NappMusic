@@ -56,6 +56,10 @@ public final class SongEncoder implements BiEncoder<Song> {
 
   @Override
   public void updateEntity(Entidad entity, Song song) {
-    // TODO
+    wrapper.updateProperty(entity, TITLE_FIELD, song.getTitle());
+    wrapper.updateProperty(entity, AUTHOR_FIELD, song.getAuthor());
+    wrapper.updateProperty(entity, STYLES_FIELD, wrapper.encodeStringList(song.getStyles()));
+    wrapper.updateProperty(entity, FILEPATH_FIELD, song.getFilePath());
+    wrapper.updateProperty(entity, NUMPLAYS_FIELD, wrapper.encodeInt(song.getNumPlays()));
   }
 }

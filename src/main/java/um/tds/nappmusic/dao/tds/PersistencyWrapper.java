@@ -1,13 +1,13 @@
 package um.tds.nappmusic.dao.tds;
 
 import beans.Entidad;
+import beans.Propiedad;
 import java.io.*;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import tds.driver.FactoriaServicioPersistencia;
@@ -65,6 +65,17 @@ class PersistencyWrapper {
     servPersistencia.borrarEntidad(entity);
   }
 
+  public void updateProperty(Entidad entity, String field, String value) {
+    for (Propiedad p : entity.getPropiedades()) {
+      if (p.getNombre().equals(field)) {
+        p.setValor(value);
+        servPersistencia.modificarPropiedad(p);
+        return;
+      }
+    }
+    servPersistencia.anadirPropiedadEntidad(entity, field, value);
+  }
+
   // Encoding typed values in Propiedad
 
   public String encodeInt(int value) {
@@ -85,7 +96,7 @@ class PersistencyWrapper {
   }
 
   // FIXME This is to support an old test and is no longer needed
-  public String encodeObjectCollection(Collection<? extends Identifiable> objs) {
+  public String encodeObjectList(List<? extends Identifiable> objs) {
     return objs.stream()
         .map(obj -> String.valueOf(obj.getId()))
         .collect(Collectors.joining(COLLECTIONS_DEL));

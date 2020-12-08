@@ -74,5 +74,16 @@ public final class UserEncoder implements BiEncoder<User> {
   }
 
   @Override
-  public void updateEntity(Entidad entity, User user) {}
+  public void updateEntity(Entidad entity, User user) {
+    wrapper.updateProperty(entity, NAME_FIELD, user.getName());
+    wrapper.updateProperty(entity, SURNAME_FIELD, user.getSurname());
+    wrapper.updateProperty(entity, BIRTHDATE_FIELD, wrapper.encodeLocalDate(user.getBirthDate()));
+    wrapper.updateProperty(entity, EMAIL_FIELD, user.getEmail());
+    wrapper.updateProperty(entity, USERNAME_FIELD, user.getUsername());
+    wrapper.updateProperty(entity, PASSWORD_FIELD, user.getPassword());
+    wrapper.updateProperty(entity, PREMIUM_FIELD, wrapper.encodeBoolean(user.isPremium()));
+    wrapper.updateProperty(
+        entity, PLAYLISTS_FIELD, wrapper.encodePlaylistList(user.getPlaylists()));
+    wrapper.updateProperty(entity, RECENT_FIELD, wrapper.encodePlaylist(user.getRecent()));
+  }
 }
