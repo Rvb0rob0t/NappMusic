@@ -46,7 +46,8 @@ public class PlaylistJList {
     return list;
   }
 
-  public void setPlaylist(List<Playlist> playlists) {
+  public void setPlaylists(List<Playlist> playlists) {
     listModel.setPlaylistList(playlists);
+    list.updateUI();
   }
 }

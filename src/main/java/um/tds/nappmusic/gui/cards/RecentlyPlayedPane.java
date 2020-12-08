@@ -19,10 +19,10 @@ public class RecentlyPlayedPane {
    * @param musicPlayer
    */
   public RecentlyPlayedPane(MusicPlayer musicPlayer) {
-    Playlist userPlaylists = Controller.getSingleton().getUserRecentlyPlayedSongs();
+    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
     mainPanel = new JPanel(new BorderLayout());
     JScrollPane scrollPane = new JScrollPane();
-    songTable = new PlaylistTable(musicPlayer, userPlaylists);
+    songTable = new PlaylistTable(musicPlayer, recentPlaylist);
 
     mainPanel.add(scrollPane, BorderLayout.CENTER);
     scrollPane.setViewportView(songTable.getTable());
@@ -30,5 +30,12 @@ public class RecentlyPlayedPane {
 
   public JPanel getPanel() {
     return mainPanel;
+  }
+
+  public void revalidate() {
+    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
+    songTable.setPlaylist(recentPlaylist);
+    scrollPane.setViewportView(songTable.getTable());
+    mainPanel.revalidate();
   }
 }
