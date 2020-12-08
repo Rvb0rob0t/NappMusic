@@ -9,7 +9,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -27,9 +26,9 @@ public class PdfGenerator {
   private static final Font TITLE_FONT = new Font(FontFamily.HELVETICA, 22, Font.BOLD);
   private static final Font PLAYLIST_NAME_FONT = new Font(FontFamily.HELVETICA, 18, Font.UNDERLINE);
 
-  public void userPlaylistsToPdf(User user, String directoryPath)
+  public void userPlaylistsToPdf(User user, String filePath)
       throws FileNotFoundException, DocumentException {
-    Document output = initializeWriter(directoryPath + File.separator + "Playlists.pdf");
+    Document output = initializeWriter(filePath);
     output.open();
 
     output.add(
