@@ -1,5 +1,6 @@
 package um.tds.nappmusic.domain.discounts;
 
+import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.domain.Discount;
 import um.tds.nappmusic.domain.User;
 
@@ -12,6 +13,6 @@ public class NoDiscount implements Discount {
 
   @Override
   public int calculatePrice() {
-    return Discount.getBasePrice();
+    return App.BASE_PRICE;
   }
 }
