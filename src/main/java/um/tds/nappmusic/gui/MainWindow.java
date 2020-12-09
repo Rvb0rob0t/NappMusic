@@ -240,7 +240,7 @@ public class MainWindow {
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, RECENTLY_CARD_NAME);
-            playlistsPanel.revalidate();
+            recentlyPlayedPane.revalidate();
           }
         });
 

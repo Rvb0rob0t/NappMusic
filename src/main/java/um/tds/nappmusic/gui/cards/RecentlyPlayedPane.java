@@ -21,11 +21,10 @@ public class RecentlyPlayedPane {
   public RecentlyPlayedPane(MusicPlayer musicPlayer) {
     Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
     mainPanel = new JPanel(new BorderLayout());
-    JScrollPane scrollPane = new JScrollPane();
+    scrollPane = new JScrollPane();
     songTable = new PlaylistTable(musicPlayer, recentPlaylist);
-
-    mainPanel.add(scrollPane, BorderLayout.CENTER);
     scrollPane.setViewportView(songTable.getTable());
+    mainPanel.add(scrollPane, BorderLayout.CENTER);
   }
 
   public JPanel getPanel() {

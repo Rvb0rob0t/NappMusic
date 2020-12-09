@@ -304,7 +304,7 @@ public class RegisterWindow {
       passwordChkTxt.setBorder(BorderFactory.createLineBorder(Color.RED));
       ok = false;
     }
-    if (!usernameErrLbl.getText().isEmpty()
+    if (!usernameTxt.getText().isEmpty()
         && Controller.getSingleton().isUserRegistered(usernameTxt.getText())) {
       usernameErrLbl.setText("That username is already in use");
       usernameErrLbl.setVisible(true);
