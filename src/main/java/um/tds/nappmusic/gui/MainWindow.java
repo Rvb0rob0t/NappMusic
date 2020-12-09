@@ -1,5 +1,6 @@
 package um.tds.nappmusic.gui;
 
+import com.itextpdf.text.DocumentException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -9,6 +10,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -16,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -45,6 +48,7 @@ public class MainWindow {
   private JPanel topPanel;
   private JLabel logoLabel;
   private JMenuItem upgradeMenuItem;
+  private JMenuItem generatePdfMenuItem;
   private JMenuItem logOutMenuItem;
   private JPanel cardsPanel;
   private JPanel leftSidePanel;
@@ -54,6 +58,7 @@ public class MainWindow {
   private JButton btnPlaylists;
   private JButton btnRecently;
   private UiButton btnXmlLoader;
+
   private HomePanel homePanel;
   private SearchPanel searchPanel;
   private PlaylistsPanel playlistsPanel;
@@ -144,8 +149,55 @@ public class MainWindow {
     JMenuBar menuBar = new JMenuBar();
     JMenu menu = new JMenu(username);
     upgradeMenuItem = new JMenuItem("Upgrade");
-    menu.add(upgradeMenuItem);
+    upgradeMenuItem.addActionListener(
+        event -> {
+          int result =
+              JOptionPane.showConfirmDialog(
+                  mainFrame,
+                  "Would you like upgrade to premium for only "
+                      + Controller.getSingleton().getcurrentUser().getDiscount().calculatePrice()
+                      + " gold coins?");
+          switch (result) {
+            case JOptionPane.YES_OPTION:
+              Controller.getSingleton().makeUserPremium(Controller.getSingleton().getcurrentUser());
+              menu.removeAll();
+              menu.add(generatePdfMenuItem);
+              menu.add(logOutMenuItem);
+              break;
+            default:
+              break;
+          }
+        });
+    generatePdfMenuItem = new JMenuItem("Save playlists in pdf");
+    generatePdfMenuItem.addActionListener(
+        event -> {
+          JFileChooser chooser = new JFileChooser();
+          if (chooser.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
+            try {
+              Controller.getSingleton()
+                  .generatePlaylistsPdf(chooser.getSelectedFile().getAbsolutePath());
+            } catch (FileNotFoundException | DocumentException e) {
+              JOptionPane.showMessageDialog(
+                  mainFrame,
+                  "You probably should choose another path",
+                  "PDF not generated",
+                  JOptionPane.ERROR_MESSAGE);
+            }
+          }
+        });
+    if (Controller.getSingleton().getcurrentUser().isPremium()) {
+      menu.add(generatePdfMenuItem);
+    } else {
+      menu.add(upgradeMenuItem);
+    }
     logOutMenuItem = new JMenuItem("Log out");
+    logOutMenuItem.addActionListener(
+        event -> {
+          LoginWindow window = new LoginWindow();
+          window.setLocationRelativeTo(null);
+          window.setVisible(true);
+          mainFrame.dispose();
+        });
     menu.add(logOutMenuItem);
     menuBar.add(menu);
     btnXmlLoader = new UiButton();

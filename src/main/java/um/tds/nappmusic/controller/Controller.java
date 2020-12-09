@@ -205,6 +205,10 @@ public final class Controller {
     xmlLoader.loadSongs(xmlPath);
   }
 
+  public void makeUserPremium(User user) {
+    user.setPremium(true);
+  }
+
   public void generatePlaylistsPdf(String filePath)
       throws FileNotFoundException, DocumentException {
     pdfGenerator.userPlaylistsToPdf(currentUser, filePath);
