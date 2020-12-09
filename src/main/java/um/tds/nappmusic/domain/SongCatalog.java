@@ -14,6 +14,7 @@ public class SongCatalog {
   private static SongCatalog singleton = null;
   private DaoFactory factory;
   private HashMap<String, ArrayList<Song>> songsByAuthor;
+  private HashMap<String, Integer> numSongsPerStyle;
 
   public static SongCatalog getSingleton() {
     if (singleton == null) {
@@ -27,8 +28,9 @@ public class SongCatalog {
       factory = DaoFactory.getSingleton();
       List<Song> songs = factory.getSongDao().getAll();
       songsByAuthor = new HashMap<String, ArrayList<Song>>();
+      numSongsPerStyle = new HashMap<String, Integer>();
       for (Song song : songs) {
-        songsByAuthor.computeIfAbsent(song.getAuthor(), k -> new ArrayList<Song>()).add(song);
+        this.addSong(song);
       }
     } catch (DaoException e) {
       // TODO what do we do?
@@ -42,6 +44,10 @@ public class SongCatalog {
       all.addAll(authorSongs);
     }
     return all;
+  }
+
+  public List<String> getAllStyles() {
+    return numSongsPerStyle.keySet().stream().collect(Collectors.toList());
   }
 
   public Playlist getSongsByAuthor(String author) {
@@ -88,6 +94,12 @@ public class SongCatalog {
 
   public void addSong(Song song) {
     songsByAuthor.computeIfAbsent(song.getAuthor(), k -> new ArrayList<Song>()).add(song);
+    song.getStyles()
+        .forEach(
+            style -> {
+              int currentNum = numSongsPerStyle.computeIfAbsent(style, k -> 0);
+              numSongsPerStyle.put(style, currentNum + 1);
+            });
   }
 
   public void removeSong(Song song) {
@@ -96,6 +108,16 @@ public class SongCatalog {
     if (sameAuthor.isEmpty()) {
       songsByAuthor.remove(song.getAuthor());
     }
+    song.getStyles()
+        .forEach(
+            style -> {
+              int currentNum = numSongsPerStyle.get(style);
+              if (currentNum <= 1) {
+                numSongsPerStyle.remove(style);
+              } else {
+                numSongsPerStyle.put(style, currentNum - 1);
+              }
+            });
   }
 
   /**

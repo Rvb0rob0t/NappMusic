@@ -53,7 +53,7 @@ public class PlaylistsPanel extends MouseAdapter {
     leftPanel.add(leftPanelScroll, BorderLayout.CENTER);
     rightPanel.add(rightPanelScroll, BorderLayout.CENTER);
     mainPanel.add(leftPanel, BorderLayout.WEST);
-    mainPanel.add(rightPanel, BorderLayout.EAST);
+    mainPanel.add(rightPanel, BorderLayout.CENTER);
   }
 
   public void updateDisplayedList(Optional<Playlist> selected) {
@@ -82,7 +82,7 @@ public class PlaylistsPanel extends MouseAdapter {
   }
 
   public void revalidate() {
-    playlistsList.setPlaylist(Controller.getSingleton().getUserPlaylists());
+    playlistsList.setPlaylists(Controller.getSingleton().getUserPlaylists());
     updateDisplayedList(playlistsList.getSelectedPlaylist());
   }
 }

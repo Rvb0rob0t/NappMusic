@@ -5,6 +5,8 @@ import java.util.List;
 import um.tds.nappmusic.dao.Identifiable;
 
 public class Playlist implements Identifiable {
+  public static final int RECENTLY_PLAYED_LIST_SIZE = 10;
+
   private int id;
   private String name;
   private ArrayList<Song> songs;
@@ -21,12 +23,24 @@ public class Playlist implements Identifiable {
     this.songs = songs;
   }
 
+  public int size() {
+    return songs.size();
+  }
+
   public boolean add(Song song) {
     return songs.add(song);
   }
 
+  public void add(int index, Song song) {
+    songs.add(index, song);
+  }
+
   public boolean remove(Song song) {
     return songs.remove(song);
+  }
+
+  public void remove(int index) {
+    songs.remove(index);
   }
 
   public int getId() {

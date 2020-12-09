@@ -4,6 +4,7 @@ import beans.Entidad;
 import beans.Propiedad;
 import java.util.ArrayList;
 import java.util.Arrays;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.domain.Playlist;
 
 public final class PlaylistEncoder implements BiEncoder<Playlist> {
@@ -11,10 +12,10 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
   private static final String NAME_FIELD = "name";
   private static final String SONGS_FIELD = "songs";
 
-  private DaoFactory factory;
+  private PersistencyWrapper wrapper;
 
-  public PlaylistEncoder(DaoFactory factory) {
-    this.factory = factory;
+  public PlaylistEncoder(PersistencyWrapper wrapper) {
+    this.wrapper = wrapper;
   }
 
   @Override
@@ -28,9 +29,9 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
   }
 
   @Override
-  public void initObjFromEntity(Playlist playlist, Entidad entity) {
-    playlist.setName(factory.retrieveString(entity, NAME_FIELD));
-    playlist.setSongs(factory.retrieveSongList(entity, SONGS_FIELD));
+  public void initObjFromEntity(Playlist playlist, Entidad entity) throws DaoException {
+    playlist.setName(wrapper.retrieveString(entity, NAME_FIELD));
+    playlist.setSongs(wrapper.retrieveSongList(entity, SONGS_FIELD));
   }
 
   @Override
@@ -40,13 +41,14 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
     entity.setPropiedades(
         new ArrayList<Propiedad>(
             Arrays.asList(
-                factory.stringProperty(NAME_FIELD, playlist.getName()),
-                factory.songCollectionProperty(SONGS_FIELD, playlist.getSongs()))));
+                new Propiedad(NAME_FIELD, playlist.getName()),
+                new Propiedad(SONGS_FIELD, wrapper.encodeSongList(playlist.getSongs())))));
     return entity;
   }
 
   @Override
   public void updateEntity(Entidad entity, Playlist playlist) {
-    // TODO
+    wrapper.updateProperty(entity, NAME_FIELD, playlist.getName());
+    wrapper.updateProperty(entity, SONGS_FIELD, wrapper.encodeSongList(playlist.getSongs()));
   }
 }

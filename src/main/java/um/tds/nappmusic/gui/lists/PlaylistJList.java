@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
+import javax.swing.ListSelectionModel;
 import um.tds.nappmusic.domain.Playlist;
 
 public class PlaylistJList {
@@ -17,6 +18,7 @@ public class PlaylistJList {
   public PlaylistJList(List<Playlist> playlists, JPopupMenu rightClickMenu) {
     this.listModel = new PlaylistListModel(playlists);
     this.list = new JList(listModel);
+    this.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     this.rightClickMenu = rightClickMenu;
     // this.addToPlaylistMenu = new JMenu("Añadir a playlist");
@@ -44,7 +46,7 @@ public class PlaylistJList {
     return list;
   }
 
-  public void setPlaylist(List<Playlist> playlists) {
+  public void setPlaylists(List<Playlist> playlists) {
     listModel.setPlaylistList(playlists);
     list.updateUI();
   }

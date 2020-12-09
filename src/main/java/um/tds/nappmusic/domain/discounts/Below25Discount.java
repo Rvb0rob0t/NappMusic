@@ -2,6 +2,7 @@ package um.tds.nappmusic.domain.discounts;
 
 import java.time.LocalDate;
 import java.time.Period;
+import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.domain.Discount;
 import um.tds.nappmusic.domain.User;
 
@@ -17,6 +18,6 @@ public class Below25Discount implements Discount {
 
   @Override
   public int calculatePrice() {
-    return (int) Math.round((1 - DISCOUNTED_PERCENTAGE) * Discount.getBasePrice());
+    return (int) Math.round((1 - DISCOUNTED_PERCENTAGE) * App.BASE_PRICE);
   }
 }

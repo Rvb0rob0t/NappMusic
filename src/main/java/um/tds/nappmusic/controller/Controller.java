@@ -198,7 +198,9 @@ public final class Controller {
 
   public void updatePlaysCounter(Song song) {
     song.incrementNumPlays();
+    currentUser.updateRecent(song);
     songDao.update(song);
+    playlistDao.update(currentUser.getRecent());
   }
 
   public void loadXml(String xmlPath) {
@@ -212,5 +214,13 @@ public final class Controller {
   public void generatePlaylistsPdf(String filePath)
       throws FileNotFoundException, DocumentException {
     pdfGenerator.userPlaylistsToPdf(currentUser, filePath);
+  }
+
+  public UserCatalog getUserCatalog() {
+    return userCatalog;
+  }
+
+  public SongCatalog getSongCatalog() {
+    return songCatalog;
   }
 }

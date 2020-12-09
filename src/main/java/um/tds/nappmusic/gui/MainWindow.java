@@ -134,7 +134,7 @@ public class MainWindow {
     playlistsPanel = new PlaylistsPanel(musicPlayer);
     cardsPanel.add(playlistsPanel.getPanel(), PLAYLISTS_CARD_NAME);
     recentlyPlayedPane = new RecentlyPlayedPane(musicPlayer);
-    cardsPanel.add(recentlyPlayedPane.getScrollPane(), RECENTLY_CARD_NAME);
+    cardsPanel.add(new RecentlyPlayedPane(musicPlayer).getPanel(), RECENTLY_CARD_NAME);
   }
 
   /** Create the panel with the user settings. */
@@ -224,6 +224,7 @@ public class MainWindow {
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, SEARCH_CARD_NAME);
+            searchPanel.revalidate();
           }
         });
 
@@ -239,6 +240,7 @@ public class MainWindow {
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, RECENTLY_CARD_NAME);
+            playlistsPanel.revalidate();
           }
         });
 

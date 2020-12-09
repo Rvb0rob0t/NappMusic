@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
+import um.tds.nappmusic.domain.SongCatalog;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
@@ -61,9 +62,7 @@ public class SearchPanel {
     fieldsPanel.add(authorField);
 
     styleComboBox = new JComboBox<String>();
-    styleComboBox.setModel(
-        new DefaultComboBoxModel<String>(
-            new String[] {"Nana", "Rock", "Indie", "Pop", "Jazz"})); // TODO Get from controller
+    updateStyleList();
     fieldsPanel.add(styleComboBox);
 
     JButton searchButton = new JButton("Buscar");
@@ -96,5 +95,15 @@ public class SearchPanel {
     }
     scrollPane.setViewportView(playlistTable.getTable());
     mainPanel.revalidate();
+  }
+
+  private void updateStyleList() {
+    SongCatalog songCatalog = Controller.getSingleton().getSongCatalog();
+    styleComboBox.setModel(
+        new DefaultComboBoxModel<String>(songCatalog.getAllStyles().toArray(new String[0])));
+  }
+
+  public void revalidate() {
+    updateStyleList();
   }
 }

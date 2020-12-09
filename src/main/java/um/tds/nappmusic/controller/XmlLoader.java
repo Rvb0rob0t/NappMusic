@@ -1,6 +1,9 @@
 package um.tds.nappmusic.controller;
 
 import java.util.ArrayList;
+import um.tds.nappmusic.dao.Dao;
+import um.tds.nappmusic.dao.DaoException;
+import um.tds.nappmusic.dao.DaoFactory;
 import um.tds.nappmusic.domain.SongCatalog;
 import um.tds.songloader.SongLoader;
 import um.tds.songloader.SongLoaderListener;
@@ -18,9 +21,23 @@ public class XmlLoader implements SongLoaderListener {
     loaderComponent.loadSongs(xmlPath);
   }
 
+  @Override
   public void notifySongsLoaded(SongsLoadedEvent event) {
     SongCatalog catalog = SongCatalog.getSingleton();
-    event.getSongs().stream().map(s -> toDomainSong(s)).forEach(s -> catalog.addSong(s));
+    // Unfortunately, this exception cannot be thrown
+    try {
+      Dao<um.tds.nappmusic.domain.Song> songDao = DaoFactory.getSingleton().getSongDao();
+      event.getSongs().stream()
+          .map(s -> toDomainSong(s))
+          .forEach(
+              s -> {
+                songDao.register(s);
+                catalog.addSong(s);
+              });
+    } catch (DaoException e) {
+      e.printStackTrace();
+      System.exit(-1);
+    }
   }
 
   private static um.tds.nappmusic.domain.Song toDomainSong(um.tds.songloader.Song song) {
