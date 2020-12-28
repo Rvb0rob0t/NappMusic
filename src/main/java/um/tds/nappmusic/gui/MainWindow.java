@@ -34,7 +34,6 @@ import um.tds.uibutton.UiButton;
 import um.tds.uibutton.UiButtonEvent;
 import um.tds.uibutton.UiButtonListener;
 
-@SuppressWarnings("serial")
 public class MainWindow {
   private static final String HOME_CARD_NAME = "Home";
   private static final String SEARCH_CARD_NAME = "Search";
@@ -194,8 +193,7 @@ public class MainWindow {
     logOutMenuItem.addActionListener(
         event -> {
           LoginWindow window = new LoginWindow();
-          window.setLocationRelativeTo(null);
-          window.setVisible(true);
+          window.showWindow();
           mainFrame.dispose();
         });
     menu.add(logOutMenuItem);

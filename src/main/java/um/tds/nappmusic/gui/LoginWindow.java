@@ -21,24 +21,30 @@ import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
 
-@SuppressWarnings("serial")
-public class LoginWindow extends JFrame {
+public class LoginWindow {
   private static final int FIELDS_WIDTH = 15;
+
+  private JFrame mainFrame;
 
   private JTextField nickField;
   private JPasswordField passwordField;
 
   /** Create the window. */
   public LoginWindow() {
-    super(App.NAME + " - Login");
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.getContentPane().setLayout(new BorderLayout());
+    mainFrame = new JFrame(App.NAME + " - Login");
+    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    mainFrame.getContentPane().setLayout(new BorderLayout());
 
-    this.getContentPane().add(createTopPanel(), BorderLayout.NORTH);
-    this.getContentPane().add(createLoginPanel(), BorderLayout.CENTER);
+    mainFrame.getContentPane().add(createTopPanel(), BorderLayout.NORTH);
+    mainFrame.getContentPane().add(createLoginPanel(), BorderLayout.CENTER);
 
-    this.pack();
-    this.setResizable(false);
+    mainFrame.pack();
+    mainFrame.setResizable(false);
+  }
+
+  public void showWindow() {
+    mainFrame.setLocationRelativeTo(null);
+    mainFrame.setVisible(true);
   }
 
   private JPanel createTopPanel() {
@@ -121,10 +127,10 @@ public class LoginWindow extends JFrame {
           if (login) {
             MainWindow window = new MainWindow();
             window.setVisible(true);
-            this.dispose();
+            mainFrame.dispose();
           } else {
             JOptionPane.showMessageDialog(
-                this,
+                mainFrame,
                 "Nombre de usuario o contraseña no válido",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
@@ -136,7 +142,7 @@ public class LoginWindow extends JFrame {
     btnRegistro.setVerticalAlignment(SwingConstants.BOTTOM);
     btnRegistro.addActionListener(
         event -> {
-          RegisterWindow registerPopup = new RegisterWindow(this);
+          RegisterWindow registerPopup = new RegisterWindow(mainFrame);
           registerPopup.showWindow();
         });
 
@@ -147,7 +153,7 @@ public class LoginWindow extends JFrame {
     btnSalir.setVerticalAlignment(SwingConstants.BOTTOM);
     btnSalir.addActionListener(
         event -> {
-          this.dispose();
+          mainFrame.dispose();
           System.exit(0);
         });
     panelBotonSalir.add(btnSalir);
@@ -166,8 +172,7 @@ public class LoginWindow extends JFrame {
         () -> {
           try {
             LoginWindow window = new LoginWindow();
-            window.setLocationRelativeTo(null);
-            window.setVisible(true);
+            window.showWindow();
           } catch (Exception e) {
             e.printStackTrace();
           }
