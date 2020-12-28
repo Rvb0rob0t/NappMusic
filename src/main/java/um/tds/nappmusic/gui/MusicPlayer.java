@@ -30,7 +30,6 @@ import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
 
-@SuppressWarnings("restriction") // TODO Check
 public class MusicPlayer {
   private static final String DEFAULT_THUMBNAIL = App.RESOURCES_PATH + "/default_thumbnail.png";
   private static final int THUMB_WIDTH = 100;
@@ -123,26 +122,34 @@ public class MusicPlayer {
           songPlayingIndex =
               songPlayingIndex == 0 ? (playlistPlaying.getSize() - 1) : (songPlayingIndex - 1);
           changeSong(playlistPlaying.getSong(songPlayingIndex));
-          mediaPlayer.play();
         });
     buttonsPanel.add(buttonPrevious);
     buttonPlay = new JButton(PLAY_ICON);
     buttonPlay.addActionListener(
         event -> {
-          switch (mediaPlayer.getStatus()) {
-            case READY:
-            case STOPPED:
-            case PAUSED:
-              buttonPlay.setIcon(PAUSE_ICON);
-              mediaPlayer.play();
-              break;
-            case PLAYING:
-              buttonPlay.setIcon(PLAY_ICON);
-              mediaPlayer.pause();
-              break;
-            default:
-              // TODO
-              break;
+          if (mediaPlayer == null) {
+            prepareMediaPlayer();
+            mediaPlayer.play();
+            buttonPlay.setIcon(PAUSE_ICON);
+          } else {
+            switch (mediaPlayer.getStatus()) {
+              case DISPOSED:
+              case READY:
+                prepareMediaPlayer();
+                // fall through
+              case STOPPED:
+              case PAUSED:
+                buttonPlay.setIcon(PAUSE_ICON);
+                mediaPlayer.play();
+                break;
+              case PLAYING:
+                buttonPlay.setIcon(PLAY_ICON);
+                mediaPlayer.pause();
+                break;
+              default:
+                // TODO
+                break;
+            }
           }
         });
     buttonsPanel.add(buttonPlay);
@@ -151,7 +158,6 @@ public class MusicPlayer {
         event -> {
           songPlayingIndex = (songPlayingIndex + 1) % playlistPlaying.getSize();
           changeSong(playlistPlaying.getSong(songPlayingIndex));
-          mediaPlayer.play();
         });
     buttonsPanel.add(buttonNext);
     buttonsPanel.add(Box.createHorizontalGlue());
@@ -166,6 +172,7 @@ public class MusicPlayer {
     if (mediaPlayer != null) {
       mediaPlayer.dispose();
     }
+    buttonPlay.setIcon(PLAY_ICON);
 
     artistLabel.setText(song.getAuthor());
     songNameLabel.setText(song.getTitle());
@@ -176,9 +183,12 @@ public class MusicPlayer {
       thumbLabel.setIcon(
           new ImageIcon(img.getScaledInstance(THUMB_WIDTH, THUMB_HEIGHT, Image.SCALE_DEFAULT)));
     } catch (IOException e) {
-
+      // No image is displayed
     }
+  }
 
+  private void prepareMediaPlayer() {
+    Song song = playlistPlaying.getSong(songPlayingIndex);
     File f;
     try {
       f = pathToFile(song.getFilePath());
@@ -225,8 +235,6 @@ public class MusicPlayer {
     }
     playlistPlaying = playlist;
     changeSong(playlistPlaying.getSong(index));
-    buttonPlay.setIcon(PAUSE_ICON);
-    mediaPlayer.play();
   }
 
   /**
