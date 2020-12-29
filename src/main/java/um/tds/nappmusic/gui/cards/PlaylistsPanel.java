@@ -16,6 +16,8 @@ import um.tds.nappmusic.gui.lists.PlaylistJList;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 public class PlaylistsPanel extends MouseAdapter {
+  private Controller controller;
+
   private MusicPlayer musicPlayer;
 
   private JPanel mainPanel;
@@ -33,15 +35,18 @@ public class PlaylistsPanel extends MouseAdapter {
    * .
    *
    * @param musicPlayer
+   * @param controller
    */
-  public PlaylistsPanel(MusicPlayer musicPlayer) {
+  public PlaylistsPanel(Controller controller, MusicPlayer musicPlayer) {
+    this.controller = controller;
+
     this.musicPlayer = musicPlayer;
     mainPanel = new JPanel(new BorderLayout(10, 10));
     leftPanel = new JPanel(new BorderLayout(10, 10));
     rightPanel = new JPanel(new BorderLayout(10, 10));
     leftPanelScroll = new JScrollPane();
     rightPanelScroll = new JScrollPane();
-    List<Playlist> userPlaylists = Controller.getSingleton().getUserPlaylists();
+    List<Playlist> userPlaylists = controller.getUserPlaylists();
     playlistsList = new PlaylistJList(userPlaylists);
     leftPaneLbl = new JLabel("Your Playlists");
 
@@ -60,7 +65,7 @@ public class PlaylistsPanel extends MouseAdapter {
     Playlist playlist =
         selected.isPresent() ? selected.get() : new Playlist("No Playlist Selected");
     if (playlistTable == null) {
-      playlistTable = new PlaylistTable(musicPlayer, playlist);
+      playlistTable = new PlaylistTable(controller, musicPlayer, playlist);
       playlistTable.addNewPlaylistsListener(() -> revalidate());
     } else {
       playlistTable.setPlaylist(playlist);
@@ -83,7 +88,7 @@ public class PlaylistsPanel extends MouseAdapter {
   }
 
   public void revalidate() {
-    playlistsList.setPlaylists(Controller.getSingleton().getUserPlaylists());
+    playlistsList.setPlaylists(controller.getUserPlaylists());
     updateDisplayedList(playlistsList.getSelectedPlaylist());
   }
 }

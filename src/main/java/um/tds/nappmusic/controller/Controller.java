@@ -28,13 +28,8 @@ public final class Controller {
 
   private User currentUser;
 
-  private Controller() {
-    DaoFactory factory = null;
-    try {
-      factory = DaoFactory.getSingleton();
-    } catch (DaoException e) {
-      e.printStackTrace();
-    }
+  private Controller() throws DaoException {
+    DaoFactory factory = DaoFactory.getSingleton();
     userDao = factory.getUserDao();
     songDao = factory.getSongDao();
     playlistDao = factory.getPlaylistDao();
@@ -51,8 +46,9 @@ public final class Controller {
    * Get the only instance of Controller.
    *
    * @return The instance of Controller class
+   * @throws DaoException if the DAO system couldn't be initializated
    */
-  public static Controller getSingleton() {
+  public static Controller getSingleton() throws DaoException {
     if (singleton == null) {
       singleton = new Controller();
     }

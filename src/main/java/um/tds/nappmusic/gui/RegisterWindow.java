@@ -30,6 +30,8 @@ import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.controller.Controller;
 
 public class RegisterWindow {
+  private Controller controller;
+
   private JDialog dialogWin;
   private JButton registerButton;
   private JButton cancelButton;
@@ -55,7 +57,9 @@ public class RegisterWindow {
   private JLabel usernameErrLbl;
   private JLabel passwordErrLbl;
 
-  public RegisterWindow(Frame owner) {
+  public RegisterWindow(Frame owner, Controller controller) {
+    this.controller = controller;
+
     dialogWin = new JDialog(owner, App.NAME + " - Register");
     dialogWin.setLocationRelativeTo(null);
     dialogWin.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -205,14 +209,13 @@ public class RegisterWindow {
           public void actionPerformed(ActionEvent e) {
             if (checkFields()) {
               boolean succesfulRegister =
-                  Controller.getSingleton()
-                      .registerUser(
-                          nameTxt.getText(),
-                          surnameTxt.getText(),
-                          dateToLocalDate(birthDateCal.getDate()),
-                          emailTxt.getText(),
-                          usernameTxt.getText(),
-                          new String(passwordTxt.getPassword()));
+                  controller.registerUser(
+                      nameTxt.getText(),
+                      surnameTxt.getText(),
+                      dateToLocalDate(birthDateCal.getDate()),
+                      emailTxt.getText(),
+                      usernameTxt.getText(),
+                      new String(passwordTxt.getPassword()));
               if (succesfulRegister) {
                 JOptionPane.showMessageDialog(
                     dialogWin,
@@ -304,8 +307,7 @@ public class RegisterWindow {
       passwordChkTxt.setBorder(BorderFactory.createLineBorder(Color.RED));
       ok = false;
     }
-    if (!usernameTxt.getText().isEmpty()
-        && Controller.getSingleton().isUserRegistered(usernameTxt.getText())) {
+    if (!usernameTxt.getText().isEmpty() && controller.isUserRegistered(usernameTxt.getText())) {
       usernameErrLbl.setText("That username is already in use");
       usernameErrLbl.setVisible(true);
       usernameLbl.setForeground(Color.RED);

@@ -41,6 +41,8 @@ public class MusicPlayer {
   private static final ImageIcon PAUSE_ICON = new ImageIcon(App.RESOURCES_PATH + "/pause.png");
   private static final ImageIcon NEXT_ICON = new ImageIcon(App.RESOURCES_PATH + "/next.png");
 
+  private Controller controller;
+
   private MediaPlayer mediaPlayer;
   private Playlist playlistPlaying;
   private int songPlayingIndex;
@@ -56,7 +58,9 @@ public class MusicPlayer {
 
   // private JPanel volumePanel;
 
-  public MusicPlayer() {
+  public MusicPlayer(Controller controller) {
+    this.controller = controller;
+
     mainPanel = new JPanel(new BorderLayout());
 
     JPanel songDataPanel = createSongDataPanel();
@@ -206,7 +210,7 @@ public class MusicPlayer {
     mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setOnMarker(
         mediaMarkerEvent -> {
-          Controller.getSingleton().updatePlaysCounter(song);
+          controller.updatePlaysCounter(song);
         });
   }
 

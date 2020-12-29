@@ -17,6 +17,8 @@ import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.gui.MusicPlayer;
 
 public class PlaylistTable extends MouseAdapter {
+  Controller controller;
+
   private JTable table;
   private MusicPlayer musicPlayer;
   private Playlist playlist;
@@ -26,7 +28,13 @@ public class PlaylistTable extends MouseAdapter {
   private JMenu addToPlaylistMenu;
   private JMenuItem newPlaylistItem;
 
-  public PlaylistTable(MusicPlayer musicPlayer, Playlist playlist, JPopupMenu rightClickMenu) {
+  public PlaylistTable(
+      Controller controller,
+      MusicPlayer musicPlayer,
+      Playlist playlist,
+      JPopupMenu rightClickMenu) {
+    this.controller = controller;
+
     this.table = new JTable(new PlaylistTableModel(playlist));
     this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     this.table.addMouseListener(this);
@@ -45,7 +53,6 @@ public class PlaylistTable extends MouseAdapter {
           if (newPlaylistName != null && newPlaylistName.length() > 0) {
             int row = table.getSelectedRow();
             if (row != -1) {
-              Controller controller = Controller.getSingleton();
               Playlist created = controller.createPlaylist(newPlaylistName);
               Song song = this.playlist.getSong(row);
               controller.addToPlaylist(created, song);
@@ -60,8 +67,8 @@ public class PlaylistTable extends MouseAdapter {
     this.rightClickMenu.add(addToPlaylistMenu);
   }
 
-  public PlaylistTable(MusicPlayer musicPlayer, Playlist playlist) {
-    this(musicPlayer, playlist, new JPopupMenu());
+  public PlaylistTable(Controller controller, MusicPlayer musicPlayer, Playlist playlist) {
+    this(controller, musicPlayer, playlist, new JPopupMenu());
   }
 
   public JTable getTable() {
@@ -94,14 +101,14 @@ public class PlaylistTable extends MouseAdapter {
 
   private void addAllPlaylistsAsMenuItems(Song song) {
     addToPlaylistMenu.removeAll();
-    Controller.getSingleton()
+    controller
         .getUserPlaylists()
         .forEach(
             playlist -> {
               JMenuItem playlistItem = new JMenuItem(playlist.getName());
               playlistItem.addActionListener(
                   e -> {
-                    Controller.getSingleton().addToPlaylist(playlist, song);
+                    controller.addToPlaylist(playlist, song);
                   });
               addToPlaylistMenu.add(playlistItem);
             });

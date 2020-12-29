@@ -9,6 +9,8 @@ import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 public class RecentlyPlayedPanel {
+  private Controller controller;
+
   private JPanel mainPanel;
   private JScrollPane scrollPane;
   private PlaylistTable songTable;
@@ -17,12 +19,15 @@ public class RecentlyPlayedPanel {
    * .
    *
    * @param musicPlayer
+   * @param controller
    */
-  public RecentlyPlayedPanel(MusicPlayer musicPlayer) {
-    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
+  public RecentlyPlayedPanel(Controller controller, MusicPlayer musicPlayer) {
+    this.controller = controller;
+
+    Playlist recentPlaylist = controller.getUserRecentlyPlayedSongs();
     mainPanel = new JPanel(new BorderLayout());
     scrollPane = new JScrollPane();
-    songTable = new PlaylistTable(musicPlayer, recentPlaylist);
+    songTable = new PlaylistTable(controller, musicPlayer, recentPlaylist);
     scrollPane.setViewportView(songTable.getTable());
     mainPanel.add(scrollPane, BorderLayout.CENTER);
   }
@@ -32,7 +37,7 @@ public class RecentlyPlayedPanel {
   }
 
   public void revalidate() {
-    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
+    Playlist recentPlaylist = controller.getUserRecentlyPlayedSongs();
     songTable.setPlaylist(recentPlaylist);
     scrollPane.setViewportView(songTable.getTable());
     mainPanel.revalidate();

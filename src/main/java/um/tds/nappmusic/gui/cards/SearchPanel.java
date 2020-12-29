@@ -22,6 +22,8 @@ public class SearchPanel {
   private static final String STYLE_FIELD_NAME = "Género";
   private static final int FIELD_WIDTH = 10;
 
+  private Controller controller;
+
   JPanel mainPanel;
 
   private JTextField titleField;
@@ -31,8 +33,14 @@ public class SearchPanel {
   private PlaylistTable playlistTable;
   private JScrollPane scrollPane;
 
-  /** . */
-  public SearchPanel(MusicPlayer musicPlayer) {
+  /**
+   * .
+   *
+   * @param controller
+   */
+  public SearchPanel(Controller controller, MusicPlayer musicPlayer) {
+    this.controller = controller;
+
     mainPanel = new JPanel(new BorderLayout());
 
     JPanel fieldsPanel = new JPanel();
@@ -55,11 +63,10 @@ public class SearchPanel {
         e -> {
           changeTable(
               musicPlayer,
-              Controller.getSingleton()
-                  .searchSongsBy(
-                      titleField.getText(),
-                      authorField.getText(),
-                      (String) styleComboBox.getSelectedItem()));
+              controller.searchSongsBy(
+                  titleField.getText(),
+                  authorField.getText(),
+                  (String) styleComboBox.getSelectedItem()));
         });
     fieldsPanel.add(searchButton);
     mainPanel.add(fieldsPanel, BorderLayout.NORTH);
@@ -84,7 +91,7 @@ public class SearchPanel {
 
   private void changeTable(MusicPlayer musicPlayer, Playlist playlist) {
     if (playlistTable == null) {
-      playlistTable = new PlaylistTable(musicPlayer, playlist);
+      playlistTable = new PlaylistTable(controller, musicPlayer, playlist);
     } else {
       playlistTable.setPlaylist(playlist);
     }
@@ -93,7 +100,7 @@ public class SearchPanel {
   }
 
   private void updateStyleList() {
-    SongCatalog songCatalog = Controller.getSingleton().getSongCatalog();
+    SongCatalog songCatalog = controller.getSongCatalog();
     styleComboBox.setModel(
         new DefaultComboBoxModel<String>(songCatalog.getAllStyles().toArray(new String[0])));
   }

@@ -1,11 +1,14 @@
 package um.tds.nappmusic.controller;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
+import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.domain.Song;
 
 public class PdfGeneratorTest {
@@ -17,7 +20,15 @@ public class PdfGeneratorTest {
 
   public static void main(String[] args) {
     // Register and logs a user with a single song playlist
-    Controller controller = Controller.getSingleton();
+    Controller controller;
+    try {
+      controller = Controller.getSingleton();
+    } catch (DaoException e) {
+      e.printStackTrace();
+      fail("Failed controller initialization");
+      return;
+    }
+
     controller.registerUser(
         "Rubén", "Gaspar", LocalDate.of(199, 8, 18), "ruben.gasparm@um.es", "1234", "1234");
     controller.logIn("1234", "1234");

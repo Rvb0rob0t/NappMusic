@@ -41,6 +41,8 @@ public class MainWindow {
   private static final String RECENTLY_CARD_NAME = "Recently";
   private static final Color BTN_SONGLOADER_COLOR = Color.RED;
 
+  private Controller controller;
+
   private MusicPlayer musicPlayer;
 
   private JFrame mainFrame;
@@ -63,13 +65,19 @@ public class MainWindow {
   private PlaylistsPanel playlistsPanel;
   private RecentlyPlayedPanel recentlyPlayedPanel;
 
-  /** Create the application. */
-  public MainWindow() {
+  /**
+   * Create the application.
+   *
+   * @param controller
+   */
+  public MainWindow(Controller controller) {
+    this.controller = controller;
+
     mainFrame = new JFrame(App.NAME);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.getContentPane().setLayout(new BorderLayout(10, 0));
 
-    musicPlayer = new MusicPlayer();
+    musicPlayer = new MusicPlayer(controller);
     mainFrame.getContentPane().add(musicPlayer.getPanel(), BorderLayout.SOUTH);
 
     createLeftSidePanel();
@@ -128,11 +136,11 @@ public class MainWindow {
     cardsPanel = new JPanel(new CardLayout());
     homePanel = new HomePanel();
     cardsPanel.add(homePanel.getPanel(), HOME_CARD_NAME);
-    searchPanel = new SearchPanel(musicPlayer);
+    searchPanel = new SearchPanel(controller, musicPlayer);
     cardsPanel.add(searchPanel.getPanel(), SEARCH_CARD_NAME);
-    playlistsPanel = new PlaylistsPanel(musicPlayer);
+    playlistsPanel = new PlaylistsPanel(controller, musicPlayer);
     cardsPanel.add(playlistsPanel.getPanel(), PLAYLISTS_CARD_NAME);
-    recentlyPlayedPanel = new RecentlyPlayedPanel(musicPlayer);
+    recentlyPlayedPanel = new RecentlyPlayedPanel(controller, musicPlayer);
     cardsPanel.add(recentlyPlayedPanel.getPanel(), RECENTLY_CARD_NAME);
   }
 
@@ -154,11 +162,11 @@ public class MainWindow {
               JOptionPane.showConfirmDialog(
                   mainFrame,
                   "Would you like upgrade to premium for only "
-                      + Controller.getSingleton().getcurrentUser().getDiscount().calculatePrice()
+                      + controller.getcurrentUser().getDiscount().calculatePrice()
                       + " gold coins?");
           switch (result) {
             case JOptionPane.YES_OPTION:
-              Controller.getSingleton().makeUserPremium(Controller.getSingleton().getcurrentUser());
+              controller.makeUserPremium(controller.getcurrentUser());
               menu.removeAll();
               menu.add(generatePdfMenuItem);
               menu.add(logOutMenuItem);
@@ -173,8 +181,7 @@ public class MainWindow {
           JFileChooser chooser = new JFileChooser();
           if (chooser.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
             try {
-              Controller.getSingleton()
-                  .generatePlaylistsPdf(chooser.getSelectedFile().getAbsolutePath());
+              controller.generatePlaylistsPdf(chooser.getSelectedFile().getAbsolutePath());
             } catch (FileNotFoundException | DocumentException e) {
               JOptionPane.showMessageDialog(
                   mainFrame,
@@ -184,7 +191,7 @@ public class MainWindow {
             }
           }
         });
-    if (Controller.getSingleton().getcurrentUser().isPremium()) {
+    if (controller.getcurrentUser().isPremium()) {
       menu.add(generatePdfMenuItem);
     } else {
       menu.add(upgradeMenuItem);
@@ -253,7 +260,6 @@ public class MainWindow {
               if (returnVal == JFileChooser.APPROVE_OPTION) {
                 System.out.println(
                     "You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
-                Controller controller = Controller.getSingleton();
                 controller.loadXml(chooser.getSelectedFile().getAbsolutePath());
               } else {
                 btnXmlLoader.setTurnedOn(false);
