@@ -1,14 +1,15 @@
 package um.tds.nappmusic.gui.cards;
 
 import java.awt.BorderLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.SongCatalog;
@@ -18,6 +19,7 @@ import um.tds.nappmusic.gui.tables.PlaylistTable;
 public class SearchPanel {
   private static final String TITLE_FIELD_NAME = "Título";
   private static final String AUTHOR_FIELD_NAME = "Intérprete";
+  private static final String STYLE_FIELD_NAME = "Género";
   private static final int FIELD_WIDTH = 10;
 
   JPanel mainPanel;
@@ -35,35 +37,18 @@ public class SearchPanel {
 
     JPanel fieldsPanel = new JPanel();
 
-    titleField = new JTextField(TITLE_FIELD_NAME, FIELD_WIDTH);
-    titleField.addFocusListener(
-        new FocusListener() {
-          @Override
-          public void focusLost(final FocusEvent e) {}
+    titleField = new JTextField(FIELD_WIDTH);
+    JPanel titleFieldPanel = wrapWithTitledBorderPanel(titleField, TITLE_FIELD_NAME);
+    fieldsPanel.add(titleFieldPanel);
 
-          @Override
-          public void focusGained(final FocusEvent e) {
-            titleField.selectAll();
-          }
-        });
-    fieldsPanel.add(titleField);
-
-    authorField = new JTextField(AUTHOR_FIELD_NAME, FIELD_WIDTH);
-    authorField.addFocusListener(
-        new FocusListener() {
-          @Override
-          public void focusLost(final FocusEvent e) {}
-
-          @Override
-          public void focusGained(final FocusEvent e) {
-            authorField.selectAll();
-          }
-        });
-    fieldsPanel.add(authorField);
+    authorField = new JTextField(FIELD_WIDTH);
+    JPanel authorFieldPanel = wrapWithTitledBorderPanel(authorField, AUTHOR_FIELD_NAME);
+    fieldsPanel.add(authorFieldPanel);
 
     styleComboBox = new JComboBox<String>();
     updateStyleList();
-    fieldsPanel.add(styleComboBox);
+    JPanel styleComboBoxPanel = wrapWithTitledBorderPanel(styleComboBox, STYLE_FIELD_NAME);
+    fieldsPanel.add(styleComboBoxPanel);
 
     JButton searchButton = new JButton("Buscar");
     searchButton.addActionListener(
@@ -81,6 +66,16 @@ public class SearchPanel {
 
     scrollPane = new JScrollPane();
     mainPanel.add(scrollPane, BorderLayout.CENTER);
+  }
+
+  // aux method to set a good-looking titled (title centered) border
+  private JPanel wrapWithTitledBorderPanel(Component comp, String title) {
+    JPanel titledPanel = new JPanel(new FlowLayout());
+    TitledBorder titledBorder = new TitledBorder(title);
+    titledBorder.setTitleJustification(TitledBorder.CENTER);
+    titledPanel.setBorder(titledBorder);
+    titledPanel.add(comp);
+    return titledPanel;
   }
 
   public JPanel getPanel() {
