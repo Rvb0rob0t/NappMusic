@@ -12,7 +12,7 @@ public abstract class DaoFactory {
   public static DaoFactory getSingleton(String type) throws DaoException {
     if (singleton == null) {
       try {
-        singleton = (DaoFactory) Class.forName(type).newInstance();
+        singleton = (DaoFactory) Class.forName(type).getDeclaredConstructor().newInstance();
       } catch (Exception e) {
         throw new DaoException(e.getMessage());
       }

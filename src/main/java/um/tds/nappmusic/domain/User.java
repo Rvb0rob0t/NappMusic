@@ -204,8 +204,8 @@ public class User implements Identifiable {
             .map(
                 discountClass -> {
                   try {
-                    return discountClass.newInstance();
-                  } catch (InstantiationException | IllegalAccessException e) {
+                    return discountClass.getDeclaredConstructor().newInstance();
+                  } catch (Exception e) {
                     return new NoDiscount();
                   }
                 })

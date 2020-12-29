@@ -162,11 +162,11 @@ public class MainWindow {
               JOptionPane.showConfirmDialog(
                   mainFrame,
                   "Would you like upgrade to premium for only "
-                      + controller.getcurrentUser().getDiscount().calculatePrice()
+                      + controller.getCurrentUser().getDiscount().calculatePrice()
                       + " gold coins?");
           switch (result) {
             case JOptionPane.YES_OPTION:
-              controller.makeUserPremium(controller.getcurrentUser());
+              controller.makeUserPremium(controller.getCurrentUser());
               menu.removeAll();
               menu.add(generatePdfMenuItem);
               menu.add(logOutMenuItem);
@@ -191,7 +191,7 @@ public class MainWindow {
             }
           }
         });
-    if (controller.getcurrentUser().isPremium()) {
+    if (controller.getCurrentUser().isPremium()) {
       menu.add(generatePdfMenuItem);
     } else {
       menu.add(upgradeMenuItem);

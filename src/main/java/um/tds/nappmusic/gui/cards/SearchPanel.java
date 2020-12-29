@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
-import um.tds.nappmusic.domain.SongCatalog;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
@@ -100,9 +99,8 @@ public class SearchPanel {
   }
 
   private void updateStyleList() {
-    SongCatalog songCatalog = controller.getSongCatalog();
     styleComboBox.setModel(
-        new DefaultComboBoxModel<String>(songCatalog.getAllStyles().toArray(new String[0])));
+        new DefaultComboBoxModel<String>(controller.getAllStyles().toArray(new String[0])));
   }
 
   public void revalidate() {

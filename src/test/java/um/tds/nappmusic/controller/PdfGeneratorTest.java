@@ -54,6 +54,6 @@ public class PdfGeneratorTest {
       }
     }
 
-    controller.removeUser(controller.getcurrentUser());
+    controller.removeUser(controller.getCurrentUser());
   }
 }

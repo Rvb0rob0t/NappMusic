@@ -4,6 +4,7 @@ import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.DaoFactory;
@@ -103,7 +104,7 @@ public final class Controller {
     return false;
   }
 
-  public User getcurrentUser() {
+  public User getCurrentUser() {
     if (currentUser == null) {
       // TODO Throw exception
     }
@@ -148,6 +149,10 @@ public final class Controller {
   }
 
   // Functionality
+  public List<String> getAllStyles() {
+    return songCatalog.getAllStyles();
+  }
+
   public Playlist searchSongsBy(String titleSubstring, String authorSubstring, String style) {
     return songCatalog.searchSongsBy(titleSubstring, authorSubstring, style);
   }
