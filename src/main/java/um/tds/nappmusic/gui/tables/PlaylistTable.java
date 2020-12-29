@@ -17,6 +17,8 @@ import um.tds.nappmusic.gui.MusicPlayer;
 public class PlaylistTable extends MouseAdapter {
   private JTable table;
   private MusicPlayer musicPlayer;
+  private Playlist playlist;
+
   private JPopupMenu rightClickMenu;
   private JMenu addToPlaylistMenu;
   private JMenuItem newPlaylistItem;
@@ -25,7 +27,10 @@ public class PlaylistTable extends MouseAdapter {
     this.table = new JTable(new PlaylistTableModel(playlist));
     this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     this.table.addMouseListener(this);
+
     this.musicPlayer = musicPlayer;
+
+    this.playlist = playlist;
 
     this.rightClickMenu = rightClickMenu;
     this.addToPlaylistMenu = new JMenu("Añadir a playlist");
@@ -38,7 +43,7 @@ public class PlaylistTable extends MouseAdapter {
             if (row != -1) {
               Controller controller = Controller.getSingleton();
               Playlist created = controller.createPlaylist(newPlaylistName);
-              Song song = playlist.getSong(row);
+              Song song = this.playlist.getSong(row);
               controller.addToPlaylist(created, song);
             }
           }
@@ -56,6 +61,7 @@ public class PlaylistTable extends MouseAdapter {
   }
 
   public void setPlaylist(Playlist playlist) {
+    this.playlist = playlist;
     // TODO Check the table model type
     ((PlaylistTableModel) table.getModel()).setPlaylist(playlist);
   }
