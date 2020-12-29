@@ -2,7 +2,6 @@ package um.tds.nappmusic.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.BoxLayout;
@@ -14,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import um.tds.nappmusic.app.App;
@@ -159,23 +157,5 @@ public class LoginWindow {
     panelBotonSalir.add(btnSalir);
 
     return buttonsPanel;
-  }
-
-  /** Launch the application. */
-  public static void main(String[] args) {
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Throwable e) {
-      e.printStackTrace();
-    }
-    EventQueue.invokeLater(
-        () -> {
-          try {
-            LoginWindow window = new LoginWindow();
-            window.showWindow();
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        });
   }
 }
