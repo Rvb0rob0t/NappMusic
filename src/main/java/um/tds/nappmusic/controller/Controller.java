@@ -98,6 +98,10 @@ public final class Controller {
     User user = UserCatalog.getSingleton().getUser(username);
     if (user != null && user.getPassword().equals(password)) {
       this.currentUser = user;
+
+      // The best discount among possible is calculated in each session
+      currentUser.setBestDiscount();
+
       return true;
     }
     return false;
@@ -107,9 +111,6 @@ public final class Controller {
     if (currentUser == null) {
       // TODO Throw exception
     }
-
-    // The best discount among possible is calculated in each session
-    currentUser.setBestDiscount();
 
     return currentUser;
   }
