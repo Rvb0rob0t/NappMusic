@@ -8,7 +8,7 @@ import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
-public class RecentlyPlayedPane {
+public class RecentlyPlayedPanel {
   private JPanel mainPanel;
   private JScrollPane scrollPane;
   private PlaylistTable songTable;
@@ -18,7 +18,7 @@ public class RecentlyPlayedPane {
    *
    * @param musicPlayer
    */
-  public RecentlyPlayedPane(MusicPlayer musicPlayer) {
+  public RecentlyPlayedPanel(MusicPlayer musicPlayer) {
     Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
     mainPanel = new JPanel(new BorderLayout());
     scrollPane = new JScrollPane();

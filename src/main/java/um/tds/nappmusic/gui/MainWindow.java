@@ -28,7 +28,7 @@ import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.gui.cards.HomePanel;
 import um.tds.nappmusic.gui.cards.PlaylistsPanel;
-import um.tds.nappmusic.gui.cards.RecentlyPlayedPane;
+import um.tds.nappmusic.gui.cards.RecentlyPlayedPanel;
 import um.tds.nappmusic.gui.cards.SearchPanel;
 import um.tds.uibutton.UiButton;
 import um.tds.uibutton.UiButtonEvent;
@@ -61,7 +61,7 @@ public class MainWindow {
   private HomePanel homePanel;
   private SearchPanel searchPanel;
   private PlaylistsPanel playlistsPanel;
-  private RecentlyPlayedPane recentlyPlayedPane;
+  private RecentlyPlayedPanel recentlyPlayedPanel;
 
   /** Create the application. */
   public MainWindow() {
@@ -132,8 +132,8 @@ public class MainWindow {
     cardsPanel.add(searchPanel.getPanel(), SEARCH_CARD_NAME);
     playlistsPanel = new PlaylistsPanel(musicPlayer);
     cardsPanel.add(playlistsPanel.getPanel(), PLAYLISTS_CARD_NAME);
-    recentlyPlayedPane = new RecentlyPlayedPane(musicPlayer);
-    cardsPanel.add(new RecentlyPlayedPane(musicPlayer).getPanel(), RECENTLY_CARD_NAME);
+    recentlyPlayedPanel = new RecentlyPlayedPanel(musicPlayer);
+    cardsPanel.add(recentlyPlayedPanel.getPanel(), RECENTLY_CARD_NAME);
   }
 
   /** Create the panel with the user settings. */
@@ -238,7 +238,7 @@ public class MainWindow {
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, RECENTLY_CARD_NAME);
-            recentlyPlayedPane.revalidate();
+            recentlyPlayedPanel.revalidate();
           }
         });
 
