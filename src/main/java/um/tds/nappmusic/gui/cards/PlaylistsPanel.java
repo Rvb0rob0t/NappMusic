@@ -56,11 +56,12 @@ public class PlaylistsPanel extends MouseAdapter {
     mainPanel.add(rightPanel, BorderLayout.CENTER);
   }
 
-  public void updateDisplayedList(Optional<Playlist> selected) {
+  private void updateDisplayedList(Optional<Playlist> selected) {
     Playlist playlist =
         selected.isPresent() ? selected.get() : new Playlist("No Playlist Selected");
     if (playlistTable == null) {
       playlistTable = new PlaylistTable(musicPlayer, playlist);
+      playlistTable.addNewPlaylistsListener(() -> revalidate());
     } else {
       playlistTable.setPlaylist(playlist);
     }
