@@ -158,6 +158,7 @@ class DaoTests {
 
       System.err.println("Poh favoh" + user.getPlaylists() + retrieved.getPlaylists());
       assertEquals(user.getName(), retrieved.getName());
+      userDao.delete(user);
     } catch (DaoException e) {
       e.printStackTrace();
       fail("Failed retrieving user");
