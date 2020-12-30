@@ -3,6 +3,7 @@ package um.tds.nappmusic.gui.cards;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -58,15 +59,7 @@ public class SearchPanel {
     fieldsPanel.add(styleComboBoxPanel);
 
     JButton searchButton = new JButton("Buscar");
-    searchButton.addActionListener(
-        e -> {
-          changeTable(
-              musicPlayer,
-              controller.searchSongsBy(
-                  titleField.getText(),
-                  authorField.getText(),
-                  (String) styleComboBox.getSelectedItem()));
-        });
+    searchButton.addActionListener(e -> changeTable(musicPlayer));
     fieldsPanel.add(searchButton);
     mainPanel.add(fieldsPanel, BorderLayout.NORTH);
 
@@ -88,7 +81,15 @@ public class SearchPanel {
     return mainPanel;
   }
 
-  private void changeTable(MusicPlayer musicPlayer, Playlist playlist) {
+  private void changeTable(MusicPlayer musicPlayer) {
+    String style = (String) styleComboBox.getSelectedItem();
+    Playlist playlist;
+    if (style == "") {
+      playlist =
+          controller.searchSongsByTitleAndAuthor(titleField.getText(), authorField.getText());
+    } else {
+      playlist = controller.searchSongsBy(titleField.getText(), authorField.getText(), style);
+    }
     if (playlistTable == null) {
       playlistTable = new PlaylistTable(controller, musicPlayer, playlist);
     } else {
@@ -99,8 +100,13 @@ public class SearchPanel {
   }
 
   private void updateStyleList() {
-    styleComboBox.setModel(
-        new DefaultComboBoxModel<String>(controller.getAllStyles().toArray(new String[0])));
+    List<String> styles = controller.getAllStyles();
+    String[] options = new String[styles.size() + 1];
+    options[0] = "";
+    for (int i = 0; i < styles.size(); i++) {
+      options[i + 1] = styles.get(i);
+    }
+    styleComboBox.setModel(new DefaultComboBoxModel<>(options));
   }
 
   public void revalidate() {

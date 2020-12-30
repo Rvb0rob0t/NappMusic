@@ -77,6 +77,17 @@ public class SongCatalog {
     return result;
   }
 
+  public Playlist searchSongsByTitleAndAuthor(String titleSubstring, String authorSubstring) {
+    List<Song> result =
+        getAllSongs().stream()
+            .filter(
+                song ->
+                    song.getAuthor().contains(authorSubstring)
+                        && song.getTitle().contains(titleSubstring))
+            .collect(Collectors.toCollection(ArrayList::new));
+    return new Playlist("Search Results", result);
+  }
+
   public Playlist searchSongsBy(String titleSubstring, String authorSubstring, String style) {
     List<Song> result =
         getAllSongs().stream()
@@ -86,7 +97,6 @@ public class SongCatalog {
                         && song.getAuthor().contains(authorSubstring)
                         && song.getTitle().contains(titleSubstring))
             .collect(Collectors.toCollection(ArrayList::new));
-
     return new Playlist("Search Results", result);
   }
 

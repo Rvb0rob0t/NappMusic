@@ -151,6 +151,10 @@ public final class Controller {
     return songCatalog.getAllStyles();
   }
 
+  public Playlist searchSongsByTitleAndAuthor(String titleSubstring, String authorSubstring) {
+    return songCatalog.searchSongsByTitleAndAuthor(titleSubstring, authorSubstring);
+  }
+
   public Playlist searchSongsBy(String titleSubstring, String authorSubstring, String style) {
     return songCatalog.searchSongsBy(titleSubstring, authorSubstring, style);
   }
