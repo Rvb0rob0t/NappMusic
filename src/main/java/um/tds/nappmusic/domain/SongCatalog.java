@@ -2,6 +2,7 @@ package um.tds.nappmusic.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ public class SongCatalog {
   public static final int MOST_PLAYED_SIZE = 10;
   private static SongCatalog singleton = null;
   private DaoFactory factory;
+  private List<Song> songList;
   private HashMap<String, ArrayList<Song>> songsByAuthor;
   private HashMap<String, Integer> numSongsPerStyle;
 
@@ -26,6 +28,7 @@ public class SongCatalog {
     try {
       factory = DaoFactory.getSingleton();
       List<Song> songs = factory.getSongDao().getAll();
+      songList = new LinkedList<Song>();
       songsByAuthor = new HashMap<String, ArrayList<Song>>();
       numSongsPerStyle = new HashMap<String, Integer>();
       for (Song song : songs) {
@@ -38,11 +41,7 @@ public class SongCatalog {
   }
 
   public List<Song> getAllSongs() {
-    List<Song> all = new ArrayList<Song>();
-    for (List<Song> authorSongs : songsByAuthor.values()) {
-      all.addAll(authorSongs);
-    }
-    return all;
+    return songList;
   }
 
   public List<String> getAllStyles() {
@@ -92,6 +91,7 @@ public class SongCatalog {
   }
 
   public void addSong(Song song) {
+    songList.add(song);
     songsByAuthor.computeIfAbsent(song.getAuthor(), k -> new ArrayList<Song>()).add(song);
     song.getStyles()
         .forEach(
@@ -102,6 +102,7 @@ public class SongCatalog {
   }
 
   public void removeSong(Song song) {
+    songList.remove(song);
     List<Song> sameAuthor = songsByAuthor.get(song.getAuthor());
     sameAuthor.remove(song);
     if (sameAuthor.isEmpty()) {
