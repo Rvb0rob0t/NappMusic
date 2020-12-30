@@ -2,8 +2,6 @@ package um.tds.nappmusic.gui.tables;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -15,14 +13,13 @@ import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.gui.MusicPlayer;
+import um.tds.nappmusic.gui.notifier.GuiNotifier;
 
 public class PlaylistTable extends MouseAdapter {
   Controller controller;
 
   private JTable table;
   private MusicPlayer musicPlayer;
-  private Playlist playlist;
-  private List<NewPlaylistsListener> listeners;
 
   private JPopupMenu rightClickMenu;
   private JMenu addToPlaylistMenu;
@@ -41,11 +38,8 @@ public class PlaylistTable extends MouseAdapter {
 
     this.musicPlayer = musicPlayer;
 
-    this.playlist = playlist;
-
     this.rightClickMenu = rightClickMenu;
     this.addToPlaylistMenu = new JMenu("Añadir a playlist");
-    this.listeners = new LinkedList<>();
     this.newPlaylistItem = new JMenuItem("Nueva playlist");
     this.newPlaylistItem.addActionListener(
         e -> {
@@ -54,12 +48,9 @@ public class PlaylistTable extends MouseAdapter {
             int row = table.getSelectedRow();
             if (row != -1) {
               Playlist created = controller.createPlaylist(newPlaylistName);
-              Song song = this.playlist.getSong(row);
+              Song song = getDisplayedPlaylist().getSong(row);
               controller.addToPlaylist(created, song);
-
-              for (NewPlaylistsListener listener : listeners) {
-                listener.onNewPlaylistAdded();
-              }
+              GuiNotifier.INSTANCE.notifyPlaylistListListeners();
             }
           }
         });
@@ -76,7 +67,6 @@ public class PlaylistTable extends MouseAdapter {
   }
 
   public void setPlaylist(Playlist playlist) {
-    this.playlist = playlist;
     // TODO Check the table model type
     ((PlaylistTableModel) table.getModel()).setPlaylist(playlist);
   }
@@ -109,13 +99,14 @@ public class PlaylistTable extends MouseAdapter {
               playlistItem.addActionListener(
                   e -> {
                     controller.addToPlaylist(playlist, song);
+                    GuiNotifier.INSTANCE.notifyPlaylistListeners(playlist);
                   });
               addToPlaylistMenu.add(playlistItem);
             });
     addToPlaylistMenu.add(newPlaylistItem);
   }
 
-  public void addNewPlaylistsListener(NewPlaylistsListener listener) {
-    listeners.add(listener);
+  public Playlist getDisplayedPlaylist() {
+    return ((PlaylistTableModel) table.getModel()).getPlaylist();
   }
 }

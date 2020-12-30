@@ -13,9 +13,12 @@ import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.lists.PlaylistJList;
+import um.tds.nappmusic.gui.notifier.GuiNotifier;
+import um.tds.nappmusic.gui.notifier.PlaylistListListener;
+import um.tds.nappmusic.gui.notifier.PlaylistListener;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
-public class PlaylistsPanel extends MouseAdapter {
+public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, PlaylistListListener {
   private Controller controller;
 
   private MusicPlayer musicPlayer;
@@ -46,12 +49,14 @@ public class PlaylistsPanel extends MouseAdapter {
     rightPanel = new JPanel(new BorderLayout(10, 10));
     leftPanelScroll = new JScrollPane();
     rightPanelScroll = new JScrollPane();
-    List<Playlist> userPlaylists = controller.getUserPlaylists();
-    playlistsList = new PlaylistJList(userPlaylists);
     leftPaneLbl = new JLabel("Your Playlists");
 
+    GuiNotifier.INSTANCE.addPlaylistListListener(this);
+    List<Playlist> userPlaylists = controller.getUserPlaylists();
+    playlistsList = new PlaylistJList(userPlaylists);
     leftPanelScroll.setViewportView(playlistsList.getList());
     playlistsList.addMouseListener(this);
+
     updateDisplayedList(Optional.empty());
 
     leftPanel.add(leftPaneLbl, BorderLayout.NORTH);
@@ -62,14 +67,18 @@ public class PlaylistsPanel extends MouseAdapter {
   }
 
   private void updateDisplayedList(Optional<Playlist> selected) {
-    Playlist playlist =
-        selected.isPresent() ? selected.get() : new Playlist("No Playlist Selected");
+    if (!selected.isPresent()) {
+      return;
+    }
+
+    Playlist playlist = selected.get();
     if (playlistTable == null) {
       playlistTable = new PlaylistTable(controller, musicPlayer, playlist);
-      playlistTable.addNewPlaylistsListener(() -> revalidate());
     } else {
+      GuiNotifier.INSTANCE.removePlaylistListener(playlistTable.getDisplayedPlaylist(), this);
       playlistTable.setPlaylist(playlist);
     }
+    GuiNotifier.INSTANCE.addPlaylistListener(playlist, this);
     rightPanelScroll.setViewportView(playlistTable.getTable());
     mainPanel.revalidate();
   }
@@ -90,5 +99,15 @@ public class PlaylistsPanel extends MouseAdapter {
   public void revalidate() {
     playlistsList.setPlaylists(controller.getUserPlaylists());
     updateDisplayedList(playlistsList.getSelectedPlaylist());
+  }
+
+  @Override
+  public void playlistModified() {
+    revalidate();
+  }
+
+  @Override
+  public void playlistListModified() {
+    revalidate();
   }
 }

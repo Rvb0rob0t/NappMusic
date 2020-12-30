@@ -29,6 +29,7 @@ import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
+import um.tds.nappmusic.gui.notifier.GuiNotifier;
 
 public class MusicPlayer {
   private static final String DEFAULT_THUMBNAIL = App.RESOURCES_PATH + "/default_thumbnail.png";
@@ -211,6 +212,7 @@ public class MusicPlayer {
     mediaPlayer.setOnMarker(
         mediaMarkerEvent -> {
           controller.updatePlaysCounter(song);
+          GuiNotifier.INSTANCE.notifyPlaylistListeners(controller.getUserRecentlyPlayedSongs());
         });
   }
 

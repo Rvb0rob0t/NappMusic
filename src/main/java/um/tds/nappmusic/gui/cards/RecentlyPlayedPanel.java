@@ -6,9 +6,11 @@ import javax.swing.JScrollPane;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.gui.MusicPlayer;
+import um.tds.nappmusic.gui.notifier.GuiNotifier;
+import um.tds.nappmusic.gui.notifier.PlaylistListener;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
-public class RecentlyPlayedPanel {
+public class RecentlyPlayedPanel implements PlaylistListener {
   private Controller controller;
 
   private JPanel mainPanel;
@@ -25,6 +27,7 @@ public class RecentlyPlayedPanel {
     this.controller = controller;
 
     Playlist recentPlaylist = controller.getUserRecentlyPlayedSongs();
+    GuiNotifier.INSTANCE.addPlaylistListener(recentPlaylist, this);
     mainPanel = new JPanel(new BorderLayout());
     scrollPane = new JScrollPane();
     songTable = new PlaylistTable(controller, musicPlayer, recentPlaylist);
@@ -41,5 +44,10 @@ public class RecentlyPlayedPanel {
     songTable.setPlaylist(recentPlaylist);
     scrollPane.setViewportView(songTable.getTable());
     mainPanel.revalidate();
+  }
+
+  @Override
+  public void playlistModified() {
+    revalidate();
   }
 }

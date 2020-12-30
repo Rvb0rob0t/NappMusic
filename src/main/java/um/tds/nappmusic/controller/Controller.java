@@ -186,7 +186,6 @@ public final class Controller {
     if (currentUser == null) {
       // TODO Throw exception
     }
-
     return currentUser.getPlaylists();
   }
 
@@ -194,7 +193,6 @@ public final class Controller {
     if (currentUser == null) {
       // TODO Throw exception
     }
-
     return currentUser.getRecent();
   }
 
