@@ -9,7 +9,7 @@ public class Playlist implements Identifiable {
 
   private int id;
   private String name;
-  private ArrayList<Song> songs;
+  private List<Song> songs;
 
   public Playlist() {}
 
@@ -18,7 +18,7 @@ public class Playlist implements Identifiable {
     this.songs = new ArrayList<Song>();
   }
 
-  public Playlist(String name, ArrayList<Song> songs) {
+  public Playlist(String name, List<Song> songs) {
     this.name = name;
     this.songs = songs;
   }
@@ -55,7 +55,7 @@ public class Playlist implements Identifiable {
     return songs.size();
   }
 
-  public ArrayList<Song> getSongs() {
+  public List<Song> getSongs() {
     return songs;
   }
 
@@ -72,6 +72,6 @@ public class Playlist implements Identifiable {
   }
 
   public void setSongs(List<Song> songs) {
-    this.songs = new ArrayList<Song>(songs);
+    this.songs = songs;
   }
 }

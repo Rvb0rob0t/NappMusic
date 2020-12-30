@@ -1,6 +1,7 @@
 package um.tds.nappmusic.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.DaoFactory;
@@ -41,7 +42,7 @@ public class XmlLoader implements SongLoaderListener {
   }
 
   private static um.tds.nappmusic.domain.Song toDomainSong(um.tds.songloader.Song song) {
-    ArrayList<String> uniqueStyle = new ArrayList();
+    List<String> uniqueStyle = new ArrayList();
     uniqueStyle.add(song.getStyle());
     return new um.tds.nappmusic.domain.Song(
         song.getTitle(), song.getAuthor(), uniqueStyle, song.getUrl(), 0);

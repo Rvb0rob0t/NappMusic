@@ -11,7 +11,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.User;
@@ -34,7 +34,7 @@ public class PdfGenerator {
     output.add(
         new Paragraph("Hello " + user.getUsername() + ", these are your playlists", TITLE_FONT));
 
-    ArrayList<Playlist> playlists = user.getPlaylists();
+    List<Playlist> playlists = user.getPlaylists();
     for (Playlist playlist : playlists) {
       output.add(new Paragraph(playlist.getName(), PLAYLIST_NAME_FONT));
       output.add(Chunk.SPACETABBING);

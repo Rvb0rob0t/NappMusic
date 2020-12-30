@@ -3,6 +3,7 @@ package um.tds.nappmusic.dao;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.domain.User;
@@ -11,12 +12,12 @@ public class AddRootUserToDb {
   private static DaoFactory factory;
 
   private static Song fakeSong() {
-    ArrayList<String> styles = new ArrayList(Arrays.asList("Pop", "Rock", "Jazz"));
+    List<String> styles = new ArrayList(Arrays.asList("Pop", "Rock", "Jazz"));
     return new Song("fake title", "fake author", styles, "NO_FILE_PATH", 0);
   }
 
   private static Playlist fakePlaylist() {
-    ArrayList<Song> songs = new ArrayList();
+    List<Song> songs = new ArrayList();
     songs.add(fakeSong());
     return new Playlist("Root's playlist 0", songs);
   }

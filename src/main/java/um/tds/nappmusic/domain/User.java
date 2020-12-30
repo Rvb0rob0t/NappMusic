@@ -19,7 +19,7 @@ public class User implements Identifiable {
   private String password;
   private boolean premium;
   private Discount discount;
-  private ArrayList<Playlist> playlists;
+  private List<Playlist> playlists;
   // DIFFERENCE We use Playlist for almost everything (that is a list of songs).
   // The idea is that the user can also replay the list of recently played songs.
   private Playlist recent;
@@ -49,7 +49,7 @@ public class User implements Identifiable {
       String password,
       boolean premium,
       Discount discount,
-      ArrayList<Playlist> playlists,
+      List<Playlist> playlists,
       Playlist recent) {
     this.name = name;
     this.surname = surname;
@@ -143,7 +143,7 @@ public class User implements Identifiable {
     return discount;
   }
 
-  public ArrayList<Playlist> getPlaylists() {
+  public List<Playlist> getPlaylists() {
     return playlists;
   }
 
@@ -188,7 +188,7 @@ public class User implements Identifiable {
   }
 
   public void setPlaylists(List<Playlist> playlists) {
-    this.playlists = new ArrayList<Playlist>(playlists);
+    this.playlists = playlists;
   }
 
   public void setRecent(Playlist recent) {

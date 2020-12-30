@@ -16,7 +16,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class CatalogTests {
   private SongCatalog songCatalog;
-  private ArrayList<Song> fakeSongs;
+  private List<Song> fakeSongs;
 
   private void assertCollectionIsContained(List<Song> lhs, List<Song> rhs) {
     for (Song lsong : lhs) {
@@ -41,77 +41,77 @@ class CatalogTests {
         new Song(
             "Title0",
             "Author0",
-            new ArrayList<String>(Arrays.asList("Style0", "Style1", "Style2")),
+            Arrays.asList("Style0", "Style1", "Style2"),
             "/home/useredsa/Music/song0.mp4",
             0));
     fakeSongs.add(
         new Song(
             "Title1",
             "Author1",
-            new ArrayList<String>(Arrays.asList("Style1", "Style2", "Style3")),
+            Arrays.asList("Style1", "Style2", "Style3"),
             "/home/useredsa/Music/song1.mp4",
             10));
     fakeSongs.add(
         new Song(
             "Title2",
             "Author2",
-            new ArrayList<String>(Arrays.asList("Style2", "Style3", "Style4")),
+            Arrays.asList("Style2", "Style3", "Style4"),
             "/home/useredsa/Music/song2.mp4",
             20));
     fakeSongs.add(
         new Song(
             "Title3",
             "Author3",
-            new ArrayList<String>(Arrays.asList("Style3", "Style4", "Style5")),
+            Arrays.asList("Style3", "Style4", "Style5"),
             "/home/useredsa/Music/song3.mp4",
             30));
     fakeSongs.add(
         new Song(
             "Title4",
             "Author4",
-            new ArrayList<String>(Arrays.asList("Style4", "Style5", "Style0")),
+            Arrays.asList("Style4", "Style5", "Style0"),
             "/home/useredsa/Music/song4.mp4",
             40));
     fakeSongs.add(
         new Song(
             "Title5",
             "Author5",
-            new ArrayList<String>(Arrays.asList("Style5", "Style0", "Style1")),
+            Arrays.asList("Style5", "Style0", "Style1"),
             "/home/useredsa/Music/song5.mp4",
             50));
     fakeSongs.add(
         new Song(
             "Title6",
             "Author6",
-            new ArrayList<String>(Arrays.asList("Style6", "Style0", "Style1")),
+            Arrays.asList("Style6", "Style0", "Style1"),
             "/home/useredsa/Music/song6.mp4",
             60));
     fakeSongs.add(
         new Song(
             "Title7",
             "Author7",
-            new ArrayList<String>(Arrays.asList("Style7", "Style0", "Style1")),
+            Arrays.asList("Style7", "Style0", "Style1"),
             "/home/useredsa/Music/song7.mp4",
             70));
     fakeSongs.add(
         new Song(
             "Title8",
             "Author8",
-            new ArrayList<String>(Arrays.asList("Style8", "Style0", "Style1")),
+            Arrays.asList("Style8", "Style0", "Style1"),
             "/home/useredsa/Music/song8.mp4",
             80));
     fakeSongs.add(
         new Song(
             "Title9",
             "Author9",
-            new ArrayList<String>(Arrays.asList("Style9", "Style0", "Style1")),
+            Arrays.asList("Style9", "Style0", "Style1"),
             "/home/useredsa/Music/song9.mp4",
             90));
     fakeSongs.add(
         new Song(
             "Title10",
             "Author10",
-            new ArrayList<String>(Arrays.asList("Style10", "Style0", "Style1")),
+            Arrays.asList("Style10", "Style0", "Style1"),
             "/home/useredsa/Music/song10.mp4",
             100));
 

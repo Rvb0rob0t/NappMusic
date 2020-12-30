@@ -1,20 +1,19 @@
 package um.tds.nappmusic.domain;
 
-import java.util.ArrayList;
+import java.util.List;
 import um.tds.nappmusic.dao.Identifiable;
 
 public class Song implements Identifiable {
   private int id;
   private String title;
   private String author;
-  private ArrayList<String> styles;
+  private List<String> styles;
   private String filePath;
   private int numPlays;
 
   public Song() {}
 
-  public Song(
-      String title, String author, ArrayList<String> styles, String filePath, int numPlays) {
+  public Song(String title, String author, List<String> styles, String filePath, int numPlays) {
     this.title = title;
     this.author = author;
     this.styles = styles;
@@ -34,7 +33,7 @@ public class Song implements Identifiable {
     return author;
   }
 
-  public ArrayList<String> getStyles() {
+  public List<String> getStyles() {
     return styles;
   }
 
@@ -58,7 +57,7 @@ public class Song implements Identifiable {
     this.author = author;
   }
 
-  public void setStyles(ArrayList<String> styles) {
+  public void setStyles(List<String> styles) {
     this.styles = styles;
   }
 

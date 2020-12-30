@@ -3,7 +3,6 @@ package um.tds.nappmusic.controller;
 import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
@@ -120,8 +119,7 @@ public final class Controller {
     return songCatalog.getSong(title, author) != null;
   }
 
-  public boolean registerSong(
-      String title, String author, ArrayList<String> styles, String filePath) {
+  public boolean registerSong(String title, String author, List<String> styles, String filePath) {
     if (isSongRegistered(title, author)) {
       return false;
     }
@@ -159,7 +157,7 @@ public final class Controller {
 
   public Playlist createPlaylist(String name) {
     // TODO Should create the playlist elsewhere?
-    Playlist playlist = new Playlist(name, new ArrayList<Song>());
+    Playlist playlist = new Playlist(name);
     playlistDao.register(playlist);
     currentUser.addPlaylist(playlist);
     userDao.update(currentUser);
@@ -182,7 +180,7 @@ public final class Controller {
     return true;
   }
 
-  public ArrayList<Playlist> getUserPlaylists() {
+  public List<Playlist> getUserPlaylists() {
     if (currentUser == null) {
       // TODO Throw exception
     }

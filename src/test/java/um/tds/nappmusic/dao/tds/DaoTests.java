@@ -72,7 +72,7 @@ class DaoTests {
     Song song = new Song();
     song.setTitle("SSNII");
     song.setAuthor("Ca Papanate");
-    song.setStyles(new ArrayList<String>(Arrays.asList("Absolutely", "Original")));
+    song.setStyles(Arrays.asList("Absolutely", "Original"));
     song.setFilePath("/home/useredsa/dotfiles/.config/kak/kakrc");
     song.setNumPlays(10);
 
@@ -101,7 +101,7 @@ class DaoTests {
     Song song = new Song();
     song.setTitle("SSNII");
     song.setAuthor("Ca Papanate");
-    song.setStyles(new ArrayList<String>(Arrays.asList("Absolutely", "Original")));
+    song.setStyles(Arrays.asList("Absolutely", "Original"));
     song.setFilePath("/home/useredsa/dotfiles/.config/kak/kakrc");
     song.setNumPlays(10);
 

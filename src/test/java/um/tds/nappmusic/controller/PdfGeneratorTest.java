@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
 import um.tds.nappmusic.dao.DaoException;
@@ -36,7 +35,7 @@ public class PdfGeneratorTest {
         new Song(
             "Title0",
             "Author0",
-            new ArrayList<String>(Arrays.asList("Style0", "Style1", "Style2", "Style2", "Style2")),
+            Arrays.asList("Style0", "Style1", "Style2", "Style2", "Style2"),
             "/home/useredsa/Music/song0.mp4",
             0);
     controller.addToPlaylist(controller.createPlaylist("Test playlist 1"), song);

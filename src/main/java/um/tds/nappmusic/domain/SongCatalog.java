@@ -2,7 +2,6 @@ package um.tds.nappmusic.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,8 +38,8 @@ public class SongCatalog {
   }
 
   public List<Song> getAllSongs() {
-    List<Song> all = new LinkedList<Song>();
-    for (ArrayList<Song> authorSongs : songsByAuthor.values()) {
+    List<Song> all = new ArrayList<Song>();
+    for (List<Song> authorSongs : songsByAuthor.values()) {
       all.addAll(authorSongs);
     }
     return all;
@@ -51,7 +50,7 @@ public class SongCatalog {
   }
 
   public Playlist getSongsByAuthor(String author) {
-    return new Playlist("Songs of " + author, new ArrayList<Song>(songsByAuthor.get(author)));
+    return new Playlist("Songs of " + author, songsByAuthor.get(author));
   }
 
   public Song getSong(String title, String author) {
@@ -61,7 +60,7 @@ public class SongCatalog {
   }
 
   public Playlist searchSongsByTitle(String pattern) {
-    ArrayList<Song> result =
+    List<Song> result =
         getAllSongs().stream()
             .filter(song -> (song.getTitle().contains(pattern)))
             .collect(Collectors.toCollection(ArrayList::new));
@@ -69,18 +68,18 @@ public class SongCatalog {
   }
 
   public List<Playlist> searchSongsByAuthor(String pattern) {
-    ArrayList<Playlist> result = new ArrayList<Playlist>();
+    List<Playlist> result = new ArrayList<Playlist>();
     for (HashMap.Entry<String, ArrayList<Song>> entry : songsByAuthor.entrySet()) {
       String author = entry.getKey();
       if (author.contains(pattern)) {
-        result.add(new Playlist("Songs of " + author, new ArrayList<Song>(entry.getValue())));
+        result.add(new Playlist("Songs of " + author, entry.getValue()));
       }
     }
     return result;
   }
 
   public Playlist searchSongsBy(String titleSubstring, String authorSubstring, String style) {
-    ArrayList<Song> result =
+    List<Song> result =
         getAllSongs().stream()
             .filter(
                 song ->
@@ -103,7 +102,7 @@ public class SongCatalog {
   }
 
   public void removeSong(Song song) {
-    ArrayList<Song> sameAuthor = songsByAuthor.get(song.getAuthor());
+    List<Song> sameAuthor = songsByAuthor.get(song.getAuthor());
     sameAuthor.remove(song);
     if (sameAuthor.isEmpty()) {
       songsByAuthor.remove(song.getAuthor());
@@ -126,7 +125,7 @@ public class SongCatalog {
    * @return A playlist with the {@value #MOST_PLAYED_SIZE} most played songs
    */
   public Playlist getMostPlayedSongs() {
-    ArrayList<Song> result =
+    List<Song> result =
         getAllSongs().stream()
             .sorted((song1, song2) -> (song2.getNumPlays() - song1.getNumPlays()))
             .limit(MOST_PLAYED_SIZE)

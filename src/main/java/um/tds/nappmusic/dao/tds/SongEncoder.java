@@ -34,7 +34,7 @@ public final class SongEncoder implements BiEncoder<Song> {
   public void initObjFromEntity(Song song, Entidad entity) {
     song.setTitle(wrapper.retrieveString(entity, TITLE_FIELD));
     song.setAuthor(wrapper.retrieveString(entity, AUTHOR_FIELD));
-    song.setStyles(new ArrayList(wrapper.retrieveStringList(entity, STYLES_FIELD)));
+    song.setStyles(wrapper.retrieveStringList(entity, STYLES_FIELD));
     song.setFilePath(wrapper.retrieveString(entity, FILEPATH_FIELD));
     song.setNumPlays(wrapper.retrieveInt(entity, NUMPLAYS_FIELD));
   }
