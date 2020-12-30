@@ -3,8 +3,9 @@ package um.tds.nappmusic.gui.tables;
 import javax.swing.table.AbstractTableModel;
 import um.tds.nappmusic.domain.Playlist;
 
-@SuppressWarnings("serial")
 public class PlaylistTableModel extends AbstractTableModel {
+
+  private static final long serialVersionUID = -3070085429813305603L;
 
   private static final int COLUMNS = 2;
   private static final int TITLE_COLUMN = 0;

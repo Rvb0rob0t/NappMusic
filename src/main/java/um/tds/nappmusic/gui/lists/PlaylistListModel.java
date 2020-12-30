@@ -4,8 +4,10 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 import um.tds.nappmusic.domain.Playlist;
 
-@SuppressWarnings("serial")
 public class PlaylistListModel extends AbstractListModel<String> {
+
+  private static final long serialVersionUID = -6915387928992573480L;
+
   private List<Playlist> playlists;
 
   public PlaylistListModel(List<Playlist> contents) {
