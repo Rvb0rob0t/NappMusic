@@ -67,14 +67,12 @@ public class PlaylistTable extends MouseAdapter {
   }
 
   public void setPlaylist(Playlist playlist) {
-    // TODO Check the table model type
     ((PlaylistTableModel) table.getModel()).setPlaylist(playlist);
   }
 
   @Override
   public void mouseReleased(MouseEvent e) {
-    Playlist playlist =
-        ((PlaylistTableModel) table.getModel()).getPlaylist(); // TODO Check the table model type
+    Playlist playlist = ((PlaylistTableModel) table.getModel()).getPlaylist();
     int row = table.rowAtPoint(e.getPoint());
     if (row != -1) {
       Song song = playlist.getSong(row);

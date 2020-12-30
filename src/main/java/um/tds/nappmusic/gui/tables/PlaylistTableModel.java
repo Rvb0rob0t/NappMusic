@@ -50,8 +50,7 @@ public class PlaylistTableModel extends AbstractTableModel {
       case AUTHOR_COLUMN:
         return AUTHOR_COLUMN_NAME;
       default:
-        // TODO Shouldn't reach here
-        return "";
+        throw new IndexOutOfBoundsException("column not in range for " + this.getClass().getName());
     }
   }
 
@@ -63,8 +62,7 @@ public class PlaylistTableModel extends AbstractTableModel {
       case AUTHOR_COLUMN:
         return playlist.getSong(row).getAuthor();
       default:
-        // TODO Shouldn't reach here
-        return "";
+        throw new IndexOutOfBoundsException("column not in range for " + this.getClass().getName());
     }
   }
 }

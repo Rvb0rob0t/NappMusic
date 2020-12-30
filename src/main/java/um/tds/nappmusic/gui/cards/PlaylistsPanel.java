@@ -87,8 +87,6 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
   public void mouseReleased(MouseEvent e) {
     if (SwingUtilities.isLeftMouseButton(e)) {
       updateDisplayedList(playlistsList.getSelectedPlaylist());
-    } else if (SwingUtilities.isRightMouseButton(e)) {
-      // TODO do we want functionality?
     }
   }
 

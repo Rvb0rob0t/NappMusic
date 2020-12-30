@@ -368,7 +368,6 @@ public class RegisterWindow {
   }
 
   private LocalDate dateToLocalDate(Date date) {
-    // TODO system default? I can only sense danger
     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
   }
 }

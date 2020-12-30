@@ -82,7 +82,6 @@ public class User implements Identifiable {
       String username,
       String password,
       boolean premium) {
-    // TODO null
     this(
         name,
         surname,
@@ -91,7 +90,7 @@ public class User implements Identifiable {
         username,
         password,
         premium,
-        null,
+        new NoDiscount(),
         new ArrayList<Playlist>(),
         new Playlist("Recent"));
   }
