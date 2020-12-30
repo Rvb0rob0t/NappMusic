@@ -230,6 +230,7 @@ public class MainWindow {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, SEARCH_CARD_NAME);
             searchPanel.revalidate();
+            mainFrame.pack();
           }
         });
 
