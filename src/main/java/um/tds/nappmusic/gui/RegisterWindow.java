@@ -11,6 +11,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.swing.BorderFactory;
@@ -314,13 +315,14 @@ public class RegisterWindow {
       usernameTxt.setBorder(BorderFactory.createLineBorder(Color.RED));
       ok = false;
     }
-    // TODO
-    // if (Period.between(birthDateCal.getDate(), LocalDate.now()).getYears() < App.MINIMUM_AGE) {
-    //   birthDateErrLbl.setVisible(true);
-    //   birthDateLbl.setForeground(Color.RED);
-    //   birthDateCal.setBorder(BorderFactory.createLineBorder(Color.RED));
-    //   ok = false;
-    // }
+    if (Period.between(dateToLocalDate(birthDateCal.getDate()), LocalDate.now()).getYears()
+        < App.MINIMUM_AGE) {
+      birthDateErrLbl.setText("The minimum age to use this app is " + App.MINIMUM_AGE);
+      birthDateErrLbl.setVisible(true);
+      birthDateLbl.setForeground(Color.RED);
+      birthDateCal.setBorder(BorderFactory.createLineBorder(Color.RED));
+      ok = false;
+    }
 
     dialogWin.revalidate();
     dialogWin.pack();
