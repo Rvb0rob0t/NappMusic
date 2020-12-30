@@ -8,12 +8,12 @@ import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.Identifiable;
 
-public class Pool<T extends Identifiable> implements Dao<T> {
+public class TdsPoolDao<T extends Identifiable> implements Dao<T> {
   private BiEncoder<T> encoder;
   private HashMap<Integer, T> pool;
   private PersistencyWrapper wrapper;
 
-  public Pool(PersistencyWrapper wrapper, BiEncoder encoder) {
+  public TdsPoolDao(PersistencyWrapper wrapper, BiEncoder encoder) {
     this.encoder = encoder;
     this.pool = new HashMap<Integer, T>();
     this.wrapper = wrapper;

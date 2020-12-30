@@ -171,7 +171,9 @@ class CatalogTests {
 
   @Test
   void checkGetMostPlayedSongs() {
-    List<Song> expected = fakeSongs.subList(fakeSongs.size() - 10, fakeSongs.size());
+    List<Song> expected =
+        fakeSongs.subList(
+            Math.max(0, fakeSongs.size() - SongCatalog.MOST_PLAYED_SIZE), fakeSongs.size());
     List<Song> returned = songCatalog.getMostPlayedSongs().getSongs();
     assertCollectionIsContained(expected, returned);
   }

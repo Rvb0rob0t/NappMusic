@@ -29,9 +29,9 @@ class PersistencyWrapper {
 
   public PersistencyWrapper() {
     this.servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
-    this.userDao = new Pool<User>(this, new UserEncoder(this));
-    this.songDao = new Pool<Song>(this, new SongEncoder(this));
-    this.playlistDao = new Pool<Playlist>(this, new PlaylistEncoder(this));
+    this.userDao = new TdsDao<User>(this, new UserEncoder(this));
+    this.songDao = new TdsPoolDao<Song>(this, new SongEncoder(this));
+    this.playlistDao = new TdsDao<Playlist>(this, new PlaylistEncoder(this));
   }
 
   public Dao<User> getUserDao() {
