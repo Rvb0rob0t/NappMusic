@@ -214,6 +214,7 @@ public class MusicPlayer {
           controller.updatePlaysCounter(song);
           GuiNotifier.INSTANCE.notifyPlaylistListeners(controller.getUserRecentlyPlayedSongs());
         });
+    mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(mediaPlayer.getStartTime()));
   }
 
   private File pathToFile(String pathName) throws IOException {
