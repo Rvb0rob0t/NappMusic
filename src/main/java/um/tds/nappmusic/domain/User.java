@@ -100,13 +100,15 @@ public class User implements Identifiable {
     playlists.add(playlist);
   }
 
-  public void updateRecent(Song reproduccion) {
-    recent.add(0, reproduccion);
+  public void updateRecent(Song reproduction) {
+    recent.remove(reproduction);
+    recent.add(0, reproduction);
     if (recent.size() > Playlist.RECENTLY_PLAYED_LIST_SIZE) {
       recent.remove(Playlist.RECENTLY_PLAYED_LIST_SIZE);
     }
   }
 
+  @Override
   public int getId() {
     return id;
   }
@@ -151,6 +153,7 @@ public class User implements Identifiable {
     return recent;
   }
 
+  @Override
   public void setId(int id) {
     this.id = id;
   }

@@ -43,6 +43,7 @@ public class Playlist implements Identifiable {
     songs.remove(index);
   }
 
+  @Override
   public int getId() {
     return id;
   }
@@ -63,6 +64,7 @@ public class Playlist implements Identifiable {
     return songs.get(index);
   }
 
+  @Override
   public void setId(int id) {
     this.id = id;
   }

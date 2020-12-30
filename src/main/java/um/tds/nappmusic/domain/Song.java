@@ -21,6 +21,20 @@ public class Song implements Identifiable {
     this.numPlays = numPlays;
   }
 
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+
+    if (obj.getClass() != this.getClass()) {
+      return false;
+    }
+
+    Song song = (Song) obj;
+
+    return this.title.equals(song.title) && this.author.equals(song.author);
+  }
+
   public int getId() {
     return id;
   }
@@ -45,6 +59,7 @@ public class Song implements Identifiable {
     return numPlays;
   }
 
+  @Override
   public void setId(int id) {
     this.id = id;
   }

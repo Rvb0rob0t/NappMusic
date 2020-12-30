@@ -79,10 +79,12 @@ class RetrieveStoreTests {
             FIELD_NAME,
             wrapper.encodeObject(
                 new Identifiable() {
+                  @Override
                   public int getId() {
                     return referenced.getId();
                   }
 
+                  @Override
                   public void setId(int id) {}
                 }));
     Entidad entity = createEntity(p);
@@ -97,10 +99,12 @@ class RetrieveStoreTests {
     Entidad referenced = registerAndRetrieve(createEntity());
     Identifiable referencedObj =
         new Identifiable() {
+          @Override
           public int getId() {
             return referenced.getId();
           }
 
+          @Override
           public void setId(int id) {}
         };
     List<Identifiable> FIELD_VALUE = Arrays.asList(referencedObj, referencedObj, referencedObj);
