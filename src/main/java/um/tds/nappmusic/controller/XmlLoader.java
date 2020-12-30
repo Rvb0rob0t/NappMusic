@@ -8,13 +8,14 @@ import um.tds.nappmusic.dao.DaoFactory;
 import um.tds.nappmusic.domain.SongCatalog;
 import um.tds.songloader.SongLoader;
 import um.tds.songloader.SongLoaderListener;
+import um.tds.songloader.TdsSongLoader;
 import um.tds.songloader.events.SongsLoadedEvent;
 
 public class XmlLoader implements SongLoaderListener {
   private SongLoader loaderComponent;
 
   public XmlLoader() {
-    loaderComponent = new SongLoader();
+    loaderComponent = new TdsSongLoader();
     loaderComponent.addSongLoaderListener(this);
   }
 
@@ -28,7 +29,7 @@ public class XmlLoader implements SongLoaderListener {
     // Unfortunately, this exception cannot be thrown
     try {
       Dao<um.tds.nappmusic.domain.Song> songDao = DaoFactory.getSingleton().getSongDao();
-      event.getSongs().stream()
+      event.getSongs().getSongs().stream()
           .map(s -> toDomainSong(s))
           .forEach(
               s -> {
