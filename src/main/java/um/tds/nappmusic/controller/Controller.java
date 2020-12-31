@@ -118,9 +118,8 @@ public final class Controller {
 
   public User getCurrentUser() {
     if (currentUser == null) {
-      // TODO Throw exception
+      throw new NullPointerException("There's no user registered");
     }
-
     return currentUser;
   }
 
@@ -173,11 +172,10 @@ public final class Controller {
   }
 
   public Playlist createPlaylist(String name) {
-    // TODO Should create the playlist elsewhere?
     Playlist playlist = new Playlist(name);
     playlistDao.register(playlist);
-    currentUser.addPlaylist(playlist);
-    userDao.update(currentUser);
+    getCurrentUser().addPlaylist(playlist);
+    userDao.update(getCurrentUser());
     return playlist;
   }
 
@@ -198,24 +196,18 @@ public final class Controller {
   }
 
   public List<Playlist> getUserPlaylists() {
-    if (currentUser == null) {
-      // TODO Throw exception
-    }
-    return currentUser.getPlaylists();
+    return getCurrentUser().getPlaylists();
   }
 
   public Playlist getUserRecentlyPlayedSongs() {
-    if (currentUser == null) {
-      // TODO Throw exception
-    }
-    return currentUser.getRecent();
+    return getCurrentUser().getRecent();
   }
 
   public void updatePlaysCounter(Song song) {
     song.incrementNumPlays();
-    currentUser.updateRecent(song);
+    getCurrentUser().updateRecent(song);
     songDao.update(song);
-    playlistDao.update(currentUser.getRecent());
+    playlistDao.update(getCurrentUser().getRecent());
   }
 
   public void loadXml(String xmlPath) {
@@ -228,7 +220,7 @@ public final class Controller {
 
   public void generatePlaylistsPdf(String filePath)
       throws FileNotFoundException, DocumentException {
-    pdfGenerator.userPlaylistsToPdf(currentUser, filePath);
+    pdfGenerator.userPlaylistsToPdf(getCurrentUser(), filePath);
   }
 
   public UserCatalog getUserCatalog() {
