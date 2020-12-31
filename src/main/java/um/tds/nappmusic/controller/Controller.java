@@ -34,7 +34,7 @@ public final class Controller {
 
     this.userCatalog = userCatalog;
     this.songCatalog = songCatalog;
-    xmlLoader = new XmlLoader(songCatalog);
+    xmlLoader = new XmlLoader();
     pdfGenerator = new PdfGenerator();
 
     currentUser = null;
