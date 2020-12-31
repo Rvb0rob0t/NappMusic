@@ -6,7 +6,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import um.tds.nappmusic.app.App;
+import um.tds.nappmusic.app.AppFonts;
 import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.gui.cards.HomePanel;
@@ -38,8 +38,8 @@ import um.tds.uibutton.UiButtonListener;
 public class MainWindow {
   private static final String HOME_CARD_NAME = "Home";
   private static final String SEARCH_CARD_NAME = "Search";
-  private static final String PLAYLISTS_CARD_NAME = "Playlists";
-  private static final String RECENTLY_CARD_NAME = "Recently";
+  private static final String PLAYLISTS_CARD_NAME = "Your playlists";
+  private static final String RECENTLY_CARD_NAME = "Recently Played";
   private static final Color BTN_SONGLOADER_COLOR = Color.RED;
 
   private Controller controller;
@@ -106,26 +106,25 @@ public class MainWindow {
 
     JPanel cardSelectorPanel = new JPanel(new GridLayout(4, 1, 0, 0));
     cardSelectorPanel.setPreferredSize(new Dimension(200, 300));
-    Font cardSelectorBtnsFont = new Font("Arial Black", Font.BOLD, 16);
     int cardSelectorBtnsHAlignment = SwingConstants.LEFT;
 
     btnHome = new JButton(HOME_CARD_NAME);
-    btnHome.setFont(cardSelectorBtnsFont);
+    btnHome.setFont(AppFonts.CARD_SELECTOR_FONT);
     btnHome.setHorizontalAlignment(cardSelectorBtnsHAlignment);
     cardSelectorPanel.add(btnHome);
 
     btnSearch = new JButton(SEARCH_CARD_NAME);
-    btnSearch.setFont(cardSelectorBtnsFont);
+    btnSearch.setFont(AppFonts.CARD_SELECTOR_FONT);
     btnSearch.setHorizontalAlignment(cardSelectorBtnsHAlignment);
     cardSelectorPanel.add(btnSearch);
 
-    btnPlaylists = new JButton("Your playlists");
-    btnPlaylists.setFont(cardSelectorBtnsFont);
+    btnPlaylists = new JButton(PLAYLISTS_CARD_NAME);
+    btnPlaylists.setFont(AppFonts.CARD_SELECTOR_FONT);
     btnPlaylists.setHorizontalAlignment(cardSelectorBtnsHAlignment);
     cardSelectorPanel.add(btnPlaylists);
 
-    btnRecently = new JButton("Recently Played");
-    btnRecently.setFont(cardSelectorBtnsFont);
+    btnRecently = new JButton(RECENTLY_CARD_NAME);
+    btnRecently.setFont(AppFonts.CARD_SELECTOR_FONT);
     btnRecently.setHorizontalAlignment(cardSelectorBtnsHAlignment);
     cardSelectorPanel.add(btnRecently);
 
@@ -151,7 +150,7 @@ public class MainWindow {
 
     logoLabel = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
     logoLabel.setBorder(new EmptyBorder(10, 30, 10, 0));
-    logoLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+    logoLabel.setFont(AppFonts.APP_NAME_FONT);
     topPanel.add(logoLabel, BorderLayout.WEST);
 
     JMenuBar menuBar = new JMenuBar();
