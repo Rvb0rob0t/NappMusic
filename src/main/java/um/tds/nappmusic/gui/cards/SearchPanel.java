@@ -3,6 +3,7 @@ package um.tds.nappmusic.gui.cards;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -39,7 +40,7 @@ public class SearchPanel {
   public SearchPanel(MusicPlayer musicPlayer) {
     mainPanel = new JPanel(new BorderLayout());
 
-    JPanel fieldsPanel = new JPanel();
+    JPanel fieldsPanel = new JPanel(new FlowLayout());
 
     titleField = new JTextField(FIELD_WIDTH);
     JPanel titleFieldPanel = wrapWithTitledBorderPanel(titleField, TITLE_FIELD_NAME);
@@ -50,6 +51,7 @@ public class SearchPanel {
     fieldsPanel.add(authorFieldPanel);
 
     styleComboBox = new JComboBox<String>();
+    styleComboBox.setPrototypeDisplayValue(columnsToPrototypeDisplayValue(FIELD_WIDTH));
     updateStyleList();
     JPanel styleComboBoxPanel = wrapWithTitledBorderPanel(styleComboBox, STYLE_FIELD_NAME);
     fieldsPanel.add(styleComboBoxPanel);
@@ -61,6 +63,12 @@ public class SearchPanel {
 
     scrollPane = new JScrollPane();
     mainPanel.add(scrollPane, BorderLayout.CENTER);
+  }
+
+  private String columnsToPrototypeDisplayValue(int columns) {
+    char[] string = new char[columns];
+    Arrays.fill(string, 'w');
+    return new String(string);
   }
 
   // aux method to set a good-looking titled (title centered) border

@@ -230,7 +230,6 @@ public class MainWindow {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, SEARCH_CARD_NAME);
             searchPanel.revalidate();
-            mainFrame.pack();
           }
         });
 
@@ -262,6 +261,7 @@ public class MainWindow {
                 System.out.println(
                     "You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
                 controller.loadXml(chooser.getSelectedFile().getAbsolutePath());
+                searchPanel.revalidate();
               } else {
                 btnXmlLoader.setTurnedOn(false);
               }
