@@ -63,11 +63,8 @@ public class MusicPlayer {
     JPanel songDataPanel = createSongDataPanel();
     mainPanel.add(songDataPanel, BorderLayout.WEST);
 
-    // TODO playback time slider?
     JPanel buttonsPanel = createButtonsPanel();
     mainPanel.add(buttonsPanel, BorderLayout.CENTER);
-
-    // TODO Volume?
 
     mainPanel.setVisible(false);
 
@@ -148,7 +145,6 @@ public class MusicPlayer {
                 mediaPlayer.pause();
                 break;
               default:
-                // TODO
                 break;
             }
           }

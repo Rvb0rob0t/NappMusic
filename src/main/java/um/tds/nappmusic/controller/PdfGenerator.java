@@ -73,7 +73,8 @@ public class PdfGenerator {
 
   private static void addRowToTable(PdfPTable table, int numColumns, String... columnStrings) {
     if (columnStrings.length != numColumns) {
-      // TODO Shit happens
+      throw new IndexOutOfBoundsException(
+          "number of columns is not equals to the number of strings arguments");
     }
     for (int i = 0; i < columnStrings.length; i++) {
       table.addCell(new PdfPCell(new Paragraph(columnStrings[i])));
