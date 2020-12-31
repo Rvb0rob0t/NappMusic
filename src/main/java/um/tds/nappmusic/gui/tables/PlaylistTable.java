@@ -2,6 +2,7 @@ package um.tds.nappmusic.gui.tables;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Optional;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -16,8 +17,6 @@ import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.notifier.GuiNotifier;
 
 public class PlaylistTable extends MouseAdapter {
-  Controller controller;
-
   private JTable table;
   private MusicPlayer musicPlayer;
 
@@ -25,13 +24,7 @@ public class PlaylistTable extends MouseAdapter {
   private JMenu addToPlaylistMenu;
   private JMenuItem newPlaylistItem;
 
-  public PlaylistTable(
-      Controller controller,
-      MusicPlayer musicPlayer,
-      Playlist playlist,
-      JPopupMenu rightClickMenu) {
-    this.controller = controller;
-
+  public PlaylistTable(MusicPlayer musicPlayer, Playlist playlist, JPopupMenu rightClickMenu) {
     this.table = new JTable(new PlaylistTableModel(playlist));
     this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     this.table.addMouseListener(this);
@@ -47,9 +40,9 @@ public class PlaylistTable extends MouseAdapter {
           if (newPlaylistName != null && newPlaylistName.length() > 0) {
             int row = table.getSelectedRow();
             if (row != -1) {
-              Playlist created = controller.createPlaylist(newPlaylistName);
+              Playlist created = Controller.getSingleton().createPlaylist(newPlaylistName);
               Song song = getDisplayedPlaylist().getSong(row);
-              controller.addToPlaylist(created, song);
+              Controller.getSingleton().addToPlaylist(created, song);
               GuiNotifier.INSTANCE.notifyPlaylistListListeners();
             }
           }
@@ -58,8 +51,17 @@ public class PlaylistTable extends MouseAdapter {
     this.rightClickMenu.add(addToPlaylistMenu);
   }
 
-  public PlaylistTable(Controller controller, MusicPlayer musicPlayer, Playlist playlist) {
-    this(controller, musicPlayer, playlist, new JPopupMenu());
+  public PlaylistTable(MusicPlayer musicPlayer, Playlist playlist) {
+    this(musicPlayer, playlist, new JPopupMenu());
+  }
+
+  public Optional<Song> getSelectedSong() {
+    Playlist playlist = ((PlaylistTableModel) table.getModel()).getPlaylist();
+    int selIdx = table.getSelectedRow();
+    if (selIdx != -1) {
+      return Optional.of(playlist.getSong(selIdx));
+    }
+    return Optional.empty();
   }
 
   public JTable getTable() {
@@ -89,14 +91,14 @@ public class PlaylistTable extends MouseAdapter {
 
   private void addAllPlaylistsAsMenuItems(Song song) {
     addToPlaylistMenu.removeAll();
-    controller
+    Controller.getSingleton()
         .getUserPlaylists()
         .forEach(
             playlist -> {
               JMenuItem playlistItem = new JMenuItem(playlist.getName());
               playlistItem.addActionListener(
                   e -> {
-                    controller.addToPlaylist(playlist, song);
+                    Controller.getSingleton().addToPlaylist(playlist, song);
                     GuiNotifier.INSTANCE.notifyPlaylistListeners(playlist);
                   });
               addToPlaylistMenu.add(playlistItem);

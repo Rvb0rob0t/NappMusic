@@ -93,7 +93,7 @@ public class SearchPanel {
               .searchSongsBy(titleField.getText(), authorField.getText(), style);
     }
     if (playlistTable == null) {
-      playlistTable = new PlaylistTable(Controller.getSingleton(), musicPlayer, playlist);
+      playlistTable = new PlaylistTable(musicPlayer, playlist);
     } else {
       playlistTable.setPlaylist(playlist);
     }
