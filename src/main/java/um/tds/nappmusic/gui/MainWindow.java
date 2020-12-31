@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -209,11 +210,14 @@ public class MainWindow {
     btnXmlLoader.setColor(BTN_SONGLOADER_COLOR);
     btnXmlLoader.setSize(20, 20);
 
-    JPanel rightSidePanel = new JPanel(new BorderLayout(0, 20));
+    JPanel rightSidePanel = new JPanel();
+    rightSidePanel.setLayout(new BoxLayout(rightSidePanel, BoxLayout.Y_AXIS));
     JPanel btnWrapper = new JPanel(new FlowLayout());
     btnWrapper.add(btnXmlLoader);
-    rightSidePanel.add(btnWrapper, BorderLayout.CENTER);
-    rightSidePanel.add(menuBar, BorderLayout.NORTH);
+    rightSidePanel.add(btnWrapper);
+    JPanel menuWrapper = new JPanel(new BorderLayout());
+    menuWrapper.add(menuBar, BorderLayout.NORTH);
+    rightSidePanel.add(menuWrapper);
     topPanel.add(rightSidePanel, BorderLayout.EAST);
   }
 
