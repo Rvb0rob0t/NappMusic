@@ -116,6 +116,11 @@ public final class Controller {
     return false;
   }
 
+  /**
+   * Gets the user who is currently logged in.
+   *
+   * @return the user who is currently logged in
+   */
   public User getCurrentUser() {
     if (currentUser == null) {
       throw new NullPointerException("There's no user registered");
@@ -131,6 +136,15 @@ public final class Controller {
     return songCatalog.getSong(title, author) != null;
   }
 
+  /**
+   * Register a new song.
+   *
+   * @param title Name of the song
+   * @param author Author of the song
+   * @param styles Genres to which the song belongs
+   * @param filePath Path of the song (it can be an HTTP url or a file system path)
+   * @return true if the song was not already registered
+   */
   public boolean registerSong(String title, String author, List<String> styles, String filePath) {
     if (isSongRegistered(title, author)) {
       return false;
@@ -171,6 +185,12 @@ public final class Controller {
     return songCatalog.searchSongsBy(titleSubstring, authorSubstring, style);
   }
 
+  /**
+   * Create a new playlist and add it to the current user list of playlists.
+   *
+   * @param name Name of the playlist
+   * @return the created playlist
+   */
   public Playlist createPlaylist(String name) {
     Playlist playlist = new Playlist(name);
     playlistDao.register(playlist);
@@ -179,6 +199,13 @@ public final class Controller {
     return playlist;
   }
 
+  /**
+   * Add a song to a playlist.
+   *
+   * @param playlist The play to which the song is added
+   * @param song The song added
+   * @return true if the song was added to the playlist
+   */
   public boolean addToPlaylist(Playlist playlist, Song song) {
     if (!playlist.add(song)) {
       return false;
@@ -187,6 +214,13 @@ public final class Controller {
     return true;
   }
 
+  /**
+   * Remove a song from a playlist.
+   *
+   * @param playlist The play to which the song is removed
+   * @param song The song removed
+   * @return true if the playlist contained the specified song
+   */
   public boolean removeFromPlaylist(Playlist playlist, Song song) {
     if (!playlist.remove(song)) {
       return false;
@@ -203,6 +237,11 @@ public final class Controller {
     return getCurrentUser().getRecent();
   }
 
+  /**
+   * Count the reproduction of a song.
+   *
+   * @param song The reproduced song
+   */
   public void updatePlaysCounter(Song song) {
     song.incrementNumPlays();
     getCurrentUser().updateRecent(song);

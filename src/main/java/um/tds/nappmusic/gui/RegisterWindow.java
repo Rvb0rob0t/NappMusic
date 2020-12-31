@@ -357,7 +357,7 @@ public class RegisterWindow {
     birthDateLbl.setForeground(Color.BLACK);
   }
 
-  /** Fixes the size of a component */
+  /** Fixes the size of a component. */
   private void fixedSize(JComponent o, int x, int y) {
     Dimension d = new Dimension(x, y);
     o.setMinimumSize(d);

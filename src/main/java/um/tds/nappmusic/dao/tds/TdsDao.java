@@ -11,7 +11,7 @@ public class TdsDao<T extends Identifiable> implements Dao<T> {
   private BiEncoder<T> encoder;
   private PersistencyWrapper wrapper;
 
-  public TdsDao(PersistencyWrapper wrapper, BiEncoder encoder) {
+  public TdsDao(PersistencyWrapper wrapper, BiEncoder<T> encoder) {
     this.encoder = encoder;
     this.wrapper = wrapper;
   }
@@ -27,7 +27,7 @@ public class TdsDao<T extends Identifiable> implements Dao<T> {
   @Override
   public List<T> getAll() throws DaoException {
     // Streams are a hassle to use when the map method throws
-    List<T> all = new ArrayList();
+    List<T> all = new ArrayList<>();
     for (Entidad entity : wrapper.retrieveEntities(encoder.getEntityName())) {
       all.add(get(entity.getId()));
     }

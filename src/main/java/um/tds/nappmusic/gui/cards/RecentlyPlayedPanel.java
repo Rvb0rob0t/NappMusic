@@ -15,12 +15,6 @@ public class RecentlyPlayedPanel implements PlaylistListener {
   private JScrollPane scrollPane;
   private PlaylistTable songTable;
 
-  /**
-   * .
-   *
-   * @param musicPlayer
-   * @param controller
-   */
   public RecentlyPlayedPanel(MusicPlayer musicPlayer) {
     Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
     GuiNotifier.INSTANCE.addPlaylistListener(recentPlaylist, this);

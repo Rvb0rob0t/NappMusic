@@ -32,12 +32,6 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
 
   private JLabel leftPaneLbl;
 
-  /**
-   * .
-   *
-   * @param musicPlayer
-   * @param controller
-   */
   public PlaylistsPanel(MusicPlayer musicPlayer) {
     this.musicPlayer = musicPlayer;
     mainPanel = new JPanel(new BorderLayout(10, 10));

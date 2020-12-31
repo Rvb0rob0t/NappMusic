@@ -86,7 +86,7 @@ public class MainWindow {
     createCardsPanel();
     mainFrame.getContentPane().add(cardsPanel, BorderLayout.CENTER);
 
-    createTopPanel("Username");
+    createTopPanel();
     mainFrame.getContentPane().add(topPanel, BorderLayout.NORTH);
 
     assignButtonActions();
@@ -145,7 +145,7 @@ public class MainWindow {
   }
 
   /** Create the panel with the user settings. */
-  private void createTopPanel(String username) {
+  private void createTopPanel() {
     topPanel = new JPanel(new BorderLayout());
 
     logoLabel = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
@@ -154,7 +154,7 @@ public class MainWindow {
     topPanel.add(logoLabel, BorderLayout.WEST);
 
     JMenuBar menuBar = new JMenuBar();
-    JMenu menu = new JMenu(username);
+    JMenu menu = new JMenu(Controller.getSingleton().getCurrentUser().getUsername());
     upgradeMenuItem = new JMenuItem("Upgrade");
     upgradeMenuItem.addActionListener(
         event -> {

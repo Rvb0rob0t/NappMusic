@@ -32,11 +32,6 @@ public class SearchPanel {
   private PlaylistTable playlistTable;
   private JScrollPane scrollPane;
 
-  /**
-   * .
-   *
-   * @param controller
-   */
   public SearchPanel(MusicPlayer musicPlayer) {
     mainPanel = new JPanel(new BorderLayout());
 

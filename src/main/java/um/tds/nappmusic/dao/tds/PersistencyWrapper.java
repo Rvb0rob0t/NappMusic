@@ -2,7 +2,6 @@ package um.tds.nappmusic.dao.tds;
 
 import beans.Entidad;
 import beans.Propiedad;
-import java.io.*;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -185,7 +184,7 @@ class PersistencyWrapper {
 
   public List<Song> retrieveSongList(Entidad entity, String field) throws DaoException {
     // Streams are a hassle to use when the map method throws
-    List<Song> list = new ArrayList();
+    List<Song> list = new ArrayList<>();
     for (int id : retrieveIdList(entity, field)) {
       list.add(songDao.get(id));
     }
@@ -193,7 +192,7 @@ class PersistencyWrapper {
   }
 
   public List<Playlist> retrievePlaylistList(Entidad entity, String field) throws DaoException {
-    List<Playlist> list = new ArrayList();
+    List<Playlist> list = new ArrayList<>();
     for (int id : retrieveIdList(entity, field)) {
       list.add(playlistDao.get(id));
     }
@@ -201,7 +200,9 @@ class PersistencyWrapper {
   }
 
   private List<String> splitValueList(String string) {
-    if (string.equals("")) return new ArrayList<String>();
+    if (string.equals("")) {
+      return new ArrayList<String>();
+    }
     return Arrays.asList(string.split(COLLECTIONS_DEL));
   }
 }

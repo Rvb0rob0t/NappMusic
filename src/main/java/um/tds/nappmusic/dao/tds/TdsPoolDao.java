@@ -13,7 +13,7 @@ public class TdsPoolDao<T extends Identifiable> implements Dao<T> {
   private HashMap<Integer, T> pool;
   private PersistencyWrapper wrapper;
 
-  public TdsPoolDao(PersistencyWrapper wrapper, BiEncoder encoder) {
+  public TdsPoolDao(PersistencyWrapper wrapper, BiEncoder<T> encoder) {
     this.encoder = encoder;
     this.pool = new HashMap<Integer, T>();
     this.wrapper = wrapper;
@@ -26,7 +26,10 @@ public class TdsPoolDao<T extends Identifiable> implements Dao<T> {
   @Override
   public T get(int id) throws DaoException {
     T t = pool.get(id);
-    if (t != null) return t;
+    if (t != null) {
+      return t;
+    }
+
     T obj = encoder.newEmptyObj();
     obj.setId(id);
     pool.put(id, obj);
@@ -37,7 +40,7 @@ public class TdsPoolDao<T extends Identifiable> implements Dao<T> {
   @Override
   public List<T> getAll() throws DaoException {
     // Streams are a hassle to use when the map method throws
-    List<T> all = new ArrayList();
+    List<T> all = new ArrayList<>();
     for (Entidad entity : wrapper.retrieveEntities(encoder.getEntityName())) {
       all.add(get(entity.getId()));
     }
@@ -48,7 +51,9 @@ public class TdsPoolDao<T extends Identifiable> implements Dao<T> {
   public void register(T obj) {
     // This step is very important to avoid cycles when registering
     // an entity that triggers more registers
-    if (pool.get(obj.getId()) != null) return;
+    if (pool.get(obj.getId()) != null) {
+      return;
+    }
 
     Entidad entity = encoder.encodeEntity(obj);
     // Registering the entity in the server gives it a unique id
