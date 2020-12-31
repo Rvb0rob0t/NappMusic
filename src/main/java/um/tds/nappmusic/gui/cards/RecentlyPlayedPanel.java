@@ -11,8 +11,6 @@ import um.tds.nappmusic.gui.notifier.PlaylistListener;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 public class RecentlyPlayedPanel implements PlaylistListener {
-  private Controller controller;
-
   private JPanel mainPanel;
   private JScrollPane scrollPane;
   private PlaylistTable songTable;
@@ -23,14 +21,12 @@ public class RecentlyPlayedPanel implements PlaylistListener {
    * @param musicPlayer
    * @param controller
    */
-  public RecentlyPlayedPanel(Controller controller, MusicPlayer musicPlayer) {
-    this.controller = controller;
-
-    Playlist recentPlaylist = controller.getUserRecentlyPlayedSongs();
+  public RecentlyPlayedPanel(MusicPlayer musicPlayer) {
+    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
     GuiNotifier.INSTANCE.addPlaylistListener(recentPlaylist, this);
     mainPanel = new JPanel(new BorderLayout());
     scrollPane = new JScrollPane();
-    songTable = new PlaylistTable(controller, musicPlayer, recentPlaylist);
+    songTable = new PlaylistTable(Controller.getSingleton(), musicPlayer, recentPlaylist);
     scrollPane.setViewportView(songTable.getTable());
     mainPanel.add(scrollPane, BorderLayout.CENTER);
   }
@@ -40,7 +36,7 @@ public class RecentlyPlayedPanel implements PlaylistListener {
   }
 
   public void revalidate() {
-    Playlist recentPlaylist = controller.getUserRecentlyPlayedSongs();
+    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
     songTable.setPlaylist(recentPlaylist);
     scrollPane.setViewportView(songTable.getTable());
     mainPanel.revalidate();

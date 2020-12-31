@@ -1,5 +1,6 @@
 package um.tds.nappmusic.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -9,30 +10,24 @@ import um.tds.nappmusic.dao.DaoFactory;
 
 public class UserCatalog {
   private static UserCatalog singleton = null;
-  private DaoFactory factory;
   private HashMap<String, User> usersByUsername;
 
-  public static UserCatalog getSingleton() {
+  public static UserCatalog getSingleton() throws DaoException {
     if (singleton == null) {
       singleton = new UserCatalog();
     }
     return singleton;
   }
 
-  private UserCatalog() {
-    try {
-      factory = DaoFactory.getSingleton();
-      List<User> usuarios = factory.getUserDao().getAll();
-      usersByUsername =
-          new HashMap<String, User>(
-              usuarios.stream().collect(Collectors.toMap(User::getUsername, Function.identity())));
-    } catch (DaoException e) {
-      e.printStackTrace();
-    }
+  private UserCatalog() throws DaoException {
+    List<User> usuarios = DaoFactory.getSingleton().getUserDao().getAll();
+    usersByUsername =
+        new HashMap<String, User>(
+            usuarios.stream().collect(Collectors.toMap(User::getUsername, Function.identity())));
   }
 
   public List<User> getUsers() throws DaoException {
-    return factory.getUserDao().getAll();
+    return new ArrayList<>(usersByUsername.values());
   }
 
   public User getUser(String username) {

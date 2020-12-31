@@ -13,8 +13,11 @@ import um.tds.songloader.events.SongsLoadedEvent;
 
 public class XmlLoader implements SongLoaderListener {
   private SongLoader loaderComponent;
+  private SongCatalog catalog;
 
-  public XmlLoader() {
+  public XmlLoader(SongCatalog catalog) {
+    this.catalog = catalog;
+
     loaderComponent = new TdsSongLoader();
     loaderComponent.addSongLoaderListener(this);
   }
@@ -25,7 +28,6 @@ public class XmlLoader implements SongLoaderListener {
 
   @Override
   public void notifySongsLoaded(SongsLoadedEvent event) {
-    SongCatalog catalog = SongCatalog.getSingleton();
     // Unfortunately, this exception cannot be thrown
     try {
       Dao<um.tds.nappmusic.domain.Song> songDao = DaoFactory.getSingleton().getSongDao();

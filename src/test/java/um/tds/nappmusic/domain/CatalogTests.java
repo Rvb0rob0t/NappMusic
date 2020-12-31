@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import um.tds.nappmusic.dao.DaoException;
 
 class CatalogTests {
   private SongCatalog songCatalog;
@@ -34,7 +35,13 @@ class CatalogTests {
 
   @BeforeEach
   void fakeData() {
-    songCatalog = SongCatalog.getSingleton();
+    try {
+      songCatalog = SongCatalog.getSingleton();
+    } catch (DaoException e) {
+      e.printStackTrace();
+      fail("Failed SongCatalog initialization");
+      return;
+    }
 
     fakeSongs = new ArrayList();
     fakeSongs.add(

@@ -1,7 +1,13 @@
 package um.tds.nappmusic.app;
 
 import java.awt.EventQueue;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import um.tds.nappmusic.controller.Controller;
+import um.tds.nappmusic.dao.DaoException;
+import um.tds.nappmusic.dao.DaoFactory;
+import um.tds.nappmusic.domain.SongCatalog;
+import um.tds.nappmusic.domain.UserCatalog;
 import um.tds.nappmusic.gui.LoginWindow;
 
 public class App {
@@ -19,6 +25,20 @@ public class App {
     }
     EventQueue.invokeLater(
         () -> {
+          try {
+            UserCatalog userCatalog = UserCatalog.getSingleton();
+            SongCatalog songCatalog = SongCatalog.getSingleton();
+            DaoFactory factory = DaoFactory.getSingleton();
+            Controller.getSingleton(userCatalog, songCatalog, factory);
+          } catch (DaoException e) {
+            JOptionPane.showMessageDialog(
+                null,
+                "Initialization error",
+                "The database is not available at the moment",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+          }
+
           try {
             LoginWindow window = new LoginWindow();
             window.showWindow();

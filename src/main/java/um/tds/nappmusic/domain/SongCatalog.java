@@ -17,27 +17,21 @@ public class SongCatalog {
   private HashMap<String, ArrayList<Song>> songsByAuthor;
   private HashMap<String, Integer> numSongsPerStyle;
 
-  public static SongCatalog getSingleton() {
+  public static SongCatalog getSingleton() throws DaoException {
     if (singleton == null) {
       singleton = new SongCatalog();
     }
     return singleton;
   }
 
-  private SongCatalog() {
-    try {
-      Dao<Song> songDao = DaoFactory.getSingleton().getSongDao();
-      List<Song> songs = songDao.getAll();
-      songList = new LinkedList<Song>();
-      songsByAuthor = new HashMap<String, ArrayList<Song>>();
-      numSongsPerStyle = new HashMap<String, Integer>();
-      for (Song song : songs) {
-        this.addSong(song);
-      }
-    } catch (DaoException e) {
-      // TODO what do we do?
-      e.printStackTrace();
-    }
+  private SongCatalog() throws DaoException {
+    songList = new LinkedList<Song>();
+    songsByAuthor = new HashMap<String, ArrayList<Song>>();
+    numSongsPerStyle = new HashMap<String, Integer>();
+
+    Dao<Song> songDao = DaoFactory.getSingleton().getSongDao();
+    List<Song> songs = songDao.getAll();
+    songs.forEach(song -> this.addSong(song));
   }
 
   public List<Song> getAllSongs() {

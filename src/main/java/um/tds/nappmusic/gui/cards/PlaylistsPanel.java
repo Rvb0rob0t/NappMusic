@@ -19,8 +19,6 @@ import um.tds.nappmusic.gui.notifier.PlaylistListener;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, PlaylistListListener {
-  private Controller controller;
-
   private MusicPlayer musicPlayer;
 
   private JPanel mainPanel;
@@ -40,9 +38,7 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
    * @param musicPlayer
    * @param controller
    */
-  public PlaylistsPanel(Controller controller, MusicPlayer musicPlayer) {
-    this.controller = controller;
-
+  public PlaylistsPanel(MusicPlayer musicPlayer) {
     this.musicPlayer = musicPlayer;
     mainPanel = new JPanel(new BorderLayout(10, 10));
     leftPanel = new JPanel(new BorderLayout(10, 10));
@@ -52,7 +48,7 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
     leftPaneLbl = new JLabel("Your Playlists");
 
     GuiNotifier.INSTANCE.addPlaylistListListener(this);
-    List<Playlist> userPlaylists = controller.getUserPlaylists();
+    List<Playlist> userPlaylists = Controller.getSingleton().getUserPlaylists();
     playlistsList = new PlaylistJList(userPlaylists);
     leftPanelScroll.setViewportView(playlistsList.getList());
     playlistsList.addMouseListener(this);
@@ -73,7 +69,7 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
 
     Playlist playlist = selected.get();
     if (playlistTable == null) {
-      playlistTable = new PlaylistTable(controller, musicPlayer, playlist);
+      playlistTable = new PlaylistTable(Controller.getSingleton(), musicPlayer, playlist);
     } else {
       GuiNotifier.INSTANCE.removePlaylistListener(playlistTable.getDisplayedPlaylist(), this);
       playlistTable.setPlaylist(playlist);
@@ -95,7 +91,7 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
   }
 
   public void revalidate() {
-    playlistsList.setPlaylists(controller.getUserPlaylists());
+    playlistsList.setPlaylists(Controller.getSingleton().getUserPlaylists());
     updateDisplayedList(playlistsList.getSelectedPlaylist());
   }
 

@@ -18,7 +18,6 @@ import javax.swing.border.TitledBorder;
 import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
-import um.tds.nappmusic.dao.DaoException;
 
 public class LoginWindow {
   private static final int FIELDS_WIDTH = 15;
@@ -28,23 +27,11 @@ public class LoginWindow {
   private JTextField nickField;
   private JPasswordField passwordField;
 
-  private Controller controller;
-
   /** Create the window. */
   public LoginWindow() {
     mainFrame = new JFrame(App.NAME + " - Login");
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.getContentPane().setLayout(new BorderLayout());
-
-    try {
-      controller = Controller.getSingleton();
-    } catch (DaoException e) {
-      JOptionPane.showMessageDialog(
-          mainFrame,
-          "Instalación errónea de la aplicación",
-          "Error al inicializar la aplicación",
-          JOptionPane.ERROR_MESSAGE);
-    }
 
     mainFrame.getContentPane().add(createTopPanel(), BorderLayout.NORTH);
     mainFrame.getContentPane().add(createLoginPanel(), BorderLayout.CENTER);
@@ -133,9 +120,10 @@ public class LoginWindow {
     btnLogin.addActionListener(
         event -> {
           boolean login =
-              controller.logIn(nickField.getText(), new String(passwordField.getPassword()));
+              Controller.getSingleton()
+                  .logIn(nickField.getText(), new String(passwordField.getPassword()));
           if (login) {
-            MainWindow window = new MainWindow(controller);
+            MainWindow window = new MainWindow();
             window.setVisible(true);
             mainFrame.dispose();
           } else {
@@ -152,7 +140,7 @@ public class LoginWindow {
     btnRegistro.setVerticalAlignment(SwingConstants.BOTTOM);
     btnRegistro.addActionListener(
         event -> {
-          RegisterWindow registerPopup = new RegisterWindow(mainFrame, controller);
+          RegisterWindow registerPopup = new RegisterWindow(mainFrame);
           registerPopup.showWindow();
         });
 

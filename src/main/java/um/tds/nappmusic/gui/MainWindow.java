@@ -70,14 +70,14 @@ public class MainWindow {
    *
    * @param controller
    */
-  public MainWindow(Controller controller) {
-    this.controller = controller;
+  public MainWindow() {
+    controller = Controller.getSingleton();
 
     mainFrame = new JFrame(App.NAME);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.getContentPane().setLayout(new BorderLayout(10, 0));
 
-    musicPlayer = new MusicPlayer(controller);
+    musicPlayer = new MusicPlayer();
     mainFrame.getContentPane().add(musicPlayer.getPanel(), BorderLayout.SOUTH);
 
     createLeftSidePanel();
@@ -136,11 +136,11 @@ public class MainWindow {
     cardsPanel = new JPanel(new CardLayout());
     homePanel = new HomePanel();
     cardsPanel.add(homePanel.getPanel(), HOME_CARD_NAME);
-    searchPanel = new SearchPanel(controller, musicPlayer);
+    searchPanel = new SearchPanel(musicPlayer);
     cardsPanel.add(searchPanel.getPanel(), SEARCH_CARD_NAME);
-    playlistsPanel = new PlaylistsPanel(controller, musicPlayer);
+    playlistsPanel = new PlaylistsPanel(musicPlayer);
     cardsPanel.add(playlistsPanel.getPanel(), PLAYLISTS_CARD_NAME);
-    recentlyPlayedPanel = new RecentlyPlayedPanel(controller, musicPlayer);
+    recentlyPlayedPanel = new RecentlyPlayedPanel(musicPlayer);
     cardsPanel.add(recentlyPlayedPanel.getPanel(), RECENTLY_CARD_NAME);
   }
 

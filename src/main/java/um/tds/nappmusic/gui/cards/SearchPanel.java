@@ -22,8 +22,6 @@ public class SearchPanel {
   private static final String STYLE_FIELD_NAME = "Género";
   private static final int FIELD_WIDTH = 10;
 
-  private Controller controller;
-
   JPanel mainPanel;
 
   private JTextField titleField;
@@ -38,9 +36,7 @@ public class SearchPanel {
    *
    * @param controller
    */
-  public SearchPanel(Controller controller, MusicPlayer musicPlayer) {
-    this.controller = controller;
-
+  public SearchPanel(MusicPlayer musicPlayer) {
     mainPanel = new JPanel(new BorderLayout());
 
     JPanel fieldsPanel = new JPanel();
@@ -86,12 +82,15 @@ public class SearchPanel {
     Playlist playlist;
     if (style == "") {
       playlist =
-          controller.searchSongsByTitleAndAuthor(titleField.getText(), authorField.getText());
+          Controller.getSingleton()
+              .searchSongsByTitleAndAuthor(titleField.getText(), authorField.getText());
     } else {
-      playlist = controller.searchSongsBy(titleField.getText(), authorField.getText(), style);
+      playlist =
+          Controller.getSingleton()
+              .searchSongsBy(titleField.getText(), authorField.getText(), style);
     }
     if (playlistTable == null) {
-      playlistTable = new PlaylistTable(controller, musicPlayer, playlist);
+      playlistTable = new PlaylistTable(Controller.getSingleton(), musicPlayer, playlist);
     } else {
       playlistTable.setPlaylist(playlist);
     }
@@ -100,7 +99,7 @@ public class SearchPanel {
   }
 
   private void updateStyleList() {
-    List<String> styles = controller.getAllStyles();
+    List<String> styles = Controller.getSingleton().getAllStyles();
     String[] options = new String[styles.size() + 1];
     options[0] = "";
     for (int i = 0; i < styles.size(); i++) {
