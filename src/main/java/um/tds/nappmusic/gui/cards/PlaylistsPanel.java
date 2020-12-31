@@ -6,11 +6,14 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
+import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.lists.PlaylistJList;
 import um.tds.nappmusic.gui.notifier.GuiNotifier;
@@ -63,7 +66,17 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
 
     Playlist playlist = selected.get();
     if (playlistTable == null) {
-      playlistTable = new PlaylistTable(Controller.getSingleton(), musicPlayer, playlist);
+      JPopupMenu rightClickMenu = new JPopupMenu();
+      JMenuItem removeItem = new JMenuItem("Remove from this playlist");
+      rightClickMenu.add(removeItem);
+      playlistTable = new PlaylistTable(musicPlayer, playlist, rightClickMenu);
+      removeItem.addActionListener(
+          event -> {
+            Optional<Song> song = playlistTable.getSelectedSong();
+            if (song.isPresent()) {
+              Controller.getSingleton().removeFromPlaylist(playlist, song.get());
+            }
+          });
     } else {
       GuiNotifier.INSTANCE.removePlaylistListener(playlistTable.getDisplayedPlaylist(), this);
       playlistTable.setPlaylist(playlist);
