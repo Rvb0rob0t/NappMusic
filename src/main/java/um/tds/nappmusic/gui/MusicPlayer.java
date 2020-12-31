@@ -249,4 +249,8 @@ public class MusicPlayer {
   public void play(Playlist playlist) {
     play(playlist, 0);
   }
+
+  public void dispose() {
+    mediaPlayer.dispose();
+  }
 }

@@ -201,7 +201,7 @@ public class MainWindow {
         event -> {
           LoginWindow window = new LoginWindow();
           window.showWindow();
-          mainFrame.dispose();
+          dispose();
         });
     menu.add(logOutMenuItem);
     menuBar.add(menu);
@@ -268,5 +268,10 @@ public class MainWindow {
             }
           }
         });
+  }
+
+  public void dispose() {
+    musicPlayer.dispose();
+    mainFrame.dispose();
   }
 }
