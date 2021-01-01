@@ -3,8 +3,6 @@ package um.tds.nappmusic.domain;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import org.reflections.Reflections;
 import um.tds.nappmusic.dao.Identifiable;
 import um.tds.nappmusic.domain.discounts.NoDiscount;
@@ -200,9 +198,8 @@ public class User implements Identifiable {
   /** Sets the best discount among all possible. */
   public void setBestDiscount() {
     Reflections reflections = new Reflections(Discount.DISCOUNTS_PACKAGE);
-    Set<Class<? extends Discount>> discountClasses = reflections.getSubTypesOf(Discount.class);
-    Optional<Discount> bestDiscount =
-        discountClasses.stream()
+    this.discount =
+        reflections.getSubTypesOf(Discount.class).stream()
             .map(
                 discountClass -> {
                   try {
@@ -213,13 +210,7 @@ public class User implements Identifiable {
                 })
             .filter(discount -> discount.isApplicable(this))
             .min(
-                (discount1, discount2) ->
-                    (discount1.calculatePrice() - discount2.calculatePrice()));
-
-    if (bestDiscount.isPresent()) {
-      this.discount = bestDiscount.get();
-    } else {
-      this.discount = new NoDiscount();
-    }
+                (discount1, discount2) -> (discount1.calculatePrice() - discount2.calculatePrice()))
+            .orElse(new NoDiscount());
   }
 }

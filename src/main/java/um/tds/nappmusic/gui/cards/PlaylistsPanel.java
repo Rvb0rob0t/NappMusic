@@ -13,7 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
-import um.tds.nappmusic.domain.Song;
 import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.lists.PlaylistJList;
 import um.tds.nappmusic.gui.notifier.GuiNotifier;
@@ -71,12 +70,10 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
       rightClickMenu.add(removeItem);
       playlistTable = new PlaylistTable(musicPlayer, playlist, rightClickMenu);
       removeItem.addActionListener(
-          event -> {
-            Optional<Song> song = playlistTable.getSelectedSong();
-            if (song.isPresent()) {
-              Controller.getSingleton().removeFromPlaylist(playlist, song.get());
-            }
-          });
+          event ->
+              playlistTable
+                  .getSelectedSong()
+                  .ifPresent(song -> Controller.getSingleton().removeFromPlaylist(playlist, song)));
     } else {
       GuiNotifier.INSTANCE.removePlaylistListener(playlistTable.getDisplayedPlaylist(), this);
       playlistTable.setPlaylist(playlist);
