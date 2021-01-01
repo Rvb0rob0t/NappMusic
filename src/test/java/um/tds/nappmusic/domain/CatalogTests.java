@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -15,8 +15,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import um.tds.nappmusic.dao.DaoException;
 
 class CatalogTests {
-  private SongCatalog songCatalog;
-  private List<Song> fakeSongs;
+  private static SongCatalog songCatalog;
+  private static List<Song> fakeSongs;
 
   private void assertCollectionIsContained(List<Song> lhs, List<Song> rhs) {
     for (Song lsong : lhs) {
@@ -32,8 +32,8 @@ class CatalogTests {
     }
   }
 
-  @BeforeEach
-  void fakeData() {
+  @BeforeAll
+  static void fakeData() {
     try {
       // These tests assume that the database is empty because of the singleton
       songCatalog = SongCatalog.getSingleton();
@@ -124,8 +124,8 @@ class CatalogTests {
     fakeSongs.forEach(s -> songCatalog.addSong(s));
   }
 
-  @AfterEach
-  void removeFakeData() {
+  @AfterAll
+  static void removeFakeData() {
     fakeSongs.forEach(s -> songCatalog.removeSong(s));
   }
 

@@ -3,12 +3,11 @@ package um.tds.nappmusic.dao.tds;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.Identifiable;
@@ -18,7 +17,7 @@ import um.tds.nappmusic.domain.User;
 import um.tds.nappmusic.domain.discounts.NoDiscount;
 
 class DaoTests {
-  private DaoFactory factory;
+  private static DaoFactory factory;
 
   void assertListsIdsMatch(List<? extends Identifiable> lhs, List<? extends Identifiable> rhs) {
     assertEquals(lhs.size(), rhs.size());
@@ -27,8 +26,8 @@ class DaoTests {
     }
   }
 
-  @BeforeEach
-  void initAll() {
+  @BeforeAll
+  static void initAll() {
     factory = new DaoFactory();
   }
 
@@ -46,7 +45,7 @@ class DaoTests {
     user.setPlaylists(new ArrayList<Playlist>());
     user.setRecent(new Playlist("Recent"));
 
-    TdsDao<User> userDao = (TdsDao) factory.getUserDao();
+    TdsDao<User> userDao = (TdsDao<User>) factory.getUserDao();
     userDao.register(user);
     try {
       User retrieved = userDao.get(user.getId());
@@ -76,7 +75,7 @@ class DaoTests {
     song.setFilePath("/home/useredsa/dotfiles/.config/kak/kakrc");
     song.setNumPlays(10);
 
-    TdsPoolDao<Song> songDao = (TdsPoolDao) factory.getSongDao();
+    TdsPoolDao<Song> songDao = (TdsPoolDao<Song>) factory.getSongDao();
     songDao.register(song);
     // The object is now in the pool, clear it
     // to try retrieving it from the database
@@ -109,7 +108,7 @@ class DaoTests {
     playlist.setName("Fall Out Boy");
     playlist.setSongs(Arrays.asList(song));
 
-    TdsDao<Playlist> playlistDao = (TdsDao) factory.getPlaylistDao();
+    TdsDao<Playlist> playlistDao = (TdsDao<Playlist>) factory.getPlaylistDao();
     playlistDao.register(playlist);
     try {
       Playlist retrieved = playlistDao.get(playlist.getId());
@@ -122,7 +121,7 @@ class DaoTests {
       assertListsIdsMatch(playlist.getSongs(), retrieved.getSongs());
 
       playlistDao.delete(playlist);
-      TdsPoolDao<Song> songDao = (TdsPoolDao) factory.getSongDao();
+      TdsPoolDao<Song> songDao = (TdsPoolDao<Song>) factory.getSongDao();
       songDao.delete(song);
     } catch (DaoException e) {
       e.printStackTrace();
@@ -144,19 +143,16 @@ class DaoTests {
     user.setPlaylists(new ArrayList<Playlist>());
     user.setRecent(new Playlist("Recent"));
 
-    TdsDao<User> userDao = (TdsDao) factory.getUserDao();
+    TdsDao<User> userDao = (TdsDao<User>) factory.getUserDao();
     userDao.register(user);
     user.addPlaylist(new Playlist("Roberto"));
-    TdsPoolDao<Song> songDao = (TdsPoolDao) factory.getSongDao();
-    TdsDao<Playlist> playlistDao = (TdsDao) factory.getPlaylistDao();
+    TdsPoolDao<Song> songDao = (TdsPoolDao<Song>) factory.getSongDao();
     // The object is now in the pool, clear it
     // to try retrieving it from the database
     songDao.clear();
     userDao.update(user);
     try {
       User retrieved = userDao.get(user.getId());
-
-      System.err.println("Poh favoh" + user.getPlaylists() + retrieved.getPlaylists());
       assertEquals(user.getName(), retrieved.getName());
       userDao.delete(user);
     } catch (DaoException e) {

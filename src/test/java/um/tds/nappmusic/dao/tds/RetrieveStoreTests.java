@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import beans.Entidad;
 import beans.Propiedad;
-import java.io.*;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import um.tds.nappmusic.dao.Identifiable;
 
@@ -16,7 +15,7 @@ class RetrieveStoreTests {
   private static final String ENTITY_NAME = "Entity";
   private static final String FIELD_NAME = "field";
 
-  private PersistencyWrapper wrapper;
+  private static PersistencyWrapper wrapper;
 
   Entidad createEntity() {
     Entidad entity = new Entidad();
@@ -40,8 +39,8 @@ class RetrieveStoreTests {
     return retrieved;
   }
 
-  @BeforeEach
-  void initAll() {
+  @BeforeAll
+  static void initAll() {
     wrapper = new PersistencyWrapper();
   }
 
