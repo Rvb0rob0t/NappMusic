@@ -2,7 +2,6 @@ package um.tds.nappmusic.domain;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +35,7 @@ class CatalogTests {
   @BeforeEach
   void fakeData() {
     try {
+      // These tests assume that the database is empty because of the singleton
       songCatalog = SongCatalog.getSingleton();
     } catch (DaoException e) {
       e.printStackTrace();
@@ -43,7 +43,7 @@ class CatalogTests {
       return;
     }
 
-    fakeSongs = new ArrayList();
+    fakeSongs = new ArrayList<>();
     fakeSongs.add(
         new Song(
             "Title0",
@@ -121,7 +121,6 @@ class CatalogTests {
             Arrays.asList("Style10", "Style0", "Style1"),
             "/home/useredsa/Music/song10.mp4",
             100));
-
     fakeSongs.forEach(s -> songCatalog.addSong(s));
   }
 

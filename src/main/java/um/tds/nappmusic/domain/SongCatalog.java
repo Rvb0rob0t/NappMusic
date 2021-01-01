@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.DaoFactory;
 
@@ -29,9 +28,7 @@ public class SongCatalog {
     songsByAuthor = new HashMap<String, ArrayList<Song>>();
     numSongsPerStyle = new HashMap<String, Integer>();
 
-    Dao<Song> songDao = DaoFactory.getSingleton().getSongDao();
-    List<Song> songs = songDao.getAll();
-    songs.forEach(song -> this.addSong(song));
+    DaoFactory.getSingleton().getSongDao().getAll().forEach(song -> this.addSong(song));
   }
 
   public List<Song> getAllSongs() {
