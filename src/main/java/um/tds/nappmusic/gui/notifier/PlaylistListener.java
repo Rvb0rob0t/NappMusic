@@ -1,5 +1,7 @@
 package um.tds.nappmusic.gui.notifier;
 
-public interface PlaylistListener {
+import java.util.EventListener;
+
+public interface PlaylistListener extends EventListener {
   public void playlistModified();
 }
