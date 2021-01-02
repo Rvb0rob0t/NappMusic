@@ -32,8 +32,8 @@ public class PlaylistTable extends MouseAdapter {
     this.musicPlayer = musicPlayer;
 
     this.rightClickMenu = rightClickMenu;
-    this.addToPlaylistMenu = new JMenu("Añadir a playlist");
-    this.newPlaylistItem = new JMenuItem("Nueva playlist");
+    this.addToPlaylistMenu = new JMenu("Add to playlist");
+    this.newPlaylistItem = new JMenuItem("New playlist");
     this.newPlaylistItem.addActionListener(
         e -> {
           String newPlaylistName = JOptionPane.showInputDialog("Name of the new playlist");

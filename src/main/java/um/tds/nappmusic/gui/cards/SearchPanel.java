@@ -18,9 +18,9 @@ import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 public class SearchPanel {
-  private static final String TITLE_FIELD_NAME = "Título";
-  private static final String AUTHOR_FIELD_NAME = "Intérprete";
-  private static final String STYLE_FIELD_NAME = "Género";
+  private static final String TITLE_FIELD_NAME = "Title";
+  private static final String AUTHOR_FIELD_NAME = "Artist";
+  private static final String STYLE_FIELD_NAME = "Genre";
   private static final int FIELD_WIDTH = 10;
 
   JPanel mainPanel;
@@ -51,7 +51,7 @@ public class SearchPanel {
     JPanel styleComboBoxPanel = wrapWithTitledBorderPanel(styleComboBox, STYLE_FIELD_NAME);
     fieldsPanel.add(styleComboBoxPanel);
 
-    JButton searchButton = new JButton("Buscar");
+    JButton searchButton = new JButton("Search");
     searchButton.addActionListener(e -> changeTable(musicPlayer));
     fieldsPanel.add(searchButton);
     mainPanel.add(fieldsPanel, BorderLayout.NORTH);

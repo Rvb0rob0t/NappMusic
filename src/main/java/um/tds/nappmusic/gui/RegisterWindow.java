@@ -133,7 +133,7 @@ public class RegisterWindow {
   }
 
   private JPanel initUserEntry() {
-    usernameLbl = new JLabel("Usuario: ", JLabel.RIGHT);
+    usernameLbl = new JLabel("Username: ", JLabel.RIGHT);
     usernameTxt = new JTextField();
     usernameErrLbl = new JLabel("", JLabel.CENTER);
     fixedSize(usernameLbl, 75, 20);

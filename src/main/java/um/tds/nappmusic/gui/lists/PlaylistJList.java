@@ -21,7 +21,7 @@ public class PlaylistJList {
     this.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     this.rightClickMenu = rightClickMenu;
-    // this.addToPlaylistMenu = new JMenu("Añadir a playlist");
+    // this.addToPlaylistMenu = new JMenu("Add to playlist");
     // this.rightClickMenu.add(addToPlaylistMenu);
   }
 

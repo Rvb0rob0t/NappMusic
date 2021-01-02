@@ -127,8 +127,8 @@ public class LoginWindow {
           } else {
             JOptionPane.showMessageDialog(
                 mainFrame,
-                "Nombre de usuario o contraseña no válido",
-                "Error",
+                "Incorrect username or password",
+                "Try again",
                 JOptionPane.ERROR_MESSAGE);
           }
         });
