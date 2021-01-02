@@ -65,6 +65,10 @@ class PersistencyWrapper {
     servPersistencia.borrarEntidad(entity);
   }
 
+  public void updateEntity(Entidad entity) {
+    servPersistencia.modificarEntidad(entity);
+  }
+
   public void updateProperty(Entidad entity, String field, String value) {
     for (Propiedad p : entity.getPropiedades()) {
       if (p.getNombre().equals(field)) {

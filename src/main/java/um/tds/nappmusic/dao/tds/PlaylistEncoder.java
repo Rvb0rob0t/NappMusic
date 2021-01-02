@@ -35,9 +35,7 @@ public final class PlaylistEncoder implements BiEncoder<Playlist> {
   }
 
   @Override
-  public Entidad encodeEntity(Playlist playlist) {
-    Entidad entity = new Entidad();
-    entity.setNombre(ENTITY_FIELD);
+  public Entidad encodeIntoEntity(Playlist playlist, Entidad entity) {
     entity.setPropiedades(
         new ArrayList<Propiedad>(
             Arrays.asList(

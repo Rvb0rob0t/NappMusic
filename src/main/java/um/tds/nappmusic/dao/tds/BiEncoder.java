@@ -11,7 +11,14 @@ public interface BiEncoder<T extends Identifiable> {
 
   public void initObjFromEntity(T obj, Entidad entity) throws DaoException;
 
-  public Entidad encodeEntity(T obj);
+  default public Entidad encodeEntity(T obj) {
+    Entidad entity = new Entidad();
+    entity.setNombre(getEntityName());
+    encodeIntoEntity(obj, entity);
+    return entity;
+  }
+
+  public Entidad encodeIntoEntity(T obj, Entidad entity);
 
   public void updateEntity(Entidad entity, T obj);
 }

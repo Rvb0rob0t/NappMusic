@@ -55,9 +55,7 @@ public final class UserEncoder implements BiEncoder<User> {
   }
 
   @Override
-  public Entidad encodeEntity(User user) {
-    Entidad entity = new Entidad();
-    entity.setNombre(ENTITY_FIELD);
+  public Entidad encodeIntoEntity(User user, Entidad entity) {
     entity.setPropiedades(
         new ArrayList<Propiedad>(
             Arrays.asList(

@@ -50,19 +50,26 @@ public class TdsPoolDao<T extends Identifiable> implements Dao<T> {
     // an entity that triggers more registers
     if (pool.get(obj.getId()) != null) return;
 
-    Entidad entity = encoder.encodeEntity(obj);
+    // We include our object into the pool to avoid cycles
+    // We first need to register the entity without fields
+    Entidad emptyEntity = new Entidad();
+    emptyEntity.setNombre(encoder.getEntityName());
     // Registering the entity in the server gives it a unique id
-    wrapper.registerEntity(entity);
-    obj.setId(entity.getId());
+    wrapper.registerEntity(emptyEntity);
+    obj.setId(emptyEntity.getId());
     pool.put(obj.getId(), obj);
+
+    encoder.encodeIntoEntity(obj, emptyEntity);
+    // Now the entity is not empty
+    wrapper.updateEntity(emptyEntity);
   }
 
   @Override
   public void update(T obj) {
     Entidad entity = wrapper.retrieveEntity(obj.getId());
-    encoder.updateEntity(entity, obj);
     // We update the pool in case the object is not the same as the stored
     pool.put(obj.getId(), obj);
+    encoder.updateEntity(entity, obj);
   }
 
   @Override

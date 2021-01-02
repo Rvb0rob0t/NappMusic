@@ -40,9 +40,7 @@ public final class SongEncoder implements BiEncoder<Song> {
   }
 
   @Override
-  public Entidad encodeEntity(Song song) {
-    Entidad entity = new Entidad();
-    entity.setNombre(ENTITY_FIELD);
+  public Entidad encodeIntoEntity(Song song, Entidad entity) {
     entity.setPropiedades(
         new ArrayList<Propiedad>(
             Arrays.asList(
