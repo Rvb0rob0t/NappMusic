@@ -28,6 +28,7 @@ import um.tds.nappmusic.app.AppFonts;
 import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.gui.cards.HomePanel;
+import um.tds.nappmusic.gui.cards.MostPlayedPanel;
 import um.tds.nappmusic.gui.cards.PlaylistsPanel;
 import um.tds.nappmusic.gui.cards.RecentlyPlayedPanel;
 import um.tds.nappmusic.gui.cards.SearchPanel;
@@ -39,38 +40,36 @@ public class MainWindow {
   private static final String HOME_CARD_NAME = "Home";
   private static final String SEARCH_CARD_NAME = "Search";
   private static final String PLAYLISTS_CARD_NAME = "Your playlists";
-  private static final String RECENTLY_CARD_NAME = "Recently Played";
+  private static final String RECENTLY_CARD_NAME = "Recently played";
+  private static final String MOST_PLAYED_CARD_NAME = "Most played";
+  private static final int CARD_SELECTOR_BUTTON_H_ALIGNMENT = SwingConstants.LEFT;
   private static final Color BTN_SONGLOADER_COLOR = Color.RED;
 
   private Controller controller;
-
   private MusicPlayer musicPlayer;
-
   private JFrame mainFrame;
-  private JPanel topPanel;
-  private JLabel logoLabel;
+
   private JMenuItem upgradeMenuItem;
   private JMenuItem generatePdfMenuItem;
   private JMenuItem logOutMenuItem;
-  private JPanel cardsPanel;
-  private JPanel leftSidePanel;
+  private UiButton btnXmlLoader;
 
+  private JPanel cardsPanel;
+
+  private JPanel cardSelectorPanel;
   private JButton btnHome;
   private JButton btnSearch;
   private JButton btnPlaylists;
   private JButton btnRecently;
-  private UiButton btnXmlLoader;
+  private JButton btnMostPlayed;
 
   private HomePanel homePanel;
   private SearchPanel searchPanel;
   private PlaylistsPanel playlistsPanel;
   private RecentlyPlayedPanel recentlyPlayedPanel;
+  private MostPlayedPanel mostPlayedPanel;
 
-  /**
-   * Create the application.
-   *
-   * @param controller
-   */
+  /** Create the application. */
   public MainWindow() {
     controller = Controller.getSingleton();
 
@@ -81,14 +80,11 @@ public class MainWindow {
     musicPlayer = new MusicPlayer();
     mainFrame.getContentPane().add(musicPlayer.getPanel(), BorderLayout.SOUTH);
 
-    createLeftSidePanel();
-    mainFrame.getContentPane().add(leftSidePanel, BorderLayout.WEST);
+    mainFrame.getContentPane().add(createLeftSidePanel(), BorderLayout.WEST);
 
-    createCardsPanel();
-    mainFrame.getContentPane().add(cardsPanel, BorderLayout.CENTER);
+    mainFrame.getContentPane().add(createCardsPanel(), BorderLayout.CENTER);
 
-    createTopPanel();
-    mainFrame.getContentPane().add(topPanel, BorderLayout.NORTH);
+    mainFrame.getContentPane().add(createTopPanel(), BorderLayout.NORTH);
 
     assignButtonActions();
 
@@ -101,54 +97,57 @@ public class MainWindow {
   }
 
   /** Create the menu selector panel. */
-  private void createLeftSidePanel() {
-    leftSidePanel = new JPanel(new BorderLayout());
+  private JPanel createLeftSidePanel() {
+    JPanel leftSidePanel = new JPanel(new BorderLayout());
 
-    JPanel cardSelectorPanel = new JPanel(new GridLayout(4, 1, 0, 0));
+    cardSelectorPanel = new JPanel(new GridLayout(0, 1, 0, 0));
     cardSelectorPanel.setPreferredSize(new Dimension(200, 300));
-    int cardSelectorBtnsHAlignment = SwingConstants.LEFT;
 
-    btnHome = new JButton(HOME_CARD_NAME);
-    btnHome.setFont(AppFonts.CARD_SELECTOR_FONT);
-    btnHome.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnHome);
-
-    btnSearch = new JButton(SEARCH_CARD_NAME);
-    btnSearch.setFont(AppFonts.CARD_SELECTOR_FONT);
-    btnSearch.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnSearch);
-
-    btnPlaylists = new JButton(PLAYLISTS_CARD_NAME);
-    btnPlaylists.setFont(AppFonts.CARD_SELECTOR_FONT);
-    btnPlaylists.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnPlaylists);
-
-    btnRecently = new JButton(RECENTLY_CARD_NAME);
-    btnRecently.setFont(AppFonts.CARD_SELECTOR_FONT);
-    btnRecently.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnRecently);
+    btnHome = addCardSelectorButton(HOME_CARD_NAME);
+    btnSearch = addCardSelectorButton(SEARCH_CARD_NAME);
+    btnPlaylists = addCardSelectorButton(PLAYLISTS_CARD_NAME);
+    btnRecently = addCardSelectorButton(RECENTLY_CARD_NAME);
+    btnMostPlayed = addCardSelectorButton(MOST_PLAYED_CARD_NAME);
 
     leftSidePanel.add(cardSelectorPanel, BorderLayout.NORTH);
+    return leftSidePanel;
+  }
+
+  private JButton addCardSelectorButton(String name) {
+    JButton button = new JButton(name);
+    button.setFont(AppFonts.CARD_SELECTOR_FONT);
+    button.setHorizontalAlignment(CARD_SELECTOR_BUTTON_H_ALIGNMENT);
+    cardSelectorPanel.add(button);
+    return button;
   }
 
   /** Create the changing panel. */
-  private void createCardsPanel() {
+  private JPanel createCardsPanel() {
     cardsPanel = new JPanel(new CardLayout());
+
     homePanel = new HomePanel();
     cardsPanel.add(homePanel.getPanel(), HOME_CARD_NAME);
+
     searchPanel = new SearchPanel(musicPlayer);
     cardsPanel.add(searchPanel.getPanel(), SEARCH_CARD_NAME);
+
     playlistsPanel = new PlaylistsPanel(musicPlayer);
     cardsPanel.add(playlistsPanel.getPanel(), PLAYLISTS_CARD_NAME);
+
     recentlyPlayedPanel = new RecentlyPlayedPanel(musicPlayer);
     cardsPanel.add(recentlyPlayedPanel.getPanel(), RECENTLY_CARD_NAME);
+
+    mostPlayedPanel = new MostPlayedPanel(musicPlayer);
+    cardsPanel.add(mostPlayedPanel.getPanel(), MOST_PLAYED_CARD_NAME);
+
+    return cardsPanel;
   }
 
   /** Create the panel with the user settings. */
-  private void createTopPanel() {
-    topPanel = new JPanel(new BorderLayout());
+  private JPanel createTopPanel() {
+    JPanel topPanel = new JPanel(new BorderLayout());
 
-    logoLabel = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
+    JLabel logoLabel = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
     logoLabel.setBorder(new EmptyBorder(10, 30, 10, 0));
     logoLabel.setFont(AppFonts.APP_NAME_FONT);
     topPanel.add(logoLabel, BorderLayout.WEST);
@@ -218,6 +217,7 @@ public class MainWindow {
     menuWrapper.add(menuBar, BorderLayout.NORTH);
     rightSidePanel.add(menuWrapper);
     topPanel.add(rightSidePanel, BorderLayout.EAST);
+    return topPanel;
   }
 
   public void assignButtonActions() {
@@ -252,6 +252,22 @@ public class MainWindow {
           }
         });
 
+    btnMostPlayed.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            if (Controller.getSingleton().getCurrentUser().isPremium()) {
+              ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, MOST_PLAYED_CARD_NAME);
+              mostPlayedPanel.revalidate();
+            } else {
+              JOptionPane.showMessageDialog(
+                  mainFrame,
+                  "This option is only available when you're premium",
+                  "You shall not pass",
+                  JOptionPane.INFORMATION_MESSAGE);
+            }
+          }
+        });
+
     btnXmlLoader.addUiButtonListener(
         new UiButtonListener() {
           public void notifyButtonEvent(UiButtonEvent e) {
@@ -261,8 +277,6 @@ public class MainWindow {
               chooser.setFileFilter(filter);
               int returnVal = chooser.showOpenDialog(mainFrame);
               if (returnVal == JFileChooser.APPROVE_OPTION) {
-                System.out.println(
-                    "You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
                 controller.loadXml(chooser.getSelectedFile().getAbsolutePath());
                 searchPanel.revalidate();
               } else {

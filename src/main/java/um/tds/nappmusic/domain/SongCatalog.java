@@ -46,7 +46,6 @@ public class SongCatalog {
   public Song getSong(String title, String author) {
     ArrayList<Song> songs = songsByAuthor.get(author);
     if (songs == null) {
-      System.out.println(author + ": " + title);
       return null;
     }
     Optional<Song> result = songs.stream().filter(s -> s.getTitle().equals(title)).findAny();

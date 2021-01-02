@@ -257,16 +257,12 @@ public final class Controller {
     user.setPremium(true);
   }
 
+  public Playlist getMostPlayedSongs() {
+    return songCatalog.getMostPlayedSongs();
+  }
+
   public void generatePlaylistsPdf(String filePath)
       throws FileNotFoundException, DocumentException {
     pdfGenerator.userPlaylistsToPdf(getCurrentUser(), filePath);
-  }
-
-  public UserCatalog getUserCatalog() {
-    return userCatalog;
-  }
-
-  public SongCatalog getSongCatalog() {
-    return songCatalog;
   }
 }

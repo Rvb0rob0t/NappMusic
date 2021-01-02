@@ -20,6 +20,9 @@ public enum GuiNotifier {
   /** Notifies to all the listeners that a playlist has been modified. */
   public void notifyPlaylistListeners(Playlist playlist) {
     Set<PlaylistListener> listeners = playlistListeners.get(playlist.getName());
+    if (listeners == null) {
+      return;
+    }
     for (PlaylistListener listener : listeners) {
       listener.playlistModified();
     }

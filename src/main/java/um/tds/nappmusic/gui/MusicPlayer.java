@@ -212,7 +212,6 @@ public class MusicPlayer {
 
   private File pathToFile(String pathName) throws IOException {
     if (pathName.startsWith("http")) {
-      System.out.println("Vamo a recoger este ficherito");
       URL url = new URL(pathName);
       Path mp3 = Files.createTempFile("now-playing", ".mp3");
       try (InputStream stream = url.openStream()) {
@@ -249,6 +248,8 @@ public class MusicPlayer {
   }
 
   public void dispose() {
-    mediaPlayer.dispose();
+    if (mediaPlayer != null) {
+      mediaPlayer.dispose();
+    }
   }
 }
