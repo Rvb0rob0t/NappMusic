@@ -70,10 +70,12 @@ public class PlaylistsPanel extends MouseAdapter implements PlaylistListener, Pl
       rightClickMenu.add(removeItem);
       playlistTable = new PlaylistTable(musicPlayer, playlist, rightClickMenu);
       removeItem.addActionListener(
-          event ->
-              playlistTable
-                  .getSelectedSong()
-                  .ifPresent(song -> Controller.getSingleton().removeFromPlaylist(playlist, song)));
+          event -> {
+            playlistTable
+                .getSelectedSong()
+                .ifPresent(song -> Controller.getSingleton().removeFromPlaylist(playlist, song));
+            GuiNotifier.INSTANCE.notifyPlaylistListeners(playlist);
+          });
     } else {
       GuiNotifier.INSTANCE.removePlaylistListener(playlistTable.getDisplayedPlaylist(), this);
       playlistTable.setPlaylist(playlist);
