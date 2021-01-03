@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -57,7 +58,7 @@ public class RegisterWindow {
   private JLabel passwordErrLbl;
 
   public RegisterWindow(Frame owner) {
-    dialogWin = new JDialog(owner, App.NAME + " - Register");
+    dialogWin = new JDialog(owner, App.NAME + " - Register", ModalityType.APPLICATION_MODAL);
     dialogWin.setLocationRelativeTo(null);
     dialogWin.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialogWin.getContentPane().setLayout(new BorderLayout());
