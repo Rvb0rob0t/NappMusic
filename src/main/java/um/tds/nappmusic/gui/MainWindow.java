@@ -161,7 +161,7 @@ public class MainWindow {
               JOptionPane.showConfirmDialog(
                   mainFrame,
                   "Would you like upgrade to premium for only "
-                      + controller.getCurrentUser().getDiscount().calculatePrice()
+                      + controller.getCurrentUser().calculatePremiumPrice()
                       + " gold coins?");
           switch (result) {
             case JOptionPane.YES_OPTION:

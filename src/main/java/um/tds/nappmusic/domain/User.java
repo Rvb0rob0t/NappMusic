@@ -138,8 +138,8 @@ public class User implements Identifiable {
     return premium;
   }
 
-  public Discount getDiscount() {
-    return discount;
+  public int calculatePremiumPrice() {
+    return discount.calculatePrice();
   }
 
   public List<Playlist> getPlaylists() {

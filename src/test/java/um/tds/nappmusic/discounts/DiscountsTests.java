@@ -17,11 +17,11 @@ public class DiscountsTests {
     user.setBestDiscount();
 
     Below25Discount below25Discount = new Below25Discount();
-    assertTrue(below25Discount.calculatePrice() >= user.getDiscount().calculatePrice());
+    assertTrue(below25Discount.calculatePrice() >= user.calculatePremiumPrice());
 
     OctoberDiscount octoberDiscount = new OctoberDiscount();
     if (LocalDate.now().getMonth() == Month.OCTOBER) {
-      assertTrue(octoberDiscount.calculatePrice() >= user.getDiscount().calculatePrice());
+      assertTrue(octoberDiscount.calculatePrice() >= user.calculatePremiumPrice());
     }
   }
 }
