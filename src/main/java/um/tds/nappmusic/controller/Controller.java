@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import um.tds.nappmusic.dao.Dao;
-import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.DaoFactory;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.domain.Song;
@@ -28,14 +27,13 @@ public final class Controller {
 
   private User currentUser;
 
-  private Controller() throws DaoException {
-    DaoFactory factory = DaoFactory.getSingleton();
+  private Controller(UserCatalog userCatalog, SongCatalog songCatalog, DaoFactory factory) {
     userDao = factory.getUserDao();
     songDao = factory.getSongDao();
     playlistDao = factory.getPlaylistDao();
 
-    userCatalog = UserCatalog.getSingleton();
-    songCatalog = SongCatalog.getSingleton();
+    this.userCatalog = userCatalog;
+    this.songCatalog = songCatalog;
     xmlLoader = new XmlLoader();
     pdfGenerator = new PdfGenerator();
 
@@ -43,14 +41,29 @@ public final class Controller {
   }
 
   /**
+   * Get the only instance of Controller and initialize it if it's not.
+   *
+   * @param userCatalog the userCatalog of the app
+   * @param songCatalog the songCatalog of the app
+   * @param factory the factory
+   * @return
+   */
+  public static Controller getSingleton(
+      UserCatalog userCatalog, SongCatalog songCatalog, DaoFactory factory) {
+    if (singleton == null) {
+      singleton = new Controller(userCatalog, songCatalog, factory);
+    }
+    return singleton;
+  }
+
+  /**
    * Get the only instance of Controller.
    *
    * @return The instance of Controller class
-   * @throws DaoException if the DAO system couldn't be initializated
    */
-  public static Controller getSingleton() throws DaoException {
+  public static Controller getSingleton() {
     if (singleton == null) {
-      singleton = new Controller();
+      throw new NullPointerException("There's no singleton built.");
     }
     return singleton;
   }
@@ -91,7 +104,7 @@ public final class Controller {
    * @return true if exists a user with username username and password password and false otherwise
    */
   public boolean logIn(String username, String password) {
-    User user = UserCatalog.getSingleton().getUser(username);
+    User user = userCatalog.getUser(username);
     if (user != null && user.getPassword().equals(password)) {
       this.currentUser = user;
 
@@ -103,11 +116,15 @@ public final class Controller {
     return false;
   }
 
+  /**
+   * Gets the user who is currently logged in.
+   *
+   * @return the user who is currently logged in
+   */
   public User getCurrentUser() {
     if (currentUser == null) {
-      // TODO Throw exception
+      throw new NullPointerException("There's no user registered");
     }
-
     return currentUser;
   }
 
@@ -119,6 +136,15 @@ public final class Controller {
     return songCatalog.getSong(title, author) != null;
   }
 
+  /**
+   * Register a new song.
+   *
+   * @param title Name of the song
+   * @param author Author of the song
+   * @param styles Genres to which the song belongs
+   * @param filePath Path of the song (it can be an HTTP url or a file system path)
+   * @return true if the song was not already registered
+   */
   public boolean registerSong(String title, String author, List<String> styles, String filePath) {
     if (isSongRegistered(title, author)) {
       return false;
@@ -159,15 +185,27 @@ public final class Controller {
     return songCatalog.searchSongsBy(titleSubstring, authorSubstring, style);
   }
 
+  /**
+   * Create a new playlist and add it to the current user list of playlists.
+   *
+   * @param name Name of the playlist
+   * @return the created playlist
+   */
   public Playlist createPlaylist(String name) {
-    // TODO Should create the playlist elsewhere?
     Playlist playlist = new Playlist(name);
     playlistDao.register(playlist);
-    currentUser.addPlaylist(playlist);
-    userDao.update(currentUser);
+    getCurrentUser().addPlaylist(playlist);
+    userDao.update(getCurrentUser());
     return playlist;
   }
 
+  /**
+   * Add a song to a playlist.
+   *
+   * @param playlist The play to which the song is added
+   * @param song The song added
+   * @return true if the song was added to the playlist
+   */
   public boolean addToPlaylist(Playlist playlist, Song song) {
     if (!playlist.add(song)) {
       return false;
@@ -176,6 +214,13 @@ public final class Controller {
     return true;
   }
 
+  /**
+   * Remove a song from a playlist.
+   *
+   * @param playlist The play to which the song is removed
+   * @param song The song removed
+   * @return true if the playlist contained the specified song
+   */
   public boolean removeFromPlaylist(Playlist playlist, Song song) {
     if (!playlist.remove(song)) {
       return false;
@@ -185,24 +230,23 @@ public final class Controller {
   }
 
   public List<Playlist> getUserPlaylists() {
-    if (currentUser == null) {
-      // TODO Throw exception
-    }
-    return currentUser.getPlaylists();
+    return getCurrentUser().getPlaylists();
   }
 
   public Playlist getUserRecentlyPlayedSongs() {
-    if (currentUser == null) {
-      // TODO Throw exception
-    }
-    return currentUser.getRecent();
+    return getCurrentUser().getRecent();
   }
 
+  /**
+   * Count the reproduction of a song.
+   *
+   * @param song The reproduced song
+   */
   public void updatePlaysCounter(Song song) {
     song.incrementNumPlays();
-    currentUser.updateRecent(song);
+    getCurrentUser().updateRecent(song);
     songDao.update(song);
-    playlistDao.update(currentUser.getRecent());
+    playlistDao.update(getCurrentUser().getRecent());
   }
 
   public void loadXml(String xmlPath) {
@@ -213,16 +257,12 @@ public final class Controller {
     user.setPremium(true);
   }
 
+  public Playlist getMostPlayedSongs() {
+    return songCatalog.getMostPlayedSongs();
+  }
+
   public void generatePlaylistsPdf(String filePath)
       throws FileNotFoundException, DocumentException {
-    pdfGenerator.userPlaylistsToPdf(currentUser, filePath);
-  }
-
-  public UserCatalog getUserCatalog() {
-    return userCatalog;
-  }
-
-  public SongCatalog getSongCatalog() {
-    return songCatalog;
+    pdfGenerator.userPlaylistsToPdf(getCurrentUser(), filePath);
   }
 }

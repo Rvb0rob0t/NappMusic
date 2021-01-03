@@ -42,8 +42,6 @@ public class MusicPlayer {
   private static final ImageIcon PAUSE_ICON = new ImageIcon(App.RESOURCES_PATH + "/pause.png");
   private static final ImageIcon NEXT_ICON = new ImageIcon(App.RESOURCES_PATH + "/next.png");
 
-  private Controller controller;
-
   private MediaPlayer mediaPlayer;
   private Playlist playlistPlaying;
   private int songPlayingIndex;
@@ -59,19 +57,14 @@ public class MusicPlayer {
 
   // private JPanel volumePanel;
 
-  public MusicPlayer(Controller controller) {
-    this.controller = controller;
-
+  public MusicPlayer() {
     mainPanel = new JPanel(new BorderLayout());
 
     JPanel songDataPanel = createSongDataPanel();
     mainPanel.add(songDataPanel, BorderLayout.WEST);
 
-    // TODO playback time slider?
     JPanel buttonsPanel = createButtonsPanel();
     mainPanel.add(buttonsPanel, BorderLayout.CENTER);
-
-    // TODO Volume?
 
     mainPanel.setVisible(false);
 
@@ -152,7 +145,6 @@ public class MusicPlayer {
                 mediaPlayer.pause();
                 break;
               default:
-                // TODO
                 break;
             }
           }
@@ -211,8 +203,9 @@ public class MusicPlayer {
     mediaPlayer = new MediaPlayer(media);
     mediaPlayer.setOnMarker(
         mediaMarkerEvent -> {
-          controller.updatePlaysCounter(song);
-          GuiNotifier.INSTANCE.notifyPlaylistListeners(controller.getUserRecentlyPlayedSongs());
+          Controller.getSingleton().updatePlaysCounter(song);
+          GuiNotifier.INSTANCE.notifyPlaylistListeners(
+              Controller.getSingleton().getUserRecentlyPlayedSongs());
         });
     mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(mediaPlayer.getStartTime()));
   }
@@ -241,6 +234,7 @@ public class MusicPlayer {
       mainPanel.setVisible(true);
     }
     playlistPlaying = playlist;
+    songPlayingIndex = index;
     changeSong(playlistPlaying.getSong(index));
   }
 
@@ -251,5 +245,11 @@ public class MusicPlayer {
    */
   public void play(Playlist playlist) {
     play(playlist, 0);
+  }
+
+  public void dispose() {
+    if (mediaPlayer != null) {
+      mediaPlayer.dispose();
+    }
   }
 }

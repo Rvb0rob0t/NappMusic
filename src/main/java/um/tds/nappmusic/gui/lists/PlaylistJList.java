@@ -10,18 +10,18 @@ import javax.swing.ListSelectionModel;
 import um.tds.nappmusic.domain.Playlist;
 
 public class PlaylistJList {
-  private JList list;
+  private JList<String> list;
   private PlaylistListModel listModel;
   private JPopupMenu rightClickMenu;
   private JMenu addToPlaylistMenu;
 
   public PlaylistJList(List<Playlist> playlists, JPopupMenu rightClickMenu) {
     this.listModel = new PlaylistListModel(playlists);
-    this.list = new JList(listModel);
+    this.list = new JList<String>(listModel);
     this.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     this.rightClickMenu = rightClickMenu;
-    // this.addToPlaylistMenu = new JMenu("Añadir a playlist");
+    // this.addToPlaylistMenu = new JMenu("Add to playlist");
     // this.rightClickMenu.add(addToPlaylistMenu);
   }
 
@@ -42,7 +42,7 @@ public class PlaylistJList {
     list.addMouseListener(listener);
   }
 
-  public JList getList() {
+  public JList<String> getList() {
     return list;
   }
 

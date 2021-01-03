@@ -6,11 +6,11 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -24,9 +24,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import um.tds.nappmusic.app.App;
+import um.tds.nappmusic.app.AppFonts;
 import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.gui.cards.HomePanel;
+import um.tds.nappmusic.gui.cards.MostPlayedPanel;
 import um.tds.nappmusic.gui.cards.PlaylistsPanel;
 import um.tds.nappmusic.gui.cards.RecentlyPlayedPanel;
 import um.tds.nappmusic.gui.cards.SearchPanel;
@@ -37,57 +39,52 @@ import um.tds.uibutton.UiButtonListener;
 public class MainWindow {
   private static final String HOME_CARD_NAME = "Home";
   private static final String SEARCH_CARD_NAME = "Search";
-  private static final String PLAYLISTS_CARD_NAME = "Playlists";
-  private static final String RECENTLY_CARD_NAME = "Recently";
+  private static final String PLAYLISTS_CARD_NAME = "Your playlists";
+  private static final String RECENTLY_CARD_NAME = "Recently played";
+  private static final String MOST_PLAYED_CARD_NAME = "Most played";
+  private static final int CARD_SELECTOR_BUTTON_H_ALIGNMENT = SwingConstants.LEFT;
   private static final Color BTN_SONGLOADER_COLOR = Color.RED;
 
   private Controller controller;
-
   private MusicPlayer musicPlayer;
-
   private JFrame mainFrame;
-  private JPanel topPanel;
-  private JLabel logoLabel;
+
   private JMenuItem upgradeMenuItem;
   private JMenuItem generatePdfMenuItem;
   private JMenuItem logOutMenuItem;
-  private JPanel cardsPanel;
-  private JPanel leftSidePanel;
+  private UiButton btnXmlLoader;
 
+  private JPanel cardsPanel;
+
+  private JPanel cardSelectorPanel;
   private JButton btnHome;
   private JButton btnSearch;
   private JButton btnPlaylists;
   private JButton btnRecently;
-  private UiButton btnXmlLoader;
+  private JButton btnMostPlayed;
 
   private HomePanel homePanel;
   private SearchPanel searchPanel;
   private PlaylistsPanel playlistsPanel;
   private RecentlyPlayedPanel recentlyPlayedPanel;
+  private MostPlayedPanel mostPlayedPanel;
 
-  /**
-   * Create the application.
-   *
-   * @param controller
-   */
-  public MainWindow(Controller controller) {
-    this.controller = controller;
+  /** Create the application. */
+  public MainWindow() {
+    controller = Controller.getSingleton();
 
     mainFrame = new JFrame(App.NAME);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.getContentPane().setLayout(new BorderLayout(10, 0));
 
-    musicPlayer = new MusicPlayer(controller);
+    musicPlayer = new MusicPlayer();
     mainFrame.getContentPane().add(musicPlayer.getPanel(), BorderLayout.SOUTH);
 
-    createLeftSidePanel();
-    mainFrame.getContentPane().add(leftSidePanel, BorderLayout.WEST);
+    mainFrame.getContentPane().add(createLeftSidePanel(), BorderLayout.WEST);
 
-    createCardsPanel();
-    mainFrame.getContentPane().add(cardsPanel, BorderLayout.CENTER);
+    mainFrame.getContentPane().add(createCardsPanel(), BorderLayout.CENTER);
 
-    createTopPanel("Username");
-    mainFrame.getContentPane().add(topPanel, BorderLayout.NORTH);
+    mainFrame.getContentPane().add(createTopPanel(), BorderLayout.NORTH);
 
     assignButtonActions();
 
@@ -100,61 +97,63 @@ public class MainWindow {
   }
 
   /** Create the menu selector panel. */
-  private void createLeftSidePanel() {
-    leftSidePanel = new JPanel(new BorderLayout());
+  private JPanel createLeftSidePanel() {
+    JPanel leftSidePanel = new JPanel(new BorderLayout());
 
-    JPanel cardSelectorPanel = new JPanel(new GridLayout(4, 1, 0, 0));
+    cardSelectorPanel = new JPanel(new GridLayout(0, 1, 0, 0));
     cardSelectorPanel.setPreferredSize(new Dimension(200, 300));
-    Font cardSelectorBtnsFont = new Font("Arial Black", Font.BOLD, 16);
-    int cardSelectorBtnsHAlignment = SwingConstants.LEFT;
 
-    btnHome = new JButton(HOME_CARD_NAME);
-    btnHome.setFont(cardSelectorBtnsFont);
-    btnHome.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnHome);
-
-    btnSearch = new JButton(SEARCH_CARD_NAME);
-    btnSearch.setFont(cardSelectorBtnsFont);
-    btnSearch.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnSearch);
-
-    btnPlaylists = new JButton("Your playlists");
-    btnPlaylists.setFont(cardSelectorBtnsFont);
-    btnPlaylists.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnPlaylists);
-
-    btnRecently = new JButton("Recently Played");
-    btnRecently.setFont(cardSelectorBtnsFont);
-    btnRecently.setHorizontalAlignment(cardSelectorBtnsHAlignment);
-    cardSelectorPanel.add(btnRecently);
+    btnHome = addCardSelectorButton(HOME_CARD_NAME);
+    btnSearch = addCardSelectorButton(SEARCH_CARD_NAME);
+    btnPlaylists = addCardSelectorButton(PLAYLISTS_CARD_NAME);
+    btnRecently = addCardSelectorButton(RECENTLY_CARD_NAME);
+    btnMostPlayed = addCardSelectorButton(MOST_PLAYED_CARD_NAME);
 
     leftSidePanel.add(cardSelectorPanel, BorderLayout.NORTH);
+    return leftSidePanel;
+  }
+
+  private JButton addCardSelectorButton(String name) {
+    JButton button = new JButton(name);
+    button.setFont(AppFonts.CARD_SELECTOR_FONT);
+    button.setHorizontalAlignment(CARD_SELECTOR_BUTTON_H_ALIGNMENT);
+    cardSelectorPanel.add(button);
+    return button;
   }
 
   /** Create the changing panel. */
-  private void createCardsPanel() {
+  private JPanel createCardsPanel() {
     cardsPanel = new JPanel(new CardLayout());
+
     homePanel = new HomePanel();
     cardsPanel.add(homePanel.getPanel(), HOME_CARD_NAME);
-    searchPanel = new SearchPanel(controller, musicPlayer);
+
+    searchPanel = new SearchPanel(musicPlayer);
     cardsPanel.add(searchPanel.getPanel(), SEARCH_CARD_NAME);
-    playlistsPanel = new PlaylistsPanel(controller, musicPlayer);
+
+    playlistsPanel = new PlaylistsPanel(musicPlayer);
     cardsPanel.add(playlistsPanel.getPanel(), PLAYLISTS_CARD_NAME);
-    recentlyPlayedPanel = new RecentlyPlayedPanel(controller, musicPlayer);
+
+    recentlyPlayedPanel = new RecentlyPlayedPanel(musicPlayer);
     cardsPanel.add(recentlyPlayedPanel.getPanel(), RECENTLY_CARD_NAME);
+
+    mostPlayedPanel = new MostPlayedPanel(musicPlayer);
+    cardsPanel.add(mostPlayedPanel.getPanel(), MOST_PLAYED_CARD_NAME);
+
+    return cardsPanel;
   }
 
   /** Create the panel with the user settings. */
-  private void createTopPanel(String username) {
-    topPanel = new JPanel(new BorderLayout());
+  private JPanel createTopPanel() {
+    JPanel topPanel = new JPanel(new BorderLayout());
 
-    logoLabel = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
+    JLabel logoLabel = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
     logoLabel.setBorder(new EmptyBorder(10, 30, 10, 0));
-    logoLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+    logoLabel.setFont(AppFonts.APP_NAME_FONT);
     topPanel.add(logoLabel, BorderLayout.WEST);
 
     JMenuBar menuBar = new JMenuBar();
-    JMenu menu = new JMenu(username);
+    JMenu menu = new JMenu(Controller.getSingleton().getCurrentUser().getUsername());
     upgradeMenuItem = new JMenuItem("Upgrade");
     upgradeMenuItem.addActionListener(
         event -> {
@@ -162,7 +161,7 @@ public class MainWindow {
               JOptionPane.showConfirmDialog(
                   mainFrame,
                   "Would you like upgrade to premium for only "
-                      + controller.getCurrentUser().getDiscount().calculatePrice()
+                      + controller.getCurrentUser().calculatePremiumPrice()
                       + " gold coins?");
           switch (result) {
             case JOptionPane.YES_OPTION:
@@ -201,7 +200,7 @@ public class MainWindow {
         event -> {
           LoginWindow window = new LoginWindow();
           window.showWindow();
-          mainFrame.dispose();
+          dispose();
         });
     menu.add(logOutMenuItem);
     menuBar.add(menu);
@@ -209,12 +208,16 @@ public class MainWindow {
     btnXmlLoader.setColor(BTN_SONGLOADER_COLOR);
     btnXmlLoader.setSize(20, 20);
 
-    JPanel rightSidePanel = new JPanel(new BorderLayout(0, 20));
+    JPanel rightSidePanel = new JPanel();
+    rightSidePanel.setLayout(new BoxLayout(rightSidePanel, BoxLayout.Y_AXIS));
     JPanel btnWrapper = new JPanel(new FlowLayout());
     btnWrapper.add(btnXmlLoader);
-    rightSidePanel.add(btnWrapper, BorderLayout.CENTER);
-    rightSidePanel.add(menuBar, BorderLayout.NORTH);
+    rightSidePanel.add(btnWrapper);
+    JPanel menuWrapper = new JPanel(new BorderLayout());
+    menuWrapper.add(menuBar, BorderLayout.NORTH);
+    rightSidePanel.add(menuWrapper);
     topPanel.add(rightSidePanel, BorderLayout.EAST);
+    return topPanel;
   }
 
   public void assignButtonActions() {
@@ -230,7 +233,6 @@ public class MainWindow {
           public void actionPerformed(ActionEvent e) {
             ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, SEARCH_CARD_NAME);
             searchPanel.revalidate();
-            mainFrame.pack();
           }
         });
 
@@ -250,6 +252,22 @@ public class MainWindow {
           }
         });
 
+    btnMostPlayed.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            if (Controller.getSingleton().getCurrentUser().isPremium()) {
+              ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, MOST_PLAYED_CARD_NAME);
+              mostPlayedPanel.revalidate();
+            } else {
+              JOptionPane.showMessageDialog(
+                  mainFrame,
+                  "This option is only available when you're premium",
+                  "You shall not pass",
+                  JOptionPane.INFORMATION_MESSAGE);
+            }
+          }
+        });
+
     btnXmlLoader.addUiButtonListener(
         new UiButtonListener() {
           public void notifyButtonEvent(UiButtonEvent e) {
@@ -259,14 +277,18 @@ public class MainWindow {
               chooser.setFileFilter(filter);
               int returnVal = chooser.showOpenDialog(mainFrame);
               if (returnVal == JFileChooser.APPROVE_OPTION) {
-                System.out.println(
-                    "You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
                 controller.loadXml(chooser.getSelectedFile().getAbsolutePath());
+                searchPanel.revalidate();
               } else {
                 btnXmlLoader.setTurnedOn(false);
               }
             }
           }
         });
+  }
+
+  public void dispose() {
+    musicPlayer.dispose();
+    mainFrame.dispose();
   }
 }

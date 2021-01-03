@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -31,8 +32,6 @@ import um.tds.nappmusic.app.App;
 import um.tds.nappmusic.controller.Controller;
 
 public class RegisterWindow {
-  private Controller controller;
-
   private JDialog dialogWin;
   private JButton registerButton;
   private JButton cancelButton;
@@ -58,10 +57,8 @@ public class RegisterWindow {
   private JLabel usernameErrLbl;
   private JLabel passwordErrLbl;
 
-  public RegisterWindow(Frame owner, Controller controller) {
-    this.controller = controller;
-
-    dialogWin = new JDialog(owner, App.NAME + " - Register");
+  public RegisterWindow(Frame owner) {
+    dialogWin = new JDialog(owner, App.NAME + " - Register", ModalityType.APPLICATION_MODAL);
     dialogWin.setLocationRelativeTo(null);
     dialogWin.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialogWin.getContentPane().setLayout(new BorderLayout());
@@ -137,7 +134,7 @@ public class RegisterWindow {
   }
 
   private JPanel initUserEntry() {
-    usernameLbl = new JLabel("Usuario: ", JLabel.RIGHT);
+    usernameLbl = new JLabel("Username: ", JLabel.RIGHT);
     usernameTxt = new JTextField();
     usernameErrLbl = new JLabel("", JLabel.CENTER);
     fixedSize(usernameLbl, 75, 20);
@@ -210,13 +207,14 @@ public class RegisterWindow {
           public void actionPerformed(ActionEvent e) {
             if (checkFields()) {
               boolean succesfulRegister =
-                  controller.registerUser(
-                      nameTxt.getText(),
-                      surnameTxt.getText(),
-                      dateToLocalDate(birthDateCal.getDate()),
-                      emailTxt.getText(),
-                      usernameTxt.getText(),
-                      new String(passwordTxt.getPassword()));
+                  Controller.getSingleton()
+                      .registerUser(
+                          nameTxt.getText(),
+                          surnameTxt.getText(),
+                          dateToLocalDate(birthDateCal.getDate()),
+                          emailTxt.getText(),
+                          usernameTxt.getText(),
+                          new String(passwordTxt.getPassword()));
               if (succesfulRegister) {
                 JOptionPane.showMessageDialog(
                     dialogWin,
@@ -308,7 +306,8 @@ public class RegisterWindow {
       passwordChkTxt.setBorder(BorderFactory.createLineBorder(Color.RED));
       ok = false;
     }
-    if (!usernameTxt.getText().isEmpty() && controller.isUserRegistered(usernameTxt.getText())) {
+    if (!usernameTxt.getText().isEmpty()
+        && Controller.getSingleton().isUserRegistered(usernameTxt.getText())) {
       usernameErrLbl.setText("That username is already in use");
       usernameErrLbl.setVisible(true);
       usernameLbl.setForeground(Color.RED);
@@ -359,7 +358,7 @@ public class RegisterWindow {
     birthDateLbl.setForeground(Color.BLACK);
   }
 
-  /** Fixes the size of a component */
+  /** Fixes the size of a component. */
   private void fixedSize(JComponent o, int x, int y) {
     Dimension d = new Dimension(x, y);
     o.setMinimumSize(d);

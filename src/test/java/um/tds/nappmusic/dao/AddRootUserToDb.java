@@ -12,12 +12,12 @@ public class AddRootUserToDb {
   private static DaoFactory factory;
 
   private static Song fakeSong() {
-    List<String> styles = new ArrayList(Arrays.asList("Pop", "Rock", "Jazz"));
+    List<String> styles = new ArrayList<>(Arrays.asList("Pop", "Rock", "Jazz"));
     return new Song("fake title", "fake author", styles, "NO_FILE_PATH", 0);
   }
 
   private static Playlist fakePlaylist() {
-    List<Song> songs = new ArrayList();
+    List<Song> songs = new ArrayList<>();
     songs.add(fakeSong());
     return new Playlist("Root's playlist 0", songs);
   }

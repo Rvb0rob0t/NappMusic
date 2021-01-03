@@ -8,7 +8,10 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
 import um.tds.nappmusic.dao.DaoException;
+import um.tds.nappmusic.dao.DaoFactory;
 import um.tds.nappmusic.domain.Song;
+import um.tds.nappmusic.domain.SongCatalog;
+import um.tds.nappmusic.domain.UserCatalog;
 
 public class PdfGeneratorTest {
   PdfGenerator pdfGenerator;
@@ -21,10 +24,14 @@ public class PdfGeneratorTest {
     // Register and logs a user with a single song playlist
     Controller controller;
     try {
-      controller = Controller.getSingleton();
+      // controller = Controller.getSingleton();
+      UserCatalog userCatalog = UserCatalog.getSingleton();
+      SongCatalog songCatalog = SongCatalog.getSingleton();
+      DaoFactory factory = DaoFactory.getSingleton();
+      controller = Controller.getSingleton(userCatalog, songCatalog, factory);
     } catch (DaoException e) {
       e.printStackTrace();
-      fail("Failed controller initialization");
+      fail("Failed database initialization");
       return;
     }
 

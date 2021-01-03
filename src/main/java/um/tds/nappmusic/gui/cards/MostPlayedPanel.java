@@ -6,21 +6,18 @@ import javax.swing.JScrollPane;
 import um.tds.nappmusic.controller.Controller;
 import um.tds.nappmusic.domain.Playlist;
 import um.tds.nappmusic.gui.MusicPlayer;
-import um.tds.nappmusic.gui.notifier.GuiNotifier;
-import um.tds.nappmusic.gui.notifier.PlaylistListener;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
-public class RecentlyPlayedPanel implements PlaylistListener {
+public class MostPlayedPanel {
   private JPanel mainPanel;
   private JScrollPane scrollPane;
   private PlaylistTable songTable;
 
-  public RecentlyPlayedPanel(MusicPlayer musicPlayer) {
-    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
-    GuiNotifier.INSTANCE.addPlaylistListener(recentPlaylist, this);
+  public MostPlayedPanel(MusicPlayer musicPlayer) {
+    Playlist playlist = Controller.getSingleton().getMostPlayedSongs();
     mainPanel = new JPanel(new BorderLayout());
     scrollPane = new JScrollPane();
-    songTable = new PlaylistTable(musicPlayer, recentPlaylist);
+    songTable = new PlaylistTable(musicPlayer, playlist);
     scrollPane.setViewportView(songTable.getTable());
     mainPanel.add(scrollPane, BorderLayout.CENTER);
   }
@@ -30,14 +27,9 @@ public class RecentlyPlayedPanel implements PlaylistListener {
   }
 
   public void revalidate() {
-    Playlist recentPlaylist = Controller.getSingleton().getUserRecentlyPlayedSongs();
+    Playlist recentPlaylist = Controller.getSingleton().getMostPlayedSongs();
     songTable.setPlaylist(recentPlaylist);
     scrollPane.setViewportView(songTable.getTable());
     mainPanel.revalidate();
-  }
-
-  @Override
-  public void playlistModified() {
-    revalidate();
   }
 }

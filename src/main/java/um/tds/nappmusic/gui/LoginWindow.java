@@ -3,7 +3,6 @@ package um.tds.nappmusic.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,9 +15,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import um.tds.nappmusic.app.App;
+import um.tds.nappmusic.app.AppFonts;
 import um.tds.nappmusic.app.AppLogo;
 import um.tds.nappmusic.controller.Controller;
-import um.tds.nappmusic.dao.DaoException;
 
 public class LoginWindow {
   private static final int FIELDS_WIDTH = 15;
@@ -28,23 +27,11 @@ public class LoginWindow {
   private JTextField nickField;
   private JPasswordField passwordField;
 
-  private Controller controller;
-
   /** Create the window. */
   public LoginWindow() {
     mainFrame = new JFrame(App.NAME + " - Login");
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.getContentPane().setLayout(new BorderLayout());
-
-    try {
-      controller = Controller.getSingleton();
-    } catch (DaoException e) {
-      JOptionPane.showMessageDialog(
-          mainFrame,
-          "Instalación errónea de la aplicación",
-          "Error al inicializar la aplicación",
-          JOptionPane.ERROR_MESSAGE);
-    }
 
     mainFrame.getContentPane().add(createTopPanel(), BorderLayout.NORTH);
     mainFrame.getContentPane().add(createLoginPanel(), BorderLayout.CENTER);
@@ -63,7 +50,7 @@ public class LoginWindow {
     topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
     JLabel lblTitulo = new JLabel(App.NAME, AppLogo.get(), JLabel.CENTER);
-    lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 20));
+    lblTitulo.setFont(AppFonts.APP_NAME_FONT);
     lblTitulo.setForeground(Color.DARK_GRAY);
     topPanel.add(lblTitulo);
 
@@ -94,7 +81,6 @@ public class LoginWindow {
     JLabel userLabel = new JLabel("User: ");
     // Put the text next to the label
     userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-    userLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
     nickFieldPanel.add(userLabel);
 
     nickField = new JTextField(FIELDS_WIDTH);
@@ -108,7 +94,6 @@ public class LoginWindow {
 
     JLabel passwordLabel = new JLabel("Password: ");
     passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-    passwordLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
     passwordFieldPanel.add(passwordLabel);
 
     passwordField = new JPasswordField(FIELDS_WIDTH);
@@ -133,16 +118,17 @@ public class LoginWindow {
     btnLogin.addActionListener(
         event -> {
           boolean login =
-              controller.logIn(nickField.getText(), new String(passwordField.getPassword()));
+              Controller.getSingleton()
+                  .logIn(nickField.getText(), new String(passwordField.getPassword()));
           if (login) {
-            MainWindow window = new MainWindow(controller);
+            MainWindow window = new MainWindow();
             window.setVisible(true);
             mainFrame.dispose();
           } else {
             JOptionPane.showMessageDialog(
                 mainFrame,
-                "Nombre de usuario o contraseña no válido",
-                "Error",
+                "Incorrect username or password",
+                "Try again",
                 JOptionPane.ERROR_MESSAGE);
           }
         });
@@ -152,7 +138,7 @@ public class LoginWindow {
     btnRegistro.setVerticalAlignment(SwingConstants.BOTTOM);
     btnRegistro.addActionListener(
         event -> {
-          RegisterWindow registerPopup = new RegisterWindow(mainFrame, controller);
+          RegisterWindow registerPopup = new RegisterWindow(mainFrame);
           registerPopup.showWindow();
         });
 

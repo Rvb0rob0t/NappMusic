@@ -26,6 +26,15 @@ public class PdfGenerator {
   private static final Font TITLE_FONT = new Font(FontFamily.HELVETICA, 22, Font.BOLD);
   private static final Font PLAYLIST_NAME_FONT = new Font(FontFamily.HELVETICA, 18, Font.UNDERLINE);
 
+  /**
+   * Write a pdf with the user's playlists
+   *
+   * @param user The owner of the playlists
+   * @param filePath The path of the new pdf
+   * @throws FileNotFoundException if the file exists but is a directory rather than a regular file,
+   *     does not exist but cannot be created, or cannot be opened for any other reason
+   * @throws DocumentException on error
+   */
   public void userPlaylistsToPdf(User user, String filePath)
       throws FileNotFoundException, DocumentException {
     Document output = initializeWriter(filePath);
@@ -64,7 +73,8 @@ public class PdfGenerator {
 
   private static void addRowToTable(PdfPTable table, int numColumns, String... columnStrings) {
     if (columnStrings.length != numColumns) {
-      // TODO Shit happens
+      throw new IndexOutOfBoundsException(
+          "number of columns is not equals to the number of strings arguments");
     }
     for (int i = 0; i < columnStrings.length; i++) {
       table.addCell(new PdfPCell(new Paragraph(columnStrings[i])));

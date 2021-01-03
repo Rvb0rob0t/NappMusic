@@ -10,8 +10,8 @@ public class PlaylistTableModel extends AbstractTableModel {
   private static final int COLUMNS = 2;
   private static final int TITLE_COLUMN = 0;
   private static final int AUTHOR_COLUMN = 1;
-  private static final String TITLE_COLUMN_NAME = "Título";
-  private static final String AUTHOR_COLUMN_NAME = "Intérprete";
+  private static final String TITLE_COLUMN_NAME = "Title";
+  private static final String AUTHOR_COLUMN_NAME = "Artist";
 
   private Playlist playlist;
 

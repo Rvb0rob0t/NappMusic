@@ -3,6 +3,7 @@ package um.tds.nappmusic.gui.cards;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -17,12 +18,10 @@ import um.tds.nappmusic.gui.MusicPlayer;
 import um.tds.nappmusic.gui.tables.PlaylistTable;
 
 public class SearchPanel {
-  private static final String TITLE_FIELD_NAME = "Título";
-  private static final String AUTHOR_FIELD_NAME = "Intérprete";
-  private static final String STYLE_FIELD_NAME = "Género";
+  private static final String TITLE_FIELD_NAME = "Title";
+  private static final String AUTHOR_FIELD_NAME = "Artist";
+  private static final String STYLE_FIELD_NAME = "Genre";
   private static final int FIELD_WIDTH = 10;
-
-  private Controller controller;
 
   JPanel mainPanel;
 
@@ -33,17 +32,10 @@ public class SearchPanel {
   private PlaylistTable playlistTable;
   private JScrollPane scrollPane;
 
-  /**
-   * .
-   *
-   * @param controller
-   */
-  public SearchPanel(Controller controller, MusicPlayer musicPlayer) {
-    this.controller = controller;
-
+  public SearchPanel(MusicPlayer musicPlayer) {
     mainPanel = new JPanel(new BorderLayout());
 
-    JPanel fieldsPanel = new JPanel();
+    JPanel fieldsPanel = new JPanel(new FlowLayout());
 
     titleField = new JTextField(FIELD_WIDTH);
     JPanel titleFieldPanel = wrapWithTitledBorderPanel(titleField, TITLE_FIELD_NAME);
@@ -54,17 +46,24 @@ public class SearchPanel {
     fieldsPanel.add(authorFieldPanel);
 
     styleComboBox = new JComboBox<String>();
+    styleComboBox.setPrototypeDisplayValue(columnsToPrototypeDisplayValue(FIELD_WIDTH));
     updateStyleList();
     JPanel styleComboBoxPanel = wrapWithTitledBorderPanel(styleComboBox, STYLE_FIELD_NAME);
     fieldsPanel.add(styleComboBoxPanel);
 
-    JButton searchButton = new JButton("Buscar");
+    JButton searchButton = new JButton("Search");
     searchButton.addActionListener(e -> changeTable(musicPlayer));
     fieldsPanel.add(searchButton);
     mainPanel.add(fieldsPanel, BorderLayout.NORTH);
 
     scrollPane = new JScrollPane();
     mainPanel.add(scrollPane, BorderLayout.CENTER);
+  }
+
+  private String columnsToPrototypeDisplayValue(int columns) {
+    char[] string = new char[columns];
+    Arrays.fill(string, 'w');
+    return new String(string);
   }
 
   // aux method to set a good-looking titled (title centered) border
@@ -86,12 +85,15 @@ public class SearchPanel {
     Playlist playlist;
     if (style == "") {
       playlist =
-          controller.searchSongsByTitleAndAuthor(titleField.getText(), authorField.getText());
+          Controller.getSingleton()
+              .searchSongsByTitleAndAuthor(titleField.getText(), authorField.getText());
     } else {
-      playlist = controller.searchSongsBy(titleField.getText(), authorField.getText(), style);
+      playlist =
+          Controller.getSingleton()
+              .searchSongsBy(titleField.getText(), authorField.getText(), style);
     }
     if (playlistTable == null) {
-      playlistTable = new PlaylistTable(controller, musicPlayer, playlist);
+      playlistTable = new PlaylistTable(musicPlayer, playlist);
     } else {
       playlistTable.setPlaylist(playlist);
     }
@@ -100,7 +102,7 @@ public class SearchPanel {
   }
 
   private void updateStyleList() {
-    List<String> styles = controller.getAllStyles();
+    List<String> styles = Controller.getSingleton().getAllStyles();
     String[] options = new String[styles.size() + 1];
     options[0] = "";
     for (int i = 0; i < styles.size(); i++) {

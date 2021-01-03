@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import um.tds.nappmusic.dao.Dao;
 import um.tds.nappmusic.dao.DaoException;
 import um.tds.nappmusic.dao.DaoFactory;
 
@@ -17,27 +16,19 @@ public class SongCatalog {
   private HashMap<String, ArrayList<Song>> songsByAuthor;
   private HashMap<String, Integer> numSongsPerStyle;
 
-  public static SongCatalog getSingleton() {
+  public static SongCatalog getSingleton() throws DaoException {
     if (singleton == null) {
       singleton = new SongCatalog();
     }
     return singleton;
   }
 
-  private SongCatalog() {
-    try {
-      Dao<Song> songDao = DaoFactory.getSingleton().getSongDao();
-      List<Song> songs = songDao.getAll();
-      songList = new LinkedList<Song>();
-      songsByAuthor = new HashMap<String, ArrayList<Song>>();
-      numSongsPerStyle = new HashMap<String, Integer>();
-      for (Song song : songs) {
-        this.addSong(song);
-      }
-    } catch (DaoException e) {
-      // TODO what do we do?
-      e.printStackTrace();
-    }
+  private SongCatalog() throws DaoException {
+    songList = new LinkedList<Song>();
+    songsByAuthor = new HashMap<String, ArrayList<Song>>();
+    numSongsPerStyle = new HashMap<String, Integer>();
+
+    DaoFactory.getSingleton().getSongDao().getAll().forEach(song -> this.addSong(song));
   }
 
   public List<Song> getAllSongs() {
@@ -53,8 +44,11 @@ public class SongCatalog {
   }
 
   public Song getSong(String title, String author) {
-    Optional<Song> result =
-        songsByAuthor.get(author).stream().filter(s -> s.getTitle().equals(title)).findAny();
+    ArrayList<Song> songs = songsByAuthor.get(author);
+    if (songs == null) {
+      return null;
+    }
+    Optional<Song> result = songs.stream().filter(s -> s.getTitle().equals(title)).findAny();
     return result.orElse(null);
   }
 
