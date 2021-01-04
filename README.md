@@ -4,15 +4,14 @@ An test app for listening to music.
 
 ## Compiling
 
-### DriverPersistencia dependency
+### Dependencies
 
-We use a JAR file created by our professors for this project.
+We use a JAR file created by our professors for this project
+and some external dependencies.
 If you want to compile this project,
-you will need to install it in your local maven repository with
+check the [parent repository].
 
-```sh
-mvn install:install-file -Dfile=lib/DriverPersistencia.jar -DgroupId=um.tds -DartifactId=DriverPersistencia -Dversion=1.0 -Dpackaging=jar -DgeneratePom=true
-```
+[parent repository]: https://github.com/useredsa/TDS-DominguezSanchezEmilio-GasparMarcoRuben
 
 ## Contributing
 
