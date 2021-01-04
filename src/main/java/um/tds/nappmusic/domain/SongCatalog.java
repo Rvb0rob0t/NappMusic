@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import um.tds.nappmusic.dao.DaoException;
-import um.tds.nappmusic.dao.DaoFactory;
 
 public class SongCatalog {
   public static final int MOST_PLAYED_SIZE = 10;
@@ -16,19 +14,12 @@ public class SongCatalog {
   private HashMap<String, ArrayList<Song>> songsByAuthor;
   private HashMap<String, Integer> numSongsPerStyle;
 
-  public static SongCatalog getSingleton() throws DaoException {
-    if (singleton == null) {
-      singleton = new SongCatalog();
-    }
-    return singleton;
-  }
-
-  private SongCatalog() throws DaoException {
+  public SongCatalog(List<Song> songs) {
     songList = new LinkedList<Song>();
     songsByAuthor = new HashMap<String, ArrayList<Song>>();
     numSongsPerStyle = new HashMap<String, Integer>();
 
-    DaoFactory.getSingleton().getSongDao().getAll().forEach(song -> this.addSong(song));
+    songs.forEach(song -> this.addSong(song));
   }
 
   public List<Song> getAllSongs() {
