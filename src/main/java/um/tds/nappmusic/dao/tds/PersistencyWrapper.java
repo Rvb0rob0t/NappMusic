@@ -93,13 +93,11 @@ class PersistencyWrapper {
     return value.format(DateTimeFormatter.ISO_LOCAL_DATE);
   }
 
-  // FIXME This is to support an old test and is no longer needed
-  public String encodeObject(Identifiable obj) {
+  String encodeObject(Identifiable obj) {
     return Integer.toString(obj.getId());
   }
 
-  // FIXME This is to support an old test and is no longer needed
-  public String encodeObjectList(List<? extends Identifiable> objs) {
+  String encodeObjectList(List<? extends Identifiable> objs) {
     return objs.stream()
         .map(obj -> String.valueOf(obj.getId()))
         .collect(Collectors.joining(COLLECTIONS_DEL));
