@@ -43,10 +43,11 @@ public class App {
           } catch (DaoException e) {
             JOptionPane.showMessageDialog(
                 null,
-                "Initialization error",
                 "The database is not available at the moment",
+                "Initialization error",
                 JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+            System.exit(-1);
           }
 
           try {
