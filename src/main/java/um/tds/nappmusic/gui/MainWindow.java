@@ -44,6 +44,7 @@ public class MainWindow {
   private static final String MOST_PLAYED_CARD_NAME = "Most played";
   private static final int CARD_SELECTOR_BUTTON_H_ALIGNMENT = SwingConstants.LEFT;
   private static final Color BTN_SONGLOADER_COLOR = Color.RED;
+  private static final Color BTN_SONGLOADER_BORDER_COLOR = Color.BLACK;
 
   private Controller controller;
   private MusicPlayer musicPlayer;
@@ -206,6 +207,7 @@ public class MainWindow {
     menuBar.add(menu);
     btnXmlLoader = new UiButton();
     btnXmlLoader.setColor(BTN_SONGLOADER_COLOR);
+    btnXmlLoader.setBorderFrontColor(BTN_SONGLOADER_BORDER_COLOR);
     btnXmlLoader.setSize(20, 20);
 
     JPanel rightSidePanel = new JPanel();
